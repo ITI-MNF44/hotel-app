@@ -1,6 +1,36 @@
-﻿namespace hotel_app.Models
+﻿using static System.Net.Mime.MediaTypeNames;
+using System.Net;
+using System.Xml.Linq;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace hotel_app.Models
 {
 	public class Hotel
 	{
+		[Key]
+		public int Id { get; set; }
+		public string Name { get; set; }
+		public string? Description { get; set; }
+		public string Country { get; set; } //from combobox in UI
+		public string City {  get; set; } //from combobox in UI based on country
+		public string? Address {  get; set; } //street,area...
+		public int StarRating {  get; set; } // 4,5,.. starts
+		
+		[ForeignKey("HotelCategory")]
+		public int Category { get; set; } //luxery , resort , standard.. 
+		public DateTime? CreatedDate { get; set; }
+		public bool? IsAccessible { get; set; }
+
+		public bool? IsWorking { get; set; }
+
+		public double? Latitude { get; set; } //for map
+		public double? Longitude { get; set; } // for map
+
+		public HotelCategory HotelCategory { get; set; }
+		public List<Room> Rooms { get; set; }
+		public List<Food> Foods { get; set; }
+
 	}
 }

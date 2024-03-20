@@ -1,0 +1,52 @@
+Hotel - Room:
+One-to-many relationship between Hotel and Room.
+Each Hotel can have multiple Rooms.
+Each Room belongs to exactly one Hotel.
+
+
+Hotel - Food:
+One-to-many relationship between Hotel and Food.
+Each Hotel can have multiple Foods.
+Each Food belongs to exactly one Hotel.
+
+
+Hotel - HotelCategory:
+Many-to-one relationship between Hotel and HotelCategory.
+Each Hotel belongs to exactly one HotelCategory.
+Each HotelCategory can have multiple Hotels.
+
+
+Room - RoomCategory:
+Many-to-one relationship between Room and RoomCategory.
+Each Room belongs to exactly one RoomCategory.
+Each RoomCategory can have multiple Rooms.
+
+
+Food - FoodCategory:
+Many-to-one relationship between Food and FoodCategory.
+Each Food belongs to exactly one FoodCategory.
+Each FoodCategory can have multiple Foods.
+
+
+GuestRoom - Guest:
+Many-to-one relationship between GuestRoom and Guest.
+Each GuestRoom can have multiple Guests.
+Each Guest belongs to exactly one GuestRoom.
+
+
+GuestRoom - Room:
+Many-to-one relationship between GuestRoom and Room.
+Each GuestRoom belongs to exactly one Room.
+Each Room can be associated with multiple GuestRooms.
+
+
+GuestRoom - Food:
+Many-to-one relationship between GuestRoom and Food.
+Each GuestRoom can have exactly one Food.
+Each Food can be associated with multiple GuestRooms.
+
+
+Food - Hotel:
+Many-to-one relationship between Food and Hotel.
+Each Food belongs to exactly one Hotel.
+Each Hotel can have multiple Foods.
