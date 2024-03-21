@@ -24,6 +24,5 @@ namespace hotel_app.Models
 		public Guest Guest { get; set; }
 		public Room Room { get; set; }
 		public Food Food { get; set; }
-
 	}
 }

@@ -24,13 +24,19 @@ namespace hotel_app.Models
 		public bool? IsAccessible { get; set; }
 
 		public bool? IsWorking { get; set; }
-
 		public double? Latitude { get; set; } //for map
 		public double? Longitude { get; set; } // for map
+		public bool isDeleted { get; set; }
 
 		public HotelCategory HotelCategory { get; set; }
 		public List<Room> Rooms { get; set; }
 		public List<Food> Foods { get; set; }
+
+
+		public string UserId { get; set; }
+		public ApplicationUser User { get; set; }
+
+
 
 	}
 }

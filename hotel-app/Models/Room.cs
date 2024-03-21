@@ -19,7 +19,7 @@ namespace hotel_app.Models
 		public decimal PricePerNight { get; set; }
 		public int NumOfRooms { get; set; }
 		public DateTime? CreatedDate { get; set; }
-
+		public bool isDeleted { get; set; }
 		public RoomCategory RoomCategory {  get; set; } 
 		public Hotel Hotel { get; set; }
 		public List<GuestRoom> GuestRooms { get; set; }
