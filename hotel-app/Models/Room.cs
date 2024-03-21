@@ -22,6 +22,8 @@ namespace hotel_app.Models
 		public bool isDeleted { get; set; }
 		public RoomCategory RoomCategory {  get; set; } 
 		public Hotel Hotel { get; set; }
+		//image
+		public string Image {  get; set; }
 		public List<GuestRoom> GuestRooms { get; set; }
 
 	}

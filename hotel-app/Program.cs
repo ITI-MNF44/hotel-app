@@ -13,6 +13,8 @@ namespace hotel_app
 			// Add services to the container.
 			builder.Services.AddControllersWithViews();
 
+			//
+
 			//register DBcontext
 			builder.Services.AddDbContext<HotelDbContext>(options => {
 				options.UseSqlServer(builder.Configuration.GetConnectionString("HotelConnection"));

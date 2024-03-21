@@ -30,7 +30,7 @@ namespace hotel_app.Models
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.
-				UseSqlServer("Data Source=.;Initial Catalog=HotelDB;Integrated Security=True;Encrypt=False");
+				UseSqlServer("Data Source=OLA;Initial Catalog=HotelDB;Integrated Security=True;Encrypt=False");
 			base.OnConfiguring(optionsBuilder);
 		}
 
