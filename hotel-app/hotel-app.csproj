@@ -16,9 +16,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Ripository\" />
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-
 </Project>
