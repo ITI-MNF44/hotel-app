@@ -12,6 +12,8 @@ namespace hotel_app.Models
 		public int HotelID { get; set; }
 		public string Name { get; set; }
 		public string? Description { get; set; }
+		[Column(TypeName = "decimal(18, 2)")]
+
 		public decimal PricePerPerson { get; set; }
 
 		[ForeignKey("Category")]

@@ -16,12 +16,16 @@ namespace hotel_app.Models
 		[ForeignKey("RoomCategory")]
 		public int Category { get; set;} //standard , VIP , LUXURY .. 
 		public int NumOfBeds { get; set; }
+		[Column(TypeName = "decimal(18, 2)")]
+
 		public decimal PricePerNight { get; set; }
 		public int NumOfRooms { get; set; }
 		public DateTime? CreatedDate { get; set; }
 		public bool isDeleted { get; set; }
 		public RoomCategory RoomCategory {  get; set; } 
 		public Hotel Hotel { get; set; }
+		//image
+		public string Image {  get; set; }
 		public List<GuestRoom> GuestRooms { get; set; }
 
 	}

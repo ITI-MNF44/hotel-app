@@ -16,7 +16,9 @@ namespace hotel_app.Models
 		public string Country { get; set; } //from combobox in UI
 		public string City {  get; set; } //from combobox in UI based on country
 		public string? Address {  get; set; } //street,area...
-		public int StarRating {  get; set; } // 4,5,.. starts
+		//Image									 
+        public string Image { get; set; }
+        public int StarRating {  get; set; } // 4,5,.. starts
 		
 		[ForeignKey("HotelCategory")]
 		public int Category { get; set; } //luxery , resort , standard.. 
