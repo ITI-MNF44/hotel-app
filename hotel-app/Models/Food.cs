@@ -18,10 +18,14 @@ namespace hotel_app.Models
 
 		public int CategoryId { get; set; }
 
+
 		public DateTime? CreatedDate { get; set; }
+		public bool isDeleted { get; set; }
+
 
 		public FoodCategory Category { get; set; }
 		public Hotel Hotel { get; set; }
+
 		public List<GuestRoom> GuestRooms { get; set;}
 
 
