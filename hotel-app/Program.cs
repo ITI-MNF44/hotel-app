@@ -1,3 +1,7 @@
+using hotel_app.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 namespace hotel_app
 {
 	public class Program
@@ -8,6 +12,18 @@ namespace hotel_app
 
 			// Add services to the container.
 			builder.Services.AddControllersWithViews();
+
+			//
+
+			//register DBcontext
+			builder.Services.AddDbContext<HotelDbContext>(options => {
+				options.UseSqlServer(builder.Configuration.GetConnectionString("HotelConnection"));
+			});
+
+			//Register Identity Service (userManager -roleMnager- SigninManager)
+			builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+				.AddEntityFrameworkStores<HotelDbContext>();
+
 
 			var app = builder.Build();
 

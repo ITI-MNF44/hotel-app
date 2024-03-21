@@ -12,16 +12,22 @@ namespace hotel_app.Models
 		public int HotelID { get; set; }
 		public string Name { get; set; }
 		public string? Description { get; set; }
+		[Column(TypeName = "decimal(18, 2)")]
+
 		public decimal PricePerPerson { get; set; }
 
 		[ForeignKey("Category")]
 
 		public int CategoryId { get; set; }
 
+
 		public DateTime? CreatedDate { get; set; }
+		public bool isDeleted { get; set; }
+
 
 		public FoodCategory Category { get; set; }
 		public Hotel Hotel { get; set; }
+
 		public List<GuestRoom> GuestRooms { get; set;}
 
 

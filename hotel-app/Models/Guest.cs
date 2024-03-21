@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace hotel_app.Models
 {
@@ -12,7 +13,11 @@ namespace hotel_app.Models
 		public string Gender { get; set; }
 		public DateTime BirthDate { get; set; }
 		public DateTime? CreatedDate { get; set; }
-		public List<GuestRoom> BookedRooms { get; set; }
+		public bool isDeleted { get; set; }
+
+		public string UserId { get; set; }
+		public ApplicationUser User { get; set; }
+		
 
 	}
 }

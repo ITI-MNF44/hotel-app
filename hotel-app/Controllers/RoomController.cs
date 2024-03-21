@@ -1,27 +1,27 @@
 ﻿using hotel_app.Models;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace hotel_app.Controllers
 {
-    public class HotelController : Controller
+    public class RoomController : Controller
     {
-        //ask
-        HotelDbContext mycontext;
-        IWebHostEnvironment myEnvironment;
-        //Ctor,inject
-        public HotelController(HotelDbContext context, IWebHostEnvironment hostEnvironment) 
+        private HotelDbContext mycontext;
+        private IWebHostEnvironment myEnvironment;
+
+        public RoomController(HotelDbContext context, IWebHostEnvironment hostEnvironment)
         {
             mycontext = context;
             myEnvironment = hostEnvironment;
         }
-
         public IActionResult Index()
         {
             return View();
         }
-        //endpoint for add hotel
-        public IActionResult AddHotel()
+        //endpoint for add room
+        public IActionResult AddRoom()
         {
             //not implemented yet
             return View();
@@ -29,7 +29,7 @@ namespace hotel_app.Controllers
 
         //add to DB
         [HttpPost]
-        public IActionResult AddHotel(HotelViewModel hotel)
+        public IActionResult AddRoom(HotelViewModel hotel)
         {
             //image code
             //string filename = "";
@@ -55,6 +55,5 @@ namespace hotel_app.Controllers
             //not implemented yet
             return View();
         }
-
     }
 }
