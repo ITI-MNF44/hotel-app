@@ -10,7 +10,7 @@ using hotel_app.Models;
 
 namespace hotel_app.Migrations
 {
-    [DbContext(typeof(HotelDbContext))]
+    [DbContext(typeof(dbContext))]
     partial class HotelDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

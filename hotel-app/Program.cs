@@ -19,14 +19,14 @@ namespace hotel_app
 
             //built-in services need to be registered
             //register DBcontext
-            builder.Services.AddDbContext<HotelDbContext>(options => {
+            builder.Services.AddDbContext<dbContext>(options => {
 				options.UseSqlServer(builder.Configuration.GetConnectionString("HotelConnection"));
 			});
 
 
 			//Register Identity Service (userManager -roleMnager- SigninManager)
 			builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-				.AddEntityFrameworkStores<HotelDbContext>();
+				.AddEntityFrameworkStores<dbContext>();
 
 			// Register custom services
 			builder.Services.AddScoped<IGuestRepository, GuestRepository>();

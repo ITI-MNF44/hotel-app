@@ -8,10 +8,10 @@ namespace hotel_app.Controllers
 {
     public class RoomController : Controller
     {
-        private HotelDbContext mycontext;
+        private dbContext mycontext;
         private IWebHostEnvironment myEnvironment;
 
-        public RoomController(HotelDbContext context, IWebHostEnvironment hostEnvironment)
+        public RoomController(dbContext context, IWebHostEnvironment hostEnvironment)
         {
             mycontext = context;
             myEnvironment = hostEnvironment;

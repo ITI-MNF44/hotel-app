@@ -12,12 +12,14 @@ namespace hotel_app.ViewModels
         public string Country { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
-        public string Image { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
+
+        //type changed to Iformfile
+        [Display(Name = "Image URL")]
+        public IFormFile photo { get; set; }
         public int StarRating { get; set; }
         public int Category { get; set; }
-        public List<SelectListItem>? Categories { get; set; }
+        //selected item
+        public List<HotelCategory>? Categories { get; set; }
        
         [Required(ErrorMessage = "Please enter a user name.")]
         public string UserName { get; set; }
@@ -34,5 +36,7 @@ namespace hotel_app.ViewModels
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        
     }
 }

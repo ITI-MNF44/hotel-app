@@ -4,7 +4,7 @@ namespace hotel_app.Repositories
 {
     public class GuestRepository : GeneralRepository<Guest>, IGuestRepository
     {
-        public GuestRepository(HotelDbContext DbContext) : base(DbContext)
+        public GuestRepository(dbContext DbContext) : base(DbContext)
         {
         }
         public void empty_function()

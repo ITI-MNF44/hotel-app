@@ -11,7 +11,7 @@ using hotel_app.Models;
 
 namespace hotel_app.Migrations
 {
-    [DbContext(typeof(HotelDbContext))]
+    [DbContext(typeof(dbContext))]
     [Migration("20240321004032_v2")]
     partial class v2
     {

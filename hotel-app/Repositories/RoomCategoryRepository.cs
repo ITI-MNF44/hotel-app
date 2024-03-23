@@ -4,7 +4,7 @@ namespace hotel_app.Repositories
 {
     public class RoomCategoryRepository : GeneralRepository<RoomCategory>, IRoomCategoryRepository
     {
-        public RoomCategoryRepository(HotelDbContext DbContext) : base(DbContext)
+        public RoomCategoryRepository(dbContext DbContext) : base(DbContext)
         {
         }
     }

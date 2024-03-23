@@ -1,4 +1,5 @@
 ﻿using hotel_app.Models;
+using hotel_app.Repositories;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,16 +10,18 @@ namespace hotel_app.Controllers
     public class HotelController : Controller
     {
         //ask
-        HotelDbContext mycontext;
+        dbContext mycontext;
         IWebHostEnvironment myEnvironment;
         UserManager<ApplicationUser> usermanager;
-        //Ctor,inject
-        public HotelController(HotelDbContext context, IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin) 
+        //repo
+        private readonly IHotelCategoryRepository _hotelCategoryRepository;
+        public HotelController(dbContext context, IWebHostEnvironment hostEnvironment,
+            UserManager<ApplicationUser> usermanagerlogin, IHotelCategoryRepository hotelCategoryRepository)
         {
             mycontext = context;
             myEnvironment = hostEnvironment;
             this.usermanager = usermanagerlogin;
+            _hotelCategoryRepository= hotelCategoryRepository;
         }
 
         public IActionResult Index()
@@ -29,70 +32,71 @@ namespace hotel_app.Controllers
         [HttpGet]
         public IActionResult UserHotelRegister()
         {
-            var categories = mycontext.HotelsCategories
-                                      .Select(c => new SelectListItem
-                                      {
-                                          Text = c.Name,
-                                          Value = c.Id.ToString()
-                                      })
-                                      .ToList();
+            var categories = _hotelCategoryRepository.GetAll()
+                                             .Select(category => new SelectListItem
+                                             {
+                                                 Value = category.Id.ToString(),
+                                                 Text = category.Name
+                                             })
+                                             .ToList();
 
-            if (categories == null)
-            {
-                categories = new List<SelectListItem>(); 
-            }
-
-            var hoteluservm = new RegisterUserViewModel
-            {
-                Categories = categories
-            };
-
-            return View(hoteluservm);
+            ViewBag.CategoryList = categories;
+            return View();
         }
         //2-save to db
         [HttpPost]
         public async Task<IActionResult> UserHotelRegister(RegisterUserViewModel hoteluservm)
         {
             //first insert to user table
-            if(ModelState.IsValid == true)
+            if (ModelState.IsValid == true)
             {
                 //user first
                 ApplicationUser user = new ApplicationUser()
                 {
                     UserName = hoteluservm.UserName,
                     Email = hoteluservm.Email,
-                    PasswordHash=hoteluservm.Password
+                    PasswordHash = hoteluservm.Password
                 };
                 IdentityResult userCreationResult = await usermanager.CreateAsync(user); //hashed
-                if(userCreationResult.Succeeded)
+                if (userCreationResult.Succeeded)
                 {
                     //get userid
                     string userId = user.Id;
+                    //image part
+                    string filename = "";
+                    if (hoteluservm.photo != null && hoteluservm.photo.Length > 0)
+                    {
+                        filename = Guid.NewGuid().ToString() + "_" + hoteluservm.photo.FileName;
+                        string filepath = Path.Combine(myEnvironment.WebRootPath, "images", filename);
+
+                        using (var stream = new FileStream(filepath, FileMode.Create))
+                        {
+                            await hoteluservm.photo.CopyToAsync(stream);
+                        }
+                    }
                     //save the rest of other data 
                     Hotel hotel = new Hotel()
                     {
                         Name = hoteluservm.Name,
-                        Description=hoteluservm.Description,
-                        Country=hoteluservm.Country,
-                        City=hoteluservm.City,
-                        Address=hoteluservm.Address,
-                        StarRating=hoteluservm.StarRating,
-                        Category=hoteluservm.Category,
-                        CreatedDate=DateTime.Now,
-                        Latitude=hoteluservm.Latitude,
-                        Longitude=hoteluservm.Longitude,
-                        Image=hoteluservm.Image,
+                        Description = hoteluservm.Description,
+                        Country = hoteluservm.Country,
+                        City = hoteluservm.City,
+                        Address = hoteluservm.Address,
+                        StarRating = hoteluservm.StarRating,
+                        Category = hoteluservm.Category,
+                        CreatedDate = DateTime.Now,
                         UserId = userId,
+                        Image=filename
                     };
                     //save
                     mycontext.Hotels.Add(hotel);
                     await mycontext.SaveChangesAsync();
-                    return RedirectToAction("");
+                    return RedirectToAction("Index");
 
                 }
                 else
                 {
-                    foreach(var item in userCreationResult.Errors)
+                    foreach (var item in userCreationResult.Errors)
                     {
                         ModelState.AddModelError("", item.Description);
                     }
@@ -101,43 +105,10 @@ namespace hotel_app.Controllers
             }
             else
             {
-                return View("UserHotelRegister",hoteluservm);
+                return View("UserHotelRegister", hoteluservm);
             }
             return View();
         }
-
-
-
-        //2- save to db
-
-        ////add to DB
-        //[HttpPost]
-        //public IActionResult AddHotel(HotelViewModel hotel)
-        //{
-        //    //image code
-        //    //string filename = "";
-        //    //if (product1.photo != null)
-        //    //{
-        //    //    string Uploader = Path.Combine(env.WebRootPath, "images");
-        //    //    filename = Guid.NewGuid().ToString() + "_" + product1.photo.FileName;
-        //    //    string filepath = Path.Combine(Uploader, filename);
-        //    //    product1.photo.CopyTo(new FileStream(filepath, FileMode.Create));
-        //    //}
-        //    ////
-        //    //product p = new product()
-        //    //{
-        //    //    Name = product1.Name,
-        //    //    price = product1.price,
-        //    //    Image = filename
-        //    //};
-        //    ////
-        //    //context.Products.Add(p);
-        //    //context.SaveChanges();
-        //    ////
-        //    //ViewBag.success = "record added successfully";
-        //    //not implemented yet
-        //    return View();
-        //}
 
     }
 }

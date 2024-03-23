@@ -4,7 +4,7 @@ namespace hotel_app.Repositories
 {
     public class FoodCategoryRepository : GeneralRepository<FoodCategory>, IFoodCategoryRepository
     {
-        public FoodCategoryRepository(HotelDbContext DbContext) : base(DbContext)
+        public FoodCategoryRepository(dbContext DbContext) : base(DbContext)
         {
         }
 

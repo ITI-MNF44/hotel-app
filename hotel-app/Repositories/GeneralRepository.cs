@@ -5,9 +5,9 @@ namespace hotel_app.Repositories
 {
     public class GeneralRepository<T> : IGeneralRepository<T> where T : class
     {
-        HotelDbContext hotelDbContext;
+        dbContext hotelDbContext;
 
-        public GeneralRepository(HotelDbContext DbContext)
+        public GeneralRepository(dbContext DbContext)
         {
             hotelDbContext = DbContext;
         }
@@ -16,6 +16,7 @@ namespace hotel_app.Repositories
             T obj =  GetById(id);
             hotelDbContext.Remove(obj);
         }
+        //return list 
         public List<T> GetAll()
         {
             return hotelDbContext.Set<T>().ToList();

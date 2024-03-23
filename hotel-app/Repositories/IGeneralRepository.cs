@@ -2,6 +2,7 @@
 {
     public interface IGeneralRepository<T>
     {
+        
         public List<T> GetAll();
         public void Insert(T obj);
         public void Update(T obj);

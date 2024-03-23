@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hotel_app.Models
 {
-	public class HotelDbContext:IdentityDbContext<ApplicationUser>
+	public class dbContext:IdentityDbContext<ApplicationUser>
 	{
         //Ctor
-        public HotelDbContext():base()
+        public dbContext():base()
         {
             
         }
 		//inject context
-		public HotelDbContext(DbContextOptions<HotelDbContext> options) : base(options)
+		public dbContext(DbContextOptions<dbContext> options) : base(options)
 		{
 
 		}
