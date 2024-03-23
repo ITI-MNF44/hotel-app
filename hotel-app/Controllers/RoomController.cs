@@ -1,4 +1,5 @@
 ﻿using hotel_app.Models;
+using hotel_app.Repositories;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,17 +9,26 @@ namespace hotel_app.Controllers
 {
     public class RoomController : Controller
     {
-        private HotelDbContext mycontext;
-        private IWebHostEnvironment myEnvironment;
+        private HotelDbContext _context;
+        private IWebHostEnvironment _environment;
 
-        public RoomController(HotelDbContext context, IWebHostEnvironment hostEnvironment)
+        private IRoomRepository _roomRepository;
+
+        public RoomController(HotelDbContext context, IWebHostEnvironment hostEnvironment, IRoomRepository roomRepository)
         {
-            mycontext = context;
-            myEnvironment = hostEnvironment;
+            _context = context;
+            _environment = hostEnvironment;
+            _roomRepository=roomRepository;
         }
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Details(int id)
+        {
+            var room = _roomRepository.GetById(id);
+            return View(room);
         }
         //endpoint for add room
         public IActionResult AddRoom()
