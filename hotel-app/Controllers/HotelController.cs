@@ -1,8 +1,10 @@
 ﻿using hotel_app.Models;
 using hotel_app.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace hotel_app.Controllers
 {
@@ -12,18 +14,28 @@ namespace hotel_app.Controllers
         HotelDbContext mycontext;
         IWebHostEnvironment myEnvironment;
         UserManager<ApplicationUser> usermanager;
+        SignInManager<ApplicationUser> signInManager;
         //Ctor,inject
         public HotelController(HotelDbContext context, IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin) 
+            UserManager<ApplicationUser> usermanagerlogin, SignInManager<ApplicationUser> _signInManager) 
         {
             mycontext = context;
             myEnvironment = hostEnvironment;
-            this.usermanager = usermanagerlogin;
+            usermanager = usermanagerlogin;
+            signInManager = _signInManager;
         }
 
-        public IActionResult Index()
-        {
-            return View();
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {   
+            ApplicationUser user = mycontext.Users.FirstOrDefault(u=>u.UserName==User.Identity.Name);
+            int hotelId=0;
+            if (user != null)
+            {
+                Hotel hotel = await mycontext.Hotels.FirstOrDefaultAsync(h => h.UserId == user.Id);
+                hotelId =  hotel.Id;
+            }
+            return Content("this is hotel index : " + hotelId);
         }
         //1-open registeration form 
         [HttpGet]
@@ -106,7 +118,37 @@ namespace hotel_app.Controllers
             return View();
         }
 
+		public IActionResult Login()
+		{
+			return View("HotelLogin");
+		}
 
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Login(UserLoginVIewModel hotelVM)
+		{
+            if (ModelState.IsValid)
+            {
+                ApplicationUser AppUser = await usermanager.FindByNameAsync(hotelVM.Username);
+                if (AppUser != null)
+                {
+                    bool Found = hotelVM.Passwrod.Equals(AppUser.PasswordHash);
+                    if (Found)
+                    {
+                        await signInManager.SignInAsync(AppUser, hotelVM.RememberMe);
+                        return RedirectToAction("index", "home");
+                    }
+                    
+                }
+            }
+            return RedirectToAction("HotelLogin");
+		}
+
+        public async Task<IActionResult> SignOut()
+        {
+            await signInManager.SignOutAsync();
+            return Content("SignedOut");
+        }
 
         //2- save to db
 
