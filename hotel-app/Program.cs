@@ -2,6 +2,7 @@ using hotel_app.Models;
 using hotel_app.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace hotel_app
 {
