@@ -1,15 +1,22 @@
 ﻿using hotel_app.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace hotel_app.Repositories
 {
     public class RoomRepository : GeneralRepository<Room>, IRoomRepository
     {
+        HotelDbContext hotelDbContext;
         public RoomRepository(HotelDbContext DbContext) : base(DbContext)
         {
+            hotelDbContext = DbContext;
         }
-        public void test_function()
+
+        public List<Room> HotelRooms(int Id)
         {
-            throw new NotImplementedException();
+            return hotelDbContext.Rooms.Where(room => room.HotelId == Id)
+                .Include(room => room.Hotel)
+                .Include(room => room.RoomCategory).ToList();
         }
+
     }
 }
