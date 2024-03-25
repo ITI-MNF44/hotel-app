@@ -4,29 +4,8 @@
     Layout = "_ViewLogin";
     ViewData["Title"] = "HotelLogin";
 }
-    <div class="row">
+<div class="row" style="background-image: url('img\room-2.jpg');">
         <div class="px-5 py-4">
-            @* <form asp-action="login">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Username" class="control-label form-label"></label>
-                    <input asp-for="Username" class="form-control form" />
-                    <span asp-validation-for="Username" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Passwrod" class="control-label"></label>
-                    <input asp-for="Passwrod" class="form-control" />
-                    <span asp-validation-for="Passwrod" class="text-danger"></span>
-                </div>
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
-                    </label>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-            </form> *@
 
         <form asp-action="login" class="w-100">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>

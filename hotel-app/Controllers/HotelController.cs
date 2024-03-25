@@ -118,7 +118,7 @@ namespace hotel_app.Controllers
 
 		public IActionResult Login()
 		{
-			return View("HotelLogin");
+			return View("HotelLoginView");
 		}
 
 		[HttpPost]
@@ -142,8 +142,10 @@ namespace hotel_app.Controllers
                     }
 
                 }
+                ModelState.AddModelError(string.Empty, "Username or password is incorrect");
+
             }
-            return View("HotelLogin",hotelVM);
+            return View("HotelLoginView", hotelVM);
 		}
 
         public async Task<IActionResult> SignOut()
