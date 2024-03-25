@@ -14,16 +14,19 @@ namespace hotel_app.Controllers
         private readonly IWebHostEnvironment _environment;
         private readonly IRoomCategoryRepository _roomCategoryRepository;
         private readonly IRoomRepository _roomRepository;
+        private readonly IHotelService _hotelService;
 
         public RoomController(HotelDbContext context,
             IWebHostEnvironment hostEnvironment,
             IRoomRepository roomRepository,
-            IRoomCategoryRepository roomCategoryRepository)
+            IRoomCategoryRepository roomCategoryRepository,
+            IHotelService hotelService)
         {
             _context = context;
             _environment = hostEnvironment;
             _roomRepository = roomRepository;
             _roomCategoryRepository = roomCategoryRepository;
+            _hotelService = hotelService;
         }
         public IActionResult Index()
         {
@@ -37,9 +40,11 @@ namespace hotel_app.Controllers
         }
 
         //AllRooms For a hotel - Id is hotel id - hotel // Hotel id my be stored in the token for an authontcated user
-        public IActionResult AllRooms(int Id)
+        public async Task<IActionResult> AllRooms()
         {
-            List<Room> rooms = _roomRepository.HotelRooms(Id);
+            Hotel hotel = await _hotelService.GetCurrentHotel();
+            int currId = hotel.Id;
+            List<Room> rooms = _roomRepository.HotelRooms(currId);
             return View("AllRooms", rooms);
         }
 
@@ -55,12 +60,13 @@ namespace hotel_app.Controllers
         }
 
         [HttpPost]
-        public IActionResult Save(RoomViewModel room)
+        public async Task<IActionResult> Save(RoomViewModel room)
         {
             if(ModelState.IsValid)
             {
                 // Hotel id should be stored in the token for an authontcated user
-                  room.HotelId = 4;
+                    Hotel hotel = await _hotelService.GetCurrentHotel();
+                  room.HotelId = hotel.Id;
                  _roomRepository.Insert(RoomModelViewMapper.MapToRoom(room, _environment));
                 _roomRepository.Save();
                 return RedirectToAction("AllRooms");
