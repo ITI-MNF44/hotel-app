@@ -1,9 +1,11 @@
 ﻿using hotel_app.Models;
+using hotel_app.ViewModels;
+using System.Threading.Tasks;
 
 namespace hotel_app.Repositories
 {
-    public interface IHotelRepository: IGeneralRepository<Hotel>
+    public interface IHotelRepository : IGeneralRepository<Hotel>
     {
-        public void test_func();
+        Task RegisterInsert(RegisterUserViewModel hotelvm);
     }
 }

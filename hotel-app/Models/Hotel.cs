@@ -18,7 +18,7 @@ namespace hotel_app.Models
 		public string? Address {  get; set; } //street,area...
 		//Image									 
         public string Image { get; set; }
-        public int StarRating {  get; set; } // 4,5,.. starts
+        public int StarRating {  get; set; }
 		
 		[ForeignKey("HotelCategory")]
 		public int Category { get; set; } //luxery , resort , standard.. 

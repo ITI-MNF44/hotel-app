@@ -6,35 +6,62 @@ namespace hotel_app.ViewModels
 {
     public class RegisterUserViewModel
     {
-        //public int Id { get; set; }
+        [Required(ErrorMessage = "Please enter a name.")]
         public string Name { get; set; }
+
+        [Required(ErrorMessage = "Please enter a description.")]
         public string Description { get; set; }
+
+        [Required(ErrorMessage = "Please enter a country.")]
         public string Country { get; set; }
+
+        [Required(ErrorMessage = "Please enter a city.")]
         public string City { get; set; }
+
+        [Required(ErrorMessage = "Please enter an address.")]
+
         public string Address { get; set; }
 
+<<<<<<< Updated upstream
         //type changed to Iformfile
         [Display(Name = "Image URL")]
         public IFormFile photo { get; set; }
+=======
+        [Required(ErrorMessage = "Please upload an image.")]
+        [Display(Name = "Upload Image")]
+        public IFormFile Image { get; set; }
+
+        [Required(ErrorMessage = "Please select a star rating.")]
+        [Display(Name = "Star Rating")]
+>>>>>>> Stashed changes
         public int StarRating { get; set; }
+
+        //[Required(ErrorMessage = "Please select a category.")]
         public int Category { get; set; }
+<<<<<<< Updated upstream
         //selected item
         public List<HotelCategory>? Categories { get; set; }
        
+=======
+        public List<HotelCategory>? Categories { get; set; }
+
+>>>>>>> Stashed changes
         [Required(ErrorMessage = "Please enter a user name.")]
+        [Display(Name = "User Name")]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Please enter an email address.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
-
-        [Required(ErrorMessage = "Please enter a password.")]
-        [DataType(DataType.Password)]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$", ErrorMessage = "Password must have at least one uppercase ('A'-'Z'), one lowercase ('a'-'z'), and one digit (0-9).")]
+        [Required(ErrorMessage = "Password is required.")]
+        [StringLength(100, ErrorMessage = "Password must be at least 6 characters long.", MinimumLength = 6)]
         public string Password { get; set; }
+
 
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
 
         

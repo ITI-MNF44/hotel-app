@@ -1,5 +1,9 @@
 ﻿using hotel_app.Models;
 using hotel_app.Repositories;
+<<<<<<< Updated upstream
+=======
+using hotel_app.Services;
+>>>>>>> Stashed changes
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +14,7 @@ namespace hotel_app.Controllers
     public class HotelController : Controller
     {
         //ask
+<<<<<<< Updated upstream
         dbContext mycontext;
         IWebHostEnvironment myEnvironment;
         UserManager<ApplicationUser> usermanager;
@@ -22,6 +27,23 @@ namespace hotel_app.Controllers
             myEnvironment = hostEnvironment;
             this.usermanager = usermanagerlogin;
             _hotelCategoryRepository= hotelCategoryRepository;
+=======
+        HotelDbContext mycontext;
+        UserManager<ApplicationUser> usermanager;
+        SignInManager<ApplicationUser> signInManager;
+        IHotelCategoryService _categoryService;
+        IHotelService _hotelService;
+        //Ctor,inject
+        public HotelController(HotelDbContext context,
+            UserManager<ApplicationUser> usermanagerlogin,IHotelCategoryService categoryService, SignInManager<ApplicationUser> _signInManager,
+            IHotelService hotelService) 
+        {
+            mycontext = context;
+            usermanager = usermanagerlogin;
+            _categoryService = categoryService;
+            _hotelService = hotelService;
+            signInManager = _signInManager;
+>>>>>>> Stashed changes
         }
 
         public IActionResult Index()
@@ -32,6 +54,7 @@ namespace hotel_app.Controllers
         [HttpGet]
         public IActionResult UserHotelRegister()
         {
+<<<<<<< Updated upstream
             var categories = _hotelCategoryRepository.GetAll()
                                              .Select(category => new SelectListItem
                                              {
@@ -42,11 +65,20 @@ namespace hotel_app.Controllers
 
             ViewBag.CategoryList = categories;
             return View();
+=======
+            var categories = _categoryService.GetAllCategories();
+            var vm = new RegisterUserViewModel
+            {
+                Categories = categories
+            };
+            return View(vm);
+>>>>>>> Stashed changes
         }
         //2-save to db
         [HttpPost]
-        public async Task<IActionResult> UserHotelRegister(RegisterUserViewModel hoteluservm)
+        public async Task<IActionResult> UserHotelRegister(RegisterUserViewModel hotelvm)
         {
+<<<<<<< Updated upstream
             //first insert to user table
             if (ModelState.IsValid == true)
             {
@@ -106,9 +138,56 @@ namespace hotel_app.Controllers
             else
             {
                 return View("UserHotelRegister", hoteluservm);
+=======
+            // Continue with form submission logic
+            if (ModelState.IsValid )
+            {
+                await _hotelService.RegisterInsert(hotelvm);
+                return RedirectToAction("Index", "Home");
             }
-            return View();
+            else
+            {
+                var categories = _categoryService.GetAllCategories();
+                hotelvm.Categories = categories;
+                return View("UserHotelRegister", hotelvm);
+>>>>>>> Stashed changes
+            }
         }
+<<<<<<< Updated upstream
 
+=======
+        //
+		public IActionResult Login()
+		{
+			return View("HotelLogin");
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Login(UserLoginVIewModel hotelVM)
+		{
+            if (ModelState.IsValid)
+            {
+                ApplicationUser AppUser = await usermanager.FindByNameAsync(hotelVM.Username);
+                if (AppUser != null)
+                {
+                    bool Found = hotelVM.Passwrod.Equals(AppUser.PasswordHash);
+                    if (Found)
+                    {
+                        await signInManager.SignInAsync(AppUser, hotelVM.RememberMe);
+                        return RedirectToAction("index", "home");
+                    }
+                    
+                }
+            }
+            return RedirectToAction("HotelLogin");
+		}
+
+        public async Task<IActionResult> SignOut()
+        {
+            await signInManager.SignOutAsync();
+            return Content("SignedOut");
+        }
+>>>>>>> Stashed changes
     }
 }

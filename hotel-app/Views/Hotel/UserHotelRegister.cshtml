@@ -4,11 +4,19 @@
     ViewData["Title"] = "UserHotelRegister";
 }
 
+<<<<<<< Updated upstream
 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <form asp-action="UserHotelRegister" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+=======
+<div class="container">
+    <div class="row justify-content-center">
+        <h1 class="">Hotel Registeration</h1>
+        <div class="col-md-6">
+            <form asp-action="UserHotelRegister" method="post" enctype="multipart/form-data">
+>>>>>>> Stashed changes
                 <div asp-validation-summary="All" class="text-danger"></div>
 
                 <div class="form-group">
@@ -43,6 +51,7 @@
                 </div>
 
                 <div class="form-group">
+<<<<<<< Updated upstream
                     <label asp-for="photo" class="control-label">Image Upload</label>
                     <div class="custom-file">
                         <input asp-for="photo" type="file" class="custom-file-input" id="photoInput" onchange="previewImage(this)" required>
@@ -109,12 +118,67 @@
 
                 <div class="form-group">
                     <input type="submit" value="Register" class="btn btn-primary" />
+=======
+                    <label asp-for="Image" class="control-label">Image Upload</label>
+                    <input asp-for="Image" type="file" class="form-control" />
+                </div>
+               
+                <div class="form-group">
+                    <label asp-for="StarRating" class="control-label">Star Rating</label>
+                    <select asp-for="StarRating" class="form-control">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <span asp-validation-for="StarRating" class="text-danger"></span>
+                </div>
+                <!--CATEGORY-->
+                <div class="form-group col-md-6">
+                    <label asp-for="Category" class="control-label">Category</label>
+                    <select asp-for="Category" class="form-control">
+                        <option value="">Select a category</option>
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </div>
+                <!------------------>
+                
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label">Username</label>
+                    <input asp-for="UserName" class="form-control" required />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input asp-for="Email" class="form-control" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" required />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create</button>
+>>>>>>> Stashed changes
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<<<<<<< Updated upstream
 @* JavaScript to handle image preview *@
 <script>
     function previewImage(input) {
@@ -134,3 +198,6 @@
             document.getElementById('imagePreviewContainer').style.display = 'none';
         }
 </script>
+=======
+<!----------------------------------->
+>>>>>>> Stashed changes
