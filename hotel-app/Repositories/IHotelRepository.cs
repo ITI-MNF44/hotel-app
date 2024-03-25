@@ -4,7 +4,8 @@ namespace hotel_app.Repositories
 {
     public interface IHotelRepository: IGeneralRepository<Hotel>
     {
-        public void test_func();
-        public List<Room> getReservedRooms(int id);
+        public List<Room> getReservationDetails(int id);
+
+        public List<GuestRoom> getRoomReservationDetails(int id);
     }
 }
