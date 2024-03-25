@@ -42,8 +42,9 @@ namespace hotel_app
 
 			//services 
 			builder.Services.AddScoped<IHotelService, HotelService>();
+			builder.Services.AddScoped<IGuestService, GuestService>();
 
-			var app = builder.Build();
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())

@@ -30,29 +30,29 @@ namespace hotel_app.Controllers
         public async Task<IActionResult> AddHotelRole()
         {
             // Check if the "Hotel" role exists
-            if (!await _roleManager.RoleExistsAsync("Hotel"))
+            if (!await _roleManager.RoleExistsAsync("Guest"))
             {
                 // If the role doesn't exist, create it
-                var role = new IdentityRole("Hotel");
+                var role = new IdentityRole("Guest");
                 var result = await _roleManager.CreateAsync(role);
 
                 // Check if the role creation was successful
                 if (result.Succeeded)
                 {
                     // Role created successfully
-                    return Ok("Hotel role created successfully.");
+                    return Ok("Guest role created successfully.");
                 }
                 else
                 {
                     // Role creation failed
                     // You can handle the error as per your application's requirements
-                    return StatusCode(500, "Failed to create Hotel role.");
+                    return StatusCode(500, "Failed to create Guest role.");
                 }
             }
             else
             {
                 // Role already exists
-                return Conflict("Hotel role already exists.");
+                return Conflict("Guest role already exists.");
             }
         }
     }

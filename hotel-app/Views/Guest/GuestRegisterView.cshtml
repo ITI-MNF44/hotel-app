@@ -1,0 +1,212 @@
+﻿@model hotel_app.ViewModels.RegisterGuestViewModel
+
+@{
+    ViewData["Title"] = "GuestRegisterView";
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css"
+    <!-- Google Web Fonts -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com"
+          asp-append-version="true" />
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin
+          asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+          asp-append-version="true" />
+    <title>Login</title>
+    <style>
+        :root {
+            --primary-color: #dfa974;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: Arial, sans-serif;
+            background-image: url('/img/hotel-login-background.jpg');
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative; /* Add this line */
+        }
+            /* Add the overlay */
+            body::before {
+                position:fixed;
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient( to top, rgba(0, 0, 0, 0.8), transparent ); /* Adjust the opacity (0.8) as needed */
+            }
+
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            width: 550px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 650px;
+            text-align: center;
+            position: relative; /* Adjust this line */
+            top:120px
+
+            z-index: 1; /* Add this line */
+        }
+
+            .login-card h1 {
+                margin-bottom: 6px;
+                /* font-family: "heboo"; */
+                color: var(--primary-color);
+                font-weight: bold;
+            }
+
+            .login-card input[type="text"],
+            .login-card input[type="password"] {
+                width: 100%;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+                font-size: 16px;
+            }
+
+        .input-box {
+           /*  padding: 6px 0;
+            margin-bottom: 4px; */
+        }
+
+        .input-box-name{
+        flex-basis:50%
+        }
+
+        .login-card input:focus {
+            outline: 1px solid var(--primary-color);
+            box-shadow: 0px 0px 1px 1px var(--primary-color);
+        }
+
+        .login-card .login-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+            .login-card .login-btn:hover {
+                background-color: black;
+            }
+
+
+        .register-link {
+            width: 100%;
+            padding: 10px 0 0;
+            margin-bottom: 6px;
+        }
+
+            .register-link a {
+                color: black;
+            }
+
+        .rememberme {
+            width: 100%;
+            padding: 0 6px;
+            margin-bottom: 10px;
+            color: black;
+        }
+
+        .login-card input[type="Checkbox"]:checked {
+            background-color: black;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0 6px;
+        }
+
+        span {
+            text-align: start;
+            width: 100%;
+            display: block;
+            min-height: 24px;
+            padding-left: 4px;
+            font: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1 class=" text-uppercase text-center">Hotelier</h1>
+        <h5 class=" mb-4 text-center">Create New Account</h5>
+        <form asp-action="register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class=" d-flex align-items-center justify-content-between gap-3 ">
+                <div class="form-group input-box-name">
+                    <input asp-for="FirstName" class="form-control flex-grow-1" placeholder="First Name" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group input-box-name">
+                    <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+          
+            <div class="form-group input-box">
+                <input asp-for="UserName" class="form-control" placeholder="userame" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group input-box">
+                <input asp-for="Password" class="form-control" placeholder="Enter Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group input-box">
+                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group input-box">
+                <select asp-for="Gender" class="form-select">
+                    @* <option class="select-option" value="non">-- Select Gender --</option> *@
+                    <option class="select-option" value="male">Male</option>
+                    <option class="select-option" value="female">Female</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group input-box">
+                <input type="date" asp-for="BirthDate" class="form-control" placeholder="Birthdate" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+            <div class="form-group input-box">
+                <input asp-for="Country" class="form-control" placeholder="Country" />
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+            <div class="form-group input-box">
+                <input type="submit" value="Create Account" class="btn login-btn" />
+            </div>
+
+        </form>
+        <div class="register-link text-center">
+            <a class="w-100  text-decoration-underline" asp-action="login">Already have an acount? Login</a>
+        </div>
+
+    </div>
+
+    <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+</body>
+</html>
