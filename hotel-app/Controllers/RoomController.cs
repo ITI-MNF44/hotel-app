@@ -1,5 +1,6 @@
 ﻿using hotel_app.Models;
 using hotel_app.Repositories;
+using hotel_app.Services;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,18 +13,53 @@ namespace hotel_app.Controllers
         private HotelDbContext _context;
         private IWebHostEnvironment _environment;
 
-        private IRoomRepository _roomRepository;
+        private RoomRepository _roomRepository;
+        private IRoomCategoryRepository _roomCategoryRepository;
+        private IHotelRepository _hotelRepository;
+        private IRoomService _roomService;
 
-        public RoomController(HotelDbContext context, IWebHostEnvironment hostEnvironment, IRoomRepository roomRepository)
+        public RoomController(HotelDbContext context, IWebHostEnvironment hostEnvironment,IRoomService roomService, RoomRepository roomRepository, IRoomCategoryRepository roomCategoryRepository, IHotelRepository hotelRepository)
         {
             _context = context;
             _environment = hostEnvironment;
-            _roomRepository=roomRepository;
+            _roomRepository = roomRepository;
+            _roomCategoryRepository = roomCategoryRepository;
+            _hotelRepository = hotelRepository;
+            _roomService = roomService;
         }
+
+
+
         public IActionResult Index()
         {
-            return View();
+            var rooms = _roomService.GetAll();
+            return View(rooms);
         }
+
+        //public IActionResult Index()
+        //{
+        //    var rooms = _roomRepository.GetAll();
+        //    return View(rooms);
+        //}
+
+        //public IActionResult Index()
+        //{
+        //    List <Room> rooms = _roomRepository.GetAll();
+        //    //var roomViewModels = rooms.Select(room => new RoomViewModel
+        //    //{
+        //    //    Name = room.Name,
+        //    //    //Description = room.Description,
+        //    //    HotelName = room.Hotel.Name, 
+        //    //    CategoryName = room.RoomCategory.Name, 
+        //    //    NumOfBeds = room.NumOfBeds,
+        //    //    PricePerNight = room.PricePerNight,
+        //    //    NumOfRooms = room.NumOfRooms,
+        //    //    //Image = room.Image
+        //    //                }).ToList();
+
+        //    return View(rooms); // Pass roomViewModels to the view
+        //}
+
 
         public IActionResult Details(int id)
         {

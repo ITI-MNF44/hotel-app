@@ -1,0 +1,103 @@
+﻿
+@* @model IEnumerable<hotel_app.ViewModels.RoomViewModel> *@
+    @model List<Room>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@* @model IEnumerable<hotel_app.Models.Room> *@
+
+    <!-- Page Header Start -->
+<div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
+    <div class="container-fluid page-header-inner py-5">
+        <div class="container text-center pb-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Booking</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center text-uppercase">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">Rooms</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+      <!-- Rooms Section Begin -->
+<section class="rooms-section spad">
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="room-item shadow">
+                    @if (!string.IsNullOrEmpty(item.Image))
+                    {                   
+                        <img src="~/img/@item.Image" alt="Room Image" />
+                    } 
+              
+                        <div class="ri-text">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4>@item.Name</h4>
+                                </div> 
+                                <div class="col-6">
+                                    <div class="rating fs-5">
+                                        4.5 <i class="fa fa-star text-yellow ms-2 fs-6"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="fs-2">@item.PricePerNight $<span>/Pernight</span></h3>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="r-o">Capacity:</td>
+                                        <td>2 <i class="fa fa-user text-primary ms-2 fs-6"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Bed:</td>
+                                        <td>3 <i class="fa fa-bed text-primary ms-2 fs-6"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Services:</td>
+                                        <td><i class="fa fa-tv text-primary me-2 fs-6"></i> TV
+                                            <i class="fa fa-wifi text-primary me-2 fs-6"></i> Wifi
+                                            <i class="fa fa-bath text-primary me-2 fs-6"></i> Bath
+
+                                        </td>
+                                        @* <td>Wifi, Television, Bathroom,...</td> *@
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a asp-action="Details" 
+                                    class="primary-btn border-primary border-bottom"
+                                    asp-controller="Room"
+                                    >More Details</a> 
+                                </div>
+                                <div class="col-6">
+                                    <a asp-action="Index" 
+                                    class="primary-btn bg-primary text-white p-2"
+                                    asp-controller="Booking"
+                                    >Booking Now</a>
+                                    @* <a href="#">Booking Now</a> *@
+                                </div>
+                            </div>
+                            @* <a href="#" class="primary-btn border-primary border-bottom">More Details</a> *@
+                        </div>                                     
+                    </div>
+                </div>
+                }
+                <div class="col-lg-12">
+                    <div class="room-pagination">
+                    <a href="#">1</a>
+                    <a href="#">2</a>
+                    <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- Rooms Section End -->

@@ -3,7 +3,7 @@
     --primary: #dfa974 !important;
     --light: #f6f3f1;
     --dark: #222736;
-    --yellow: #debf0e;
+    --yellow: #f5b917;
     /* --dark: #0f172b; */
 }
 
@@ -73,6 +73,9 @@ ul, ol {
 
 .shadow {
     box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.067) !important;
+}
+.rating i{
+    color: var(--yellow);
 }
 
 .fw-medium {
@@ -744,7 +747,10 @@ ul, ol {
 .room-details-item img {
     margin-bottom: 40px;
 }
-
+.room-details-section img {
+    min-width: 100%;
+    max-width: 100%;
+}
 .room-details-item .rd-text .rd-title {
     overflow: hidden;
     margin-bottom: 8px;

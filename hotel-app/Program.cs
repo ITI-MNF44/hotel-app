@@ -1,5 +1,6 @@
 using hotel_app.Models;
 using hotel_app.Repositories;
+using hotel_app.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -30,14 +31,15 @@ namespace hotel_app
 
 			// Register custom services
 			builder.Services.AddScoped<IGuestRepository, GuestRepository>();
-            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+            builder.Services.AddScoped<RoomRepository, RoomRepository>();
 			builder.Services.AddScoped<IHotelRepository, HotelRepository>();
             builder.Services.AddScoped<IFoodRepository, FoodRepository>();
             builder.Services.AddScoped<IRoomCategoryRepository, RoomCategoryRepository>();
             builder.Services.AddScoped<IHotelCategoryRepository, HotelCategoryRepository>();
             builder.Services.AddScoped<IFoodCategoryRepository, FoodCategoryRepository>();
+            builder.Services.AddScoped<IRoomService, RoomService>();
 
-			var app = builder.Build();
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
