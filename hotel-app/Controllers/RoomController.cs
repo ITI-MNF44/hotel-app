@@ -1,5 +1,6 @@
 ﻿using hotel_app.Models;
 using hotel_app.Repositories;
+using hotel_app.Services;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,16 +10,20 @@ namespace hotel_app.Controllers
 {
     public class RoomController : Controller
     {
-        private HotelDbContext _context;
-        private IWebHostEnvironment _environment;
+        private readonly HotelDbContext _context;
+        private readonly IWebHostEnvironment _environment;
+        private readonly IRoomCategoryRepository _roomCategoryRepository;
+        private readonly IRoomRepository _roomRepository;
 
-        private IRoomRepository _roomRepository;
-
-        public RoomController(HotelDbContext context, IWebHostEnvironment hostEnvironment, IRoomRepository roomRepository)
+        public RoomController(HotelDbContext context,
+            IWebHostEnvironment hostEnvironment,
+            IRoomRepository roomRepository,
+            IRoomCategoryRepository roomCategoryRepository)
         {
             _context = context;
             _environment = hostEnvironment;
-            _roomRepository=roomRepository;
+            _roomRepository = roomRepository;
+            _roomCategoryRepository = roomCategoryRepository;
         }
         public IActionResult Index()
         {
@@ -30,16 +35,44 @@ namespace hotel_app.Controllers
             var room = _roomRepository.GetById(id);
             return View(room);
         }
-        //endpoint for add room
-        public IActionResult AddRoom()
+
+        //AllRooms For a hotel - Id is hotel id - hotel // Hotel id my be stored in the token for an authontcated user
+        public IActionResult AllRooms(int Id)
         {
-            //not implemented yet
-            return View();
+            List<Room> rooms = _roomRepository.HotelRooms(Id);
+            return View("AllRooms", rooms);
+        }
+
+        //Endpoint for add room
+        public IActionResult Add()
+        {
+            RoomViewModel room = new RoomViewModel
+            {
+                Categories = _roomCategoryRepository.GetAll(),
+            };
+
+            return View("AddRoom", room);
+        }
+
+        [HttpPost]
+        public IActionResult Save(RoomViewModel room)
+        {
+            if(ModelState.IsValid)
+            {
+                // Hotel id should be stored in the token for an authontcated user
+                  room.HotelId = 4;
+                 _roomRepository.Insert(RoomModelViewMapper.MapToRoom(room, _environment));
+                _roomRepository.Save();
+                return RedirectToAction("AllRooms");
+            }
+            room.Categories = _roomCategoryRepository.GetAll();
+            return View("AddRoom", room);
+
         }
 
         //add to DB
         [HttpPost]
-        public IActionResult AddRoom(HotelViewModel hotel)
+        public IActionResult Add(HotelViewModel hotel)
         {
             //image code
             //string filename = "";
@@ -64,6 +97,18 @@ namespace hotel_app.Controllers
             //ViewBag.success = "record added successfully";
             //not implemented yet
             return View();
+        }
+
+        public IActionResult Edit(int id)
+        {
+            return View("EditRoom");
+
+        }
+
+        public IActionResult Delete(int id)
+        {
+            return View("DeleteRoom");
+
         }
     }
 }

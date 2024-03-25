@@ -1,0 +1,94 @@
+﻿@model hotel_app.ViewModels.RoomViewModel
+
+@{
+    ViewData["Title"] = "AddRoom";
+    SelectList CategoriesList = new SelectList(Model.Categories, "Id", "Name");
+}
+
+<h1 class="text-center m-3">Add New Room</h1>
+<style>
+    a:hover {
+        color: #0F172B;
+    }
+</style>
+
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form asp-action="Save" asp-controller="Room" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+           
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Category" class="control-label"></label>
+                <select class="form form-control"
+                        asp-for="Category"
+                        asp-items="CategoriesList">
+                    <option value="0">--Select Category--</option>
+
+
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="NumOfBeds" class="control-label"></label>
+                <input asp-for="NumOfBeds" class="form-control" />
+                <span asp-validation-for="NumOfBeds" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="PricePerNight" class="control-label"></label>
+                <input asp-for="PricePerNight" class="form-control" />
+                <span asp-validation-for="PricePerNight" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="NumOfRooms" class="control-label"></label>
+                <input asp-for="NumOfRooms" class="form-control" />
+                <span asp-validation-for="NumOfRooms" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <input asp-for="IsDeleted" class="form-check-input" />
+                <label asp-for="IsDeleted" class="form-check-label control-label"></label>
+                <span asp-validation-for="IsDeleted" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3 d-flex justify-content-center">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <a asp-action="AllRooms" style="font-size: 15px;">Back To All Rooms</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
