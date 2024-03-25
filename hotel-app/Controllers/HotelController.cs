@@ -1,10 +1,12 @@
 ﻿using hotel_app.Models;
+using hotel_app.Services;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace hotel_app.Controllers
 {
@@ -15,27 +17,23 @@ namespace hotel_app.Controllers
         IWebHostEnvironment myEnvironment;
         UserManager<ApplicationUser> usermanager;
         SignInManager<ApplicationUser> signInManager;
+        IHotelService hotelService;
         //Ctor,inject
         public HotelController(HotelDbContext context, IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin, SignInManager<ApplicationUser> _signInManager) 
+            UserManager<ApplicationUser> usermanagerlogin, SignInManager<ApplicationUser> _signInManager, IHotelService _HotelService) 
         {
             mycontext = context;
             myEnvironment = hostEnvironment;
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
+            hotelService = _HotelService;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Hotel")]
         public async Task<IActionResult> Index()
-        {   
-            ApplicationUser user = mycontext.Users.FirstOrDefault(u=>u.UserName==User.Identity.Name);
-            int hotelId=0;
-            if (user != null)
-            {
-                Hotel hotel = await mycontext.Hotels.FirstOrDefaultAsync(h => h.UserId == user.Id);
-                hotelId =  hotel.Id;
-            }
-            return Content("this is hotel index : " + hotelId);
+        {
+            Hotel h = await hotelService.GetCurrentHotel(); 
+            return Content("current hotel : "+h.Name);
         }
         //1-open registeration form 
         [HttpGet]
@@ -136,12 +134,16 @@ namespace hotel_app.Controllers
                     if (Found)
                     {
                         await signInManager.SignInAsync(AppUser, hotelVM.RememberMe);
+                        List<Claim> Claims = new List<Claim>();
+                        Claims.Add(new Claim(ClaimTypes.NameIdentifier, AppUser.Id));
+                        await usermanager.AddToRoleAsync(AppUser, "Hotel");
+                        await signInManager.SignInWithClaimsAsync(AppUser, hotelVM.RememberMe, Claims);
                         return RedirectToAction("index", "home");
                     }
-                    
+
                 }
             }
-            return RedirectToAction("HotelLogin");
+            return View("HotelLogin",hotelVM);
 		}
 
         public async Task<IActionResult> SignOut()
