@@ -6,5 +6,6 @@ namespace hotel_app.Repositories
     public interface IRoomRepository:IGeneralRepository<Room>
     {
         public List<Room> HotelRooms(int Id);
+        public List<Room> AllAvailableRooms();
     }
 }
