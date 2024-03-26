@@ -1,0 +1,81 @@
+﻿@using hotel_app.Models;
+@using HelperClass;
+@model List<RoomGuestReservationVM>
+
+
+    <div style="width:100%; padding:20px; min-height:600px">
+    <h1 id="main-title">Reservation Information about @ViewData["roomName"]</h1>
+    <table class="table">
+    <thead class="bg-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Guest Name</th>
+            <th scope="col">Booking Date</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Num Of Rooms</th>
+            <th scope="col">Room Price</th>
+            <th scope="col">Food Name</th>
+            <th scope="col">Food Category</th>
+            <th scope="col">Food price</th>
+            <th scope="col">Food Amount</th>
+            <th scope="col">Total Price</th>
+            
+
+          </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@Model[i].Full_name</td>
+                <td>@Model[i].BookingDate.getCustomTime()</td>
+                <td>@Model[i].StartDate.getCustomTime()</td>
+                <td>@Model[i].EndDate.getCustomTime()</td>
+                <td>@Model[i].Rooms_amount</td>
+                <td>@Model[i].RoomPrice</td>
+                <td>@(Model[i].FoodName != null ? Model[i].FoodName : "--")</td>
+                <td>@(Model[i].FoodCategory != null ? Model[i].FoodCategory :"--")</td>
+                <td>@(Model[i].FoodPrice != null ? Model[i].FoodPrice : "--")</td>
+                <td>@(Model[i].FoodAmount != null ? Model[i].FoodAmount : "--")</td>
+                    <td>@( (Model[i].RoomPrice * Model[i].Rooms_amount) + ( (Model[i].FoodAmount ?? 0) * (Model[i].FoodPrice??0) ) )</td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
+    </div>
+
+
+
+
+<style>
+
+    #main-title {
+        text-align: center;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        box-shadow: 2px 2px 2px 2px #3333;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    table {
+        box-shadow: 2px 2px 2px 2px #3333;
+        border-radius: 10px;
+    }
+
+        table thead tr {
+            font-size: 14px;
+            color: white;
+        }
+
+    tr {
+        text-align: center;
+        font-size: 14px;
+        color: black;
+    }
+</style>
