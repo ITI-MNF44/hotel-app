@@ -19,15 +19,20 @@ namespace hotel_app.Controllers
         UserManager<ApplicationUser> usermanager;
         SignInManager<ApplicationUser> signInManager;
         IHotelService hotelService;
+        IHotelRepository hotelRepository;
+        IHotelCategoryRepository hotelCategoryRepository;
         //Ctor,inject
         public HotelController(HotelDbContext context, IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin, SignInManager<ApplicationUser> _signInManager, IHotelService _HotelService) 
+            UserManager<ApplicationUser> usermanagerlogin, SignInManager<ApplicationUser> _signInManager, 
+            IHotelService _HotelService, IHotelRepository _hotelRepository, IHotelCategoryRepository _hotelCategoryRepository) 
         {
             mycontext = context;
             myEnvironment = hostEnvironment;
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
             hotelService = _HotelService;
+            hotelRepository = _hotelRepository;
+            hotelCategoryRepository = _hotelCategoryRepository;
         }
 
         [Authorize(Roles = "Hotel")]
@@ -36,6 +41,13 @@ namespace hotel_app.Controllers
             Hotel h = await hotelService.GetCurrentHotel(); 
             return Content("current hotel : "+h.Name);
         }
+
+        public IActionResult AllHotels()
+        {
+            var hotels = hotelRepository.AllHotels();
+            return View("AllHotels", hotels);
+        }
+
         //1-open registeration form 
         [HttpGet]
         public IActionResult UserHotelRegister()
@@ -155,10 +167,19 @@ namespace hotel_app.Controllers
             return Content("SignedOut");
         }
 
-        public IActionResult ReservationsInfo(int id)
+        public async Task<IActionResult> ReservationsInfo()
         {
-            var res = hotelService.ReservationsInfo(id);
-            return View("DisplayHotelReservedRooms", res);
+            Hotel currHotel = await hotelService.GetCurrentHotel();
+            if (currHotel != null)
+            {
+                var res = hotelService.ReservationsInfo(currHotel.Id);
+                return View("DisplayHotelReservedRooms", res);
+            }
+            else
+            {
+                return Content("Error getting reservations data");
+            }
+           
         }
 
         public IActionResult getRoomReservationsDetails(int id, string roomName)

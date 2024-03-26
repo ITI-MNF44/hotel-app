@@ -14,18 +14,18 @@ namespace hotel_app.Controllers
         UserManager<ApplicationUser> usermanager;
         SignInManager<ApplicationUser> signInManager;
         IGuestService GuestService;
-        public GuestController( UserManager<ApplicationUser> usermanagerlogin, 
+        public GuestController(UserManager<ApplicationUser> usermanagerlogin,
             SignInManager<ApplicationUser> _signInManager, IGuestService _GuestService)
         {
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
             GuestService = _GuestService;
         }
-        [Authorize]
+        [Authorize(Roles = "Guest")]
         public async Task<IActionResult> Index()
         {
             Guest guest = await GuestService.GetCurrentGuest();
-            return Content("hello from guest index");
+            return Content("hello from guest index : " + guest.FirstName + " " + guest.LastName);
         }
 
         public IActionResult Login()
@@ -42,8 +42,8 @@ namespace hotel_app.Controllers
                 ApplicationUser AppUser = await usermanager.FindByNameAsync(guestVM.Username);
                 if (AppUser != null)
                 {
-                    bool Found = guestVM.Passwrod.Equals(AppUser.PasswordHash);
-                    if (Found)
+                    bool found = await usermanager.CheckPasswordAsync(AppUser, guestVM.Passwrod);
+                    if (found)
                     {
                         await signInManager.SignInAsync(AppUser, guestVM.RememberMe);
                         List<Claim> Claims = new List<Claim>();
@@ -77,19 +77,27 @@ namespace hotel_app.Controllers
                     await usermanager.AddToRoleAsync(AppUser, "Guest");
                     List<Claim> Claims = new List<Claim>();
                     Claims.Add(new Claim(ClaimTypes.NameIdentifier, AppUser.Id));
-                    await signInManager.SignInWithClaimsAsync(AppUser,true, Claims);
+                    await signInManager.SignInWithClaimsAsync(AppUser, true, Claims);
                     Guest guest = GuestService.MapGuestVmToGuest(guestVM);
+                    guest.UserId = AppUser.Id;
                     GuestService.InsertGuest(guest);
                     GuestService.SaveChanges();
                     return RedirectToAction("Index");
                 }
 
-                    return View("GuestRegisterView", guestVM);
+                return View("GuestRegisterView", guestVM);
 
 
             }
             return View("GuestRegisterView", guestVM);
         }
+
+        public async Task<IActionResult> SignOut()
+        {
+            await signInManager.SignOutAsync();
+            return Content("guest SignedOut");
+        }
+
    
         public IActionResult ReservationsHistory(int guestId)
         {
