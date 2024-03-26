@@ -10,5 +10,8 @@ namespace hotel_app.Services
         public List<Room> ReservationsInfo(int id);
         public List<RoomGuestReservationVM> RoomReservationsDetails(int id);
 
+        //hotel register
+        public Task RegisterInsert(RegisterUserViewModel hotelvm);
+
     }
 }

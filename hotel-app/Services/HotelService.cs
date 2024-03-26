@@ -32,6 +32,11 @@ namespace hotel_app.Services
         {
             return hotelRepository.getReservationsDetails(id);
         }
+        //Register Hotel
+        public async Task RegisterInsert(RegisterUserViewModel hotelvm)
+        {
+            await hotelRepository.RegisterInsert(hotelvm);
+        }
 
         public List<RoomGuestReservationVM> RoomReservationsDetails(int id)
         {
