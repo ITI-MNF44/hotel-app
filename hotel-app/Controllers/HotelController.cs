@@ -155,10 +155,19 @@ namespace hotel_app.Controllers
             return Content("SignedOut");
         }
 
-        public IActionResult ReservationsInfo(int id)
+        public async Task<IActionResult> ReservationsInfo()
         {
-            var res = hotelService.ReservationsInfo(id);
-            return View("DisplayHotelReservedRooms", res);
+            Hotel currHotel = await hotelService.GetCurrentHotel();
+            if (currHotel != null)
+            {
+                var res = hotelService.ReservationsInfo(currHotel.Id);
+                return View("DisplayHotelReservedRooms", res);
+            }
+            else
+            {
+                return Content("Error getting reservations data");
+            }
+           
         }
 
         public IActionResult getRoomReservationsDetails(int id, string roomName)
