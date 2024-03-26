@@ -1,0 +1,81 @@
+﻿@using hotel_app.Models;
+
+<h1 >Rooms Information</h1>
+
+@model List<Room>
+
+<table class="table">
+    <thead class="bg-success">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Room Name</th>
+            <th scope="col">Room Category</th>
+            <th scope="col">Num Of Bed</th>
+            <th scope="col">Price Per Night</th>
+            <th scope="col">Num Of Rooms</th>
+            <th scope="col">Reserved Rooms</th>
+            <th scope="col">Available Rooms</th>
+            <th scope="col">Extra Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for(int i = 0; i<Model.Count ; i++)
+        {
+            <tr>
+                <th scope="row">@(i+1)</th>
+                <td>@Model[i].Name</td>
+                <td>@Model[i].RoomCategory!.Name</td>
+                <td>@Model[i].NumOfBeds</td>
+                <td>@Model[i].PricePerNight</td>                
+                <td>@Model[i].NumOfRooms </td>
+                <td>@Model[i].GuestRooms.Sum(x => x.RoomsAmount)</td>
+                <td>@(Model[i].NumOfRooms- Model[i].GuestRooms.Sum(x=>x.RoomsAmount) )</td>
+                <td><a href="/hotel/getRoomReservationsDetails/@Model[i].Id?roomName=@Model[i].Name">More Details</a></td>
+            </tr>
+        }
+
+    </tbody>
+  
+</table>
+
+
+
+<style>
+
+   h1{
+       text-align:center;
+       margin-bottom:20px;
+       margin-top:20px;
+        box-shadow: 5px 5px 10px #546, -5px -5px 10px #546;
+        border-radius:10px;
+        padding:10px;
+    }
+    
+    table{
+        box-shadow: 5px 5px 10px #546;
+        border-radius: 10px;
+    }
+          table thead tr{
+              font-size: 20px;
+              color:white;
+            
+          }
+          tr{
+              text-align: center;
+              font-size:20px;
+              color:black;
+          }
+
+    td a {
+        background-color: red;
+        color:white;
+        padding: 2px 8px;
+        border-radius:15px;
+        transition: all 0.3s ease-out;
+    }
+
+    td a:hover {
+        background-color:black;
+        color:white;
+    }
+</style>
