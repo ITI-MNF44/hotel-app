@@ -14,6 +14,7 @@ namespace hotel_app.Services
 
         public void SaveChanges();
 
+        public List<RoomGuestReservationVM> getGuestReservations(int guest_id);
 
     }
 }

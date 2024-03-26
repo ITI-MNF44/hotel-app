@@ -90,5 +90,11 @@ namespace hotel_app.Controllers
             }
             return View("GuestRegisterView", guestVM);
         }
+   
+        public IActionResult ReservationsHistory(int guestId)
+        {
+            var model = GuestService.getGuestReservations(guestId);
+            return View("GuestReservationsHistory", model);
+        }
     }
 }
