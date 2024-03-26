@@ -59,11 +59,13 @@ namespace hotel_app.Controllers
             {
                 Hotel hotel = await _hotelService.GetCurrentHotel();
                 room.HotelId = hotel.Id;
+                room.IsDeleted = false;
+                room.CreatedDate = DateTime.Now.Date;
 
                 _roomService.Insert(RoomModelViewMapper.MapToRoom(room, _environment));
                 _roomService.Save();
 
-                return RedirectToAction("AllRooms");
+                return RedirectToAction("All");
             }
 
             room.Categories = _roomService.RoomCategories();
@@ -73,17 +75,43 @@ namespace hotel_app.Controllers
 
         public IActionResult Edit(int id)
         {
-            Room room = _roomService.GetById(id);
+            Room room = _roomService.GetById(id, "Hotel", "RoomCategory");
             RoomViewModel? roomViewModle = RoomModelViewMapper.MapToRoomViewModel(room);
             roomViewModle.Categories = _roomService.RoomCategories();
 
-            return View("EditRoom",roomViewModle);
+            return View("EditRoom", roomViewModle);
         }
 
+        [HttpPost]
+        public IActionResult Update(RoomViewModel room)
+        {
+            //Broken
+            if (ModelState.IsValid)
+            {
+                 _roomService.Update(RoomModelViewMapper.MapToRoom(room));
+                _roomService.Save();
+                return RedirectToAction("All");
+            }
+
+            return View("EditRoom", room);
+        }
+
+        public IActionResult DeleteRoom(int id)
+        {
+           var room = RoomModelViewMapper.MapToRoomViewModel( _roomService.GetById(id, "Hotel", "RoomCategory"));
+            return View("DeleteRoom", room);
+
+        }
+
+        [HttpPost]
         public IActionResult Delete(int id)
         {
-            return View("DeleteRoom");
+            var room = _roomService.GetById(id);
+            room.isDeleted = true;
+            _roomService.Update(room);
+            _roomService.Save();
 
+            return RedirectToAction("All");
         }
     }
 }

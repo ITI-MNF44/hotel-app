@@ -6,8 +6,8 @@ namespace hotel_app.Services
 {
     public class RoomService: IRoomService
     {
-        IRoomRepository _roomRepository;
-        IRoomCategoryRepository _roomCategoryRepository;
+        readonly IRoomRepository _roomRepository;
+        readonly IRoomCategoryRepository _roomCategoryRepository;
         public RoomService(IRoomRepository roomRepository,
         IRoomCategoryRepository roomCategoryRepository) 
         {
@@ -39,5 +39,21 @@ namespace hotel_app.Services
         {
             _roomRepository.Save();
         }
+
+        public Room GetById(int id, params string[] include)
+        {
+           return _roomRepository.GetById(id, include);
+        }
+
+        public void Update(Room room)
+        {
+            _roomRepository.Update(room);
+        }
+        public void Delete(int id)
+        {
+            _roomRepository.Delete(id);
+        }
+
+      
     }
 }

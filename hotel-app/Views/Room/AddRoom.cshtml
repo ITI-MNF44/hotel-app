@@ -35,9 +35,6 @@
                 <select class="form form-control"
                         asp-for="Category"
                         asp-items="CategoriesList">
-                    <option value="0">--Select Category--</option>
-
-
                 </select>
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
@@ -60,22 +57,11 @@
                 <span asp-validation-for="NumOfRooms" class="text-danger"></span>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
 
             <div class="form-group mb-3">
                 <label asp-for="Image" class="control-label"></label>
                 <input asp-for="Image" class="form-control" />
                 <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <input asp-for="IsDeleted" class="form-check-input" />
-                <label asp-for="IsDeleted" class="form-check-label control-label"></label>
-                <span asp-validation-for="IsDeleted" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3 d-flex justify-content-center">
@@ -86,7 +72,7 @@
 </div>
 
 <div class="d-flex justify-content-center">
-    <a asp-action="AllRooms" style="font-size: 15px;">Back To All Rooms</a>
+    <a asp-action="All" style="font-size: 15px;">Back To All Rooms</a>
 </div>
 
 @section Scripts {
