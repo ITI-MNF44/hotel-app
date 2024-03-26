@@ -1,10 +1,12 @@
 ﻿using hotel_app.Models;
+using hotel_app.Services;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace hotel_app.Controllers
 {
@@ -15,27 +17,23 @@ namespace hotel_app.Controllers
         IWebHostEnvironment myEnvironment;
         UserManager<ApplicationUser> usermanager;
         SignInManager<ApplicationUser> signInManager;
+        IHotelService hotelService;
         //Ctor,inject
         public HotelController(HotelDbContext context, IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin, SignInManager<ApplicationUser> _signInManager) 
+            UserManager<ApplicationUser> usermanagerlogin, SignInManager<ApplicationUser> _signInManager, IHotelService _HotelService) 
         {
             mycontext = context;
             myEnvironment = hostEnvironment;
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
+            hotelService = _HotelService;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Hotel")]
         public async Task<IActionResult> Index()
-        {   
-            ApplicationUser user = mycontext.Users.FirstOrDefault(u=>u.UserName==User.Identity.Name);
-            int hotelId=0;
-            if (user != null)
-            {
-                Hotel hotel = await mycontext.Hotels.FirstOrDefaultAsync(h => h.UserId == user.Id);
-                hotelId =  hotel.Id;
-            }
-            return Content("this is hotel index : " + hotelId);
+        {
+            Hotel h = await hotelService.GetCurrentHotel(); 
+            return Content("current hotel : "+h.Name);
         }
         //1-open registeration form 
         [HttpGet]
@@ -120,7 +118,7 @@ namespace hotel_app.Controllers
 
 		public IActionResult Login()
 		{
-			return View("HotelLogin");
+			return View("HotelLoginView");
 		}
 
 		[HttpPost]
@@ -136,12 +134,18 @@ namespace hotel_app.Controllers
                     if (Found)
                     {
                         await signInManager.SignInAsync(AppUser, hotelVM.RememberMe);
+                        List<Claim> Claims = new List<Claim>();
+                        Claims.Add(new Claim(ClaimTypes.NameIdentifier, AppUser.Id));
+                        await usermanager.AddToRoleAsync(AppUser, "Hotel");
+                        await signInManager.SignInWithClaimsAsync(AppUser, hotelVM.RememberMe, Claims);
                         return RedirectToAction("index", "home");
                     }
-                    
+
                 }
+                ModelState.AddModelError(string.Empty, "Username or password is incorrect");
+
             }
-            return RedirectToAction("HotelLogin");
+            return View("HotelLoginView", hotelVM);
 		}
 
         public async Task<IActionResult> SignOut()
@@ -150,36 +154,6 @@ namespace hotel_app.Controllers
             return Content("SignedOut");
         }
 
-        //2- save to db
-
-        ////add to DB
-        //[HttpPost]
-        //public IActionResult AddHotel(HotelViewModel hotel)
-        //{
-        //    //image code
-        //    //string filename = "";
-        //    //if (product1.photo != null)
-        //    //{
-        //    //    string Uploader = Path.Combine(env.WebRootPath, "images");
-        //    //    filename = Guid.NewGuid().ToString() + "_" + product1.photo.FileName;
-        //    //    string filepath = Path.Combine(Uploader, filename);
-        //    //    product1.photo.CopyTo(new FileStream(filepath, FileMode.Create));
-        //    //}
-        //    ////
-        //    //product p = new product()
-        //    //{
-        //    //    Name = product1.Name,
-        //    //    price = product1.price,
-        //    //    Image = filename
-        //    //};
-        //    ////
-        //    //context.Products.Add(p);
-        //    //context.SaveChanges();
-        //    ////
-        //    //ViewBag.success = "record added successfully";
-        //    //not implemented yet
-        //    return View();
-        //}
 
     }
 }

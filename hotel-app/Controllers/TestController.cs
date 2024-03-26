@@ -1,6 +1,6 @@
 ﻿using hotel_app.Models;
 using hotel_app.Repositories;
-using hotel_app.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hotel_app.Controllers
@@ -8,12 +8,13 @@ namespace hotel_app.Controllers
     public class TestController : Controller
     {
         private readonly IGuestRepository guestRepository;
-        private readonly IHotelRepository hotelRepository;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public TestController(IGuestRepository _guestRepository, IHotelRepository _hotelRepository)
+        public TestController(IGuestRepository _guestRepository, RoleManager<IdentityRole> roleManager)
         {
             guestRepository = _guestRepository;
-            hotelRepository = _hotelRepository;
+            _roleManager = roleManager;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
@@ -23,33 +24,36 @@ namespace hotel_app.Controllers
         }
 
 
-        public IActionResult ReservationInfo(int id)
-        {
-            var res = hotelRepository.getReservationDetails(id);
-            return View("DisplayHotelReservedRooms", res);
-        }
+       
 
-        public IActionResult getRoomReservationDetails(int id, string roomName)
+        // Action method to add the "Hotel" role
+        public async Task<IActionResult> AddHotelRole()
         {
-            var RoomReservations = hotelRepository.getRoomReservationDetails(id);
-
-            var model = hotelRepository.getRoomReservationDetails(id).Select(x => new RoomGuestReservationVM()
+            // Check if the "Hotel" role exists
+            if (!await _roleManager.RoleExistsAsync("Guest"))
             {
-                Full_name = x.Guest.FirstName + " " + x.Guest.LastName,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                BookingDate = x.BookingDate,
-                Rooms_amount = x.RoomsAmount,
-                RoomPrice = x.Room.PricePerNight,
-                FoodAmount = x.FoodAmount,
-                FoodCategory =  x.Food==null?null:x.Food.Category.Name,
-                FoodName = x.Food == null?null:x.Food.Name,
-                FoodPrice = x.Food == null?null:x.Food.PricePerPerson,
+                // If the role doesn't exist, create it
+                var role = new IdentityRole("Guest");
+                var result = await _roleManager.CreateAsync(role);
 
-            }).ToList();
-            ViewData["roomName"] = roomName;
-            return View("RoomReservationsDetails",model);
+                // Check if the role creation was successful
+                if (result.Succeeded)
+                {
+                    // Role created successfully
+                    return Ok("Guest role created successfully.");
+                }
+                else
+                {
+                    // Role creation failed
+                    // You can handle the error as per your application's requirements
+                    return StatusCode(500, "Failed to create Guest role.");
+                }
+            }
+            else
+            {
+                // Role already exists
+                return Conflict("Guest role already exists.");
+            }
         }
-
     }
 }
