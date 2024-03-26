@@ -17,6 +17,12 @@ namespace hotel_app.Repositories
                 .Include(room => room.Hotel)
                 .Include(room => room.RoomCategory).ToList();
         }
+        public List<Room> AllAvailableRooms()
+        {
+            return hotelDbContext.Rooms
+                .Include(room => room.Hotel)
+                .Include(room=>room.RoomCategory).ToList();
+        }
 
     }
 }

@@ -6,6 +6,8 @@ namespace hotel_app.Repositories
     {
         public void test_func();
         public Task<Hotel> GetHotelByUserId(string userId);
+
+        public List<Hotel> AllHotels();
     }
 
 

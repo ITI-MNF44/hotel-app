@@ -31,6 +31,12 @@ namespace hotel_app.Repositories
             return DbContext.Hotels.FirstOrDefaultAsync(h => h.UserId == userId);
         }
 
+        public List<Hotel> AllHotels()
+        {
+            return DbContext.Hotels
+                .Include(hotel => hotel.HotelCategory).ToList();
+        }
+
 
     }
 }

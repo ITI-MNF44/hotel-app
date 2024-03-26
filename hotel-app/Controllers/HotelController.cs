@@ -1,4 +1,5 @@
 ﻿using hotel_app.Models;
+using hotel_app.Repositories;
 using hotel_app.Services;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -18,15 +19,20 @@ namespace hotel_app.Controllers
         UserManager<ApplicationUser> usermanager;
         SignInManager<ApplicationUser> signInManager;
         IHotelService hotelService;
+        IHotelRepository hotelRepository;
+        IHotelCategoryRepository hotelCategoryRepository;
         //Ctor,inject
         public HotelController(HotelDbContext context, IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin, SignInManager<ApplicationUser> _signInManager, IHotelService _HotelService) 
+            UserManager<ApplicationUser> usermanagerlogin, SignInManager<ApplicationUser> _signInManager, 
+            IHotelService _HotelService, IHotelRepository _hotelRepository, IHotelCategoryRepository _hotelCategoryRepository) 
         {
             mycontext = context;
             myEnvironment = hostEnvironment;
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
             hotelService = _HotelService;
+            hotelRepository = _hotelRepository;
+            hotelCategoryRepository = _hotelCategoryRepository;
         }
 
         [Authorize(Roles = "Hotel")]
@@ -35,6 +41,13 @@ namespace hotel_app.Controllers
             Hotel h = await hotelService.GetCurrentHotel(); 
             return Content("current hotel : "+h.Name);
         }
+
+        public IActionResult AllHotels()
+        {
+            var hotels = hotelRepository.AllHotels();
+            return View("AllHotels", hotels);
+        }
+
         //1-open registeration form 
         [HttpGet]
         public IActionResult UserHotelRegister()
