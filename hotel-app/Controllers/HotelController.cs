@@ -1,4 +1,5 @@
 ﻿using hotel_app.Models;
+using hotel_app.Repositories;
 using hotel_app.Services;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -152,6 +153,28 @@ namespace hotel_app.Controllers
         {
             await signInManager.SignOutAsync();
             return Content("SignedOut");
+        }
+
+        public async Task<IActionResult> ReservationsInfo()
+        {
+            Hotel currHotel = await hotelService.GetCurrentHotel();
+            if (currHotel != null)
+            {
+                var res = hotelService.ReservationsInfo(currHotel.Id);
+                return View("DisplayHotelReservedRooms", res);
+            }
+            else
+            {
+                return Content("Error getting reservations data");
+            }
+           
+        }
+
+        public IActionResult getRoomReservationsDetails(int id, string roomName)
+        {
+            var model = hotelService.RoomReservationsDetails(id);
+            ViewData["roomName"] = roomName;
+            return View("RoomReservationsDetails", model);
         }
 
 
