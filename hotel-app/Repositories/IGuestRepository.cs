@@ -4,6 +4,7 @@ namespace hotel_app.Repositories
 {
     public interface IGuestRepository: IGeneralRepository<Guest>
     {
-        public void empty_function();
+        public Task<Guest> GetGuestByUserId(string userId);
+
     }
 }
