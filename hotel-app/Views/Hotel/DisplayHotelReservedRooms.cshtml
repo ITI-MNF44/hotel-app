@@ -30,7 +30,7 @@
                 <td>@Model[i].NumOfRooms </td>
                 <td>@Model[i].GuestRooms.Sum(x => x.RoomsAmount)</td>
                 <td>@(Model[i].NumOfRooms- Model[i].GuestRooms.Sum(x=>x.RoomsAmount) )</td>
-                <td><a href="/test/getRoomReservationDetails/@Model[i].Id?roomName=@Model[i].Name">More Details</a></td>
+                <td><a href="/hotel/getRoomReservationsDetails/@Model[i].Id?roomName=@Model[i].Name">More Details</a></td>
             </tr>
         }
 
