@@ -2,13 +2,9 @@
 using hotel_app.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using hotel_app.Models;
 using hotel_app.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
+
 
 namespace hotel_app.Repositories
 {
@@ -16,11 +12,20 @@ namespace hotel_app.Repositories
     {
         HotelDbContext DbContext;
         IRoomRepository roomRepository;
-        public HotelRepository(HotelDbContext _DbContext, IRoomRepository _roomRepository) : base(_DbContext)
-        {
+        UserManager<ApplicationUser> usermanager;
+        IWebHostEnvironment myEnvironment;
+        IGeneralRepository<Hotel> repository;
+        public HotelRepository(HotelDbContext _DbContext, IRoomRepository _roomRepository,
+            UserManager<ApplicationUser> _usermanager, IWebHostEnvironment _myEnvironment, IGeneralRepository<Hotel> _repository) : base(_DbContext)
+        {   
             DbContext = _DbContext;
             roomRepository = _roomRepository;
+            usermanager = _usermanager;
+            myEnvironment = _myEnvironment;
+            repository = _repository;
         }
+        //Hotel register
+       
 
         Task<Hotel> IHotelRepository.GetHotelByUserId(string userId)
         {
@@ -72,6 +77,12 @@ namespace hotel_app.Repositories
                 .Where(d => d.EndDate > TimeHelperClass.getCurrTime()).ToList();
 
             return Reservations;
+        }
+
+        public async Task RegisterInsert(Hotel hotel)
+        {
+                repository.Insert(hotel);
+                repository.Save();
         }
     }
 }

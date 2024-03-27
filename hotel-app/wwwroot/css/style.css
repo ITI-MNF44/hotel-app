@@ -1137,6 +1137,74 @@ ul, ol {
     }
 
 
+
+/*---------------------
+  Hotel Register view style 
+-----------------------*/
+/* CSS for Hotel Registration Form */
+
+.hotel-registration-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+    .hotel-registration-container h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #dfa974;
+        font-weight: bold;
+    }
+
+.hotel-registration-form-group {
+    margin-bottom: 17px;
+}
+
+.hotel-registration-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.hotel-registration-col-md-8 {
+    width: 100%;
+}
+
+.form-control {
+    width: calc(100% - 10px);
+    padding: 7px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #dfa974;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+.control-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.text-danger {
+    color: #dc3545;
+    margin-left: 10px;
+}
+
+/*---------------------
+next style 
+-----------------------*/
 /*---------------------
   Hotels Page
 -----------------------*/

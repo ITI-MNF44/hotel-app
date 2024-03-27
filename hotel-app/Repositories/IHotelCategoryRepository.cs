@@ -5,5 +5,7 @@ namespace hotel_app.Repositories
     public interface IHotelCategoryRepository: IGeneralRepository<HotelCategory>
     {
         // add abstract method
+        List<HotelCategory> GetAllCategories();
     }
 }
+    

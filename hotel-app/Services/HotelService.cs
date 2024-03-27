@@ -5,19 +5,25 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using hotel_app.Repositories;
 using hotel_app.ViewModels;
+using System;
 
 namespace hotel_app.Services
 {
-    public class HotelService:IHotelService
+    public class HotelService : IHotelService
     {
         private readonly IHttpContextAccessor httpContextAccessor;
         HttpContext httpContext;
         IHotelRepository hotelRepository;
-        public HotelService(IHttpContextAccessor _httpContextAccessor,IHotelRepository _hotelRepository)
+        UserManager<ApplicationUser> usermanager;
+        IWebHostEnvironment myEnvironment;
+        public HotelService(IHttpContextAccessor _httpContextAccessor, IHotelRepository _hotelRepository, UserManager<ApplicationUser> _usermanager,
+            IWebHostEnvironment _myEnvironment)
         {
             httpContextAccessor = _httpContextAccessor;
             httpContext = httpContextAccessor.HttpContext;
             hotelRepository = _hotelRepository;
+            usermanager = _usermanager;
+            myEnvironment = _myEnvironment;
         }
 
         public List<Hotel> AllHotels()
@@ -38,11 +44,10 @@ namespace hotel_app.Services
         {
             return hotelRepository.getReservationsDetails(id);
         }
-
         public List<RoomGuestReservationVM> RoomReservationsDetails(int id)
         {
             var RoomReservations = hotelRepository.getRoomReservationsDetails(id);
-            
+
             return hotelRepository.getRoomReservationsDetails(id).Select(x => new RoomGuestReservationVM()
             {
                 Full_name = x.Guest.FirstName + " " + x.Guest.LastName,
@@ -59,5 +64,54 @@ namespace hotel_app.Services
             }).ToList();
 
         }
+        //Register Hotel
+        public async Task RegisterInsert(Hotel hotel)
+        {
+            await hotelRepository.RegisterInsert(hotel);
+        }
+
+        //user mapping
+        public ApplicationUser MapHotelUserVmToAppUser(RegisterUserViewModel hotelvm)
+        {
+            ApplicationUser user = new ApplicationUser()
+            {
+                UserName = hotelvm.UserName,
+                Email = hotelvm.Email,
+                PasswordHash = hotelvm.Password
+            };
+            return user;
+
+        }
+
+        public async Task<Hotel> MapHotelVmToHotel(RegisterUserViewModel hotelvm,string userId)
+        {
+           
+           
+                string filename = string.Empty;
+                if (hotelvm.Image != null)
+                {
+                    string Uploader = Path.Combine(myEnvironment.WebRootPath, "images");
+                    filename = Guid.NewGuid().ToString() + "_" + hotelvm.Image.FileName;
+                    string filepath = Path.Combine(Uploader, filename);
+                    // Copy image file
+                    hotelvm.Image.CopyTo(new FileStream(filepath, FileMode.Create));
+                }
+                Hotel hotel = new Hotel()
+                {
+                    Name = hotelvm.Name,
+                    Description = hotelvm.Description,
+                    Country = hotelvm.Country,
+                    City = hotelvm.City,
+                    Address = hotelvm.Address,
+                    StarRating = hotelvm.StarRating,
+                    Category = hotelvm.Category,
+                    CreatedDate = DateTime.Now,
+                    UserId = userId,
+                    Image = filename
+                };
+                return hotel;
+        }
+
+       
     }
 }
