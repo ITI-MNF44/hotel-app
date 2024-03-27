@@ -9,6 +9,7 @@ namespace hotel_app.Services
         public Task<Hotel> GetCurrentHotel();
 
         public List<Room> ReservationsInfo(int id);
+        public List<Hotel> AllHotels();
         public List<RoomGuestReservationVM> RoomReservationsDetails(int id);
 
         //hotel services

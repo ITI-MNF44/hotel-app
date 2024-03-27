@@ -40,7 +40,6 @@ namespace hotel_app.Services
                 isDeleted=false
             };
         }
-
         public void InsertGuest(Guest guest)
         {
             GuestRepository.Insert(guest);
@@ -50,6 +49,24 @@ namespace hotel_app.Services
             GuestRepository.Save();
         }
 
+        public List<RoomGuestReservationVM> getGuestReservations(int guest_id)
+        {
+            return GuestRepository.getGuestReservations(guest_id).Select(x => new RoomGuestReservationVM()
+            {
+                roomName = x.Room.Name,
+                roomCategory = x.Room.RoomCategory.Name,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                BookingDate = x.BookingDate,
+                Rooms_amount = x.RoomsAmount,
+                RoomPrice = x.Room.PricePerNight,
+                FoodAmount = x.FoodAmount,
+                FoodCategory = x.Food == null ? null : x.Food.Category.Name,
+                FoodName = x.Food == null ? null : x.Food.Name,
+                FoodPrice = x.Food == null ? null : x.Food.PricePerPerson,
+
+            }).ToList();
+        }
 
     }
 }

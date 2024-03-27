@@ -22,7 +22,7 @@ namespace hotel_app.ViewModels
         public DateTime? CreatedDate { get; set; }
         [Display(Name = "Is Deleted")]
         public bool IsDeleted { get; set; }
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
         public List<RoomCategory>? Categories { get; set; } = new List<RoomCategory> { };
         
         }

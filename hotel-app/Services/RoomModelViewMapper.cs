@@ -1,4 +1,5 @@
 ﻿using hotel_app.Models;
+using hotel_app.Repositories;
 using hotel_app.ViewModels;
 
 namespace hotel_app.Services
@@ -33,7 +34,7 @@ namespace hotel_app.Services
             if (room == null)
                 return null;
 
-            // Maping for Image
+            // Mapping for Image
             string fileName = "";
             string uploadFile = Path.Combine(_hostEnvironment.WebRootPath, "img");
             fileName = Guid.NewGuid().ToString() + "_" + room.Image.FileName;
@@ -43,6 +44,7 @@ namespace hotel_app.Services
 
             return new Room
             {
+                Id = room.Id,
                 Name = room.Name,
                 Description = room.Description,
                 HotelId = room.HotelId,
@@ -56,5 +58,27 @@ namespace hotel_app.Services
                 
             };
         }
+
+        public static Room MapToRoom(RoomViewModel room)
+        {
+            if (room == null)
+                return null;
+
+            return new Room
+            {
+                Id = room.Id,
+                Name = room.Name,
+                Description = room.Description,
+                HotelId = room.HotelId,
+                Category = room.Category,
+                CreatedDate = room.CreatedDate,
+                NumOfBeds = room.NumOfBeds,
+                NumOfRooms = room.NumOfRooms,
+                PricePerNight = room.PricePerNight,
+                isDeleted = room.IsDeleted,
+            };
+        }
+
+
     }
 }

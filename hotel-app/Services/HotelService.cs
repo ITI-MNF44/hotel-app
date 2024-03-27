@@ -25,6 +25,12 @@ namespace hotel_app.Services
             usermanager = _usermanager;
             myEnvironment = _myEnvironment;
         }
+
+        public List<Hotel> AllHotels()
+        {
+            return hotelRepository.AllHotels();
+        }
+
         public async Task<Hotel> GetCurrentHotel()
         {
             var claimsIdentity = httpContext.User.Identity as ClaimsIdentity;

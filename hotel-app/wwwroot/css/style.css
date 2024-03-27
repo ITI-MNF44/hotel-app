@@ -3,7 +3,7 @@
     --primary: #dfa974 !important;
     --light: #f6f3f1;
     --dark: #222736;
-    --yellow: #debf0e;
+    --yellow: #f5b917;
     /* --dark: #0f172b; */
 }
 
@@ -75,6 +75,10 @@ ul, ol {
     box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.067) !important;
 }
 
+.rating i {
+    color: var(--yellow);
+}
+
 .fw-medium {
     font-weight: 500 !important;
 }
@@ -90,6 +94,7 @@ ul, ol {
     right: 45px;
     bottom: 45px;
     z-index: 99;
+    box-shadow: 2 2 5px rgba(0, 0, 0, 0.2);
 }
 
 /*** Spinner ***/
@@ -745,6 +750,11 @@ ul, ol {
     margin-bottom: 40px;
 }
 
+.room-details-section img {
+    min-width: 100%;
+    max-width: 100%;
+}
+
 .room-details-item .rd-text .rd-title {
     overflow: hidden;
     margin-bottom: 8px;
@@ -1110,15 +1120,15 @@ ul, ol {
         font-weight: 500;
     }
 
-        .breadcrumb-text .bt-option a:after {
-            position: absolute;
-            right: -13px;
-            top: 1px;
-            content: "?";
-            font-size: 18px;
-            font-family: "FontAwesome";
-            color: #aaaab3;
-        }
+    .breadcrumb-text .bt-option a:after {
+        position: absolute;
+        right: -13px;
+        top: 1px;
+        content: "?";
+        font-size: 18px;
+        font-family: "FontAwesome";
+        color: #aaaab3;
+    }
 
     .breadcrumb-text .bt-option span {
         display: inline-block;
@@ -1195,3 +1205,21 @@ ul, ol {
 /*---------------------
 next style 
 -----------------------*/
+/*---------------------
+  Hotels Page
+-----------------------*/
+
+.rooms-section .hotel-item img {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+}
+.rooms-section .hotel-item h4 a:hover {
+    border-bottom: 2px solid var(--primary);
+    margin-bottom: 50px !important;
+}
+.rooms-section .hotel-item li a:hover{
+    border-bottom:2px solid var(--primary);
+    margin-bottom:5px;
+}

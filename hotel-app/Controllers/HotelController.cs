@@ -19,8 +19,13 @@ namespace hotel_app.Controllers
         RoleManager<IdentityRole> _roleManager;
 
         //Ctor,inject
-        public HotelController(UserManager<ApplicationUser> usermanagerlogin,IHotelCategoryService hotelCategoryService,
-            SignInManager<ApplicationUser> _signInManager, IHotelService _HotelService,RoleManager<IdentityRole> roleManager) 
+
+        public HotelController(HotelDbContext context, 
+        RoleManager<IdentityRole> roleManagerو
+            IWebHostEnvironment hostEnvironment,
+            UserManager<ApplicationUser> usermanagerlogin,
+            SignInManager<ApplicationUser> _signInManager, 
+            IHotelService _HotelService) 
         {
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
@@ -36,6 +41,13 @@ namespace hotel_app.Controllers
             Hotel h = await hotelService.GetCurrentHotel(); 
             return Content("current hotel : "+h.Name);
         }
+
+        public IActionResult AllHotels()
+        {
+            var hotels = hotelService.AllHotels();
+            return View("AllHotels", hotels);
+        }
+
         //1-open registeration form 
         [HttpGet]
         public IActionResult UserHotelRegister()
@@ -114,10 +126,19 @@ namespace hotel_app.Controllers
             return Content("SignedOut");
         }
 
-        public IActionResult ReservationsInfo(int id)
+        public async Task<IActionResult> ReservationsInfo()
         {
-            var res = hotelService.ReservationsInfo(id);
-            return View("DisplayHotelReservedRooms", res);
+            Hotel currHotel = await hotelService.GetCurrentHotel();
+            if (currHotel != null)
+            {
+                var res = hotelService.ReservationsInfo(currHotel.Id);
+                return View("DisplayHotelReservedRooms", res);
+            }
+            else
+            {
+                return Content("Error getting reservations data");
+            }
+           
         }
 
         public IActionResult getRoomReservationsDetails(int id, string roomName)

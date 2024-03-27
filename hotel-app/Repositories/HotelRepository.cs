@@ -53,6 +53,12 @@ namespace hotel_app.Repositories
             return rooms.ToList();
         }
 
+        public List<Hotel> AllHotels()
+        {
+            return DbContext.Hotels
+                .Include(hotel => hotel.HotelCategory).ToList();
+        }
+
         public List<GuestRoom> getRoomReservationsDetails(int id)
         {
             // get room with id = id

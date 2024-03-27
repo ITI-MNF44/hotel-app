@@ -7,6 +7,7 @@ namespace hotel_app.Repositories
     {
         Task RegisterInsert(Hotel hotel);
         public Task<Hotel> GetHotelByUserId(string userId);
+        public List<Hotel> AllHotels();
         public List<Room> getReservationsDetails(int hotelId);
         public List<GuestRoom> getRoomReservationsDetails(int id);
        
