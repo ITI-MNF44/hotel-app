@@ -20,7 +20,7 @@ namespace hotel_app.Repositories
                 room = room.Include(includeProperty);
             }
 
-            return room.FirstOrDefault();
+            return room.AsNoTracking().FirstOrDefault();
         }
         
         public List<Room> HotelRooms(int Id)
@@ -28,6 +28,7 @@ namespace hotel_app.Repositories
             return hotelDbContext.Rooms.Where(room => room.HotelId == Id && room.isDeleted == false)
                 .Include(room => room.Hotel)
                 .Include(room => room.RoomCategory)
+                .AsNoTracking()
                 .ToList();
         }
 
