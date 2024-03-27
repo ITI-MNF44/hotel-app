@@ -10,22 +10,17 @@ namespace hotel_app.Controllers
 {
     public class RoomController : Controller
     {
-        private readonly HotelDbContext _context;
         private readonly IWebHostEnvironment _environment;
-        private readonly IRoomCategoryRepository _roomCategoryRepository;
-        private readonly IRoomRepository _roomRepository;
+        private readonly IRoomService _roomService;
         private readonly IHotelService _hotelService;
 
-        public RoomController(HotelDbContext context,
+        public RoomController(
             IWebHostEnvironment hostEnvironment,
-            IRoomRepository roomRepository,
-            IRoomCategoryRepository roomCategoryRepository,
+            IRoomService roomService,
             IHotelService hotelService)
         {
-            _context = context;
             _environment = hostEnvironment;
-            _roomRepository = roomRepository;
-            _roomCategoryRepository = roomCategoryRepository;
+            _roomService = roomService;
             _hotelService = hotelService;
         }
         public IActionResult Index()
@@ -36,25 +31,23 @@ namespace hotel_app.Controllers
 
         public IActionResult Details(int id)
         {
-            var room = _roomRepository.GetById(id);
+            var room = _roomService.GetById(id);
             return View(room);
         }
 
-        //AllRooms For a hotel - Id is hotel id - hotel // Hotel id my be stored in the token for an authontcated user
-        public async Task<IActionResult> AllRooms()
+        public async Task<IActionResult> All()
         {
             Hotel hotel = await _hotelService.GetCurrentHotel();
-            int currId = hotel.Id;
-            List<Room> rooms = _roomRepository.HotelRooms(currId);
+            List<Room> rooms = _roomService.HotelRooms(hotel.Id);
+
             return View("AllRooms", rooms);
         }
 
-        //Endpoint for add room
         public IActionResult Add()
         {
             RoomViewModel room = new RoomViewModel
             {
-                Categories = _roomCategoryRepository.GetAll(),
+                Categories = _roomService.RoomCategories(),
             };
 
             return View("AddRoom", room);
@@ -65,57 +58,61 @@ namespace hotel_app.Controllers
         {
             if(ModelState.IsValid)
             {
-                // Hotel id should be stored in the token for an authontcated user
-                    Hotel hotel = await _hotelService.GetCurrentHotel();
-                  room.HotelId = hotel.Id;
-                 _roomRepository.Insert(RoomModelViewMapper.MapToRoom(room, _environment));
-                _roomRepository.Save();
-                return RedirectToAction("AllRooms");
+                Hotel hotel = await _hotelService.GetCurrentHotel();
+                room.HotelId = hotel.Id;
+                room.IsDeleted = false;
+                room.CreatedDate = DateTime.Now.Date;
+
+                _roomService.Insert(RoomModelViewMapper.MapToRoom(room, _environment));
+                _roomService.Save();
+
+                return RedirectToAction("All");
             }
-            room.Categories = _roomCategoryRepository.GetAll();
+
+            room.Categories = _roomService.RoomCategories();
+
             return View("AddRoom", room);
-
-        }
-
-        //add to DB
-        [HttpPost]
-        public IActionResult Add(HotelViewModel hotel)
-        {
-            //image code
-            //string filename = "";
-            //if (product1.photo != null)
-            //{
-            //    string Uploader = Path.Combine(env.WebRootPath, "images");
-            //    filename = Guid.NewGuid().ToString() + "_" + product1.photo.FileName;
-            //    string filepath = Path.Combine(Uploader, filename);
-            //    product1.photo.CopyTo(new FileStream(filepath, FileMode.Create));
-            //}
-            ////
-            //product p = new product()
-            //{
-            //    Name = product1.Name,
-            //    price = product1.price,
-            //    Image = filename
-            //};
-            ////
-            //context.Products.Add(p);
-            //context.SaveChanges();
-            ////
-            //ViewBag.success = "record added successfully";
-            //not implemented yet
-            return View();
         }
 
         public IActionResult Edit(int id)
         {
-            return View("EditRoom");
+            Room room = _roomService.GetById(id, "Hotel", "RoomCategory");
+            RoomViewModel? roomViewModle = RoomModelViewMapper.MapToRoomViewModel(room);
+            roomViewModle.Categories = _roomService.RoomCategories();
+
+            return View("EditRoom", roomViewModle);
+        }
+
+        [HttpPost]
+        public IActionResult Update(RoomViewModel room)
+        {
+            //Broken
+            if (ModelState.IsValid)
+            {
+                 _roomService.Update(RoomModelViewMapper.MapToRoom(room));
+                _roomService.Save();
+                return RedirectToAction("All");
+            }
+
+            return View("EditRoom", room);
+        }
+
+        public IActionResult DeleteRoom(int id)
+        {
+           var room = RoomModelViewMapper.MapToRoomViewModel( _roomService.GetById(id, "Hotel", "RoomCategory"));
+            return View("DeleteRoom", room);
 
         }
 
+        [HttpPost]
         public IActionResult Delete(int id)
         {
-            return View("DeleteRoom");
+            var room = _roomService.GetById(id);
+            room.isDeleted = true;
+            _roomService.Update(room);
+            _roomService.Save();
 
+            return RedirectToAction("All");
         }
     }
 }

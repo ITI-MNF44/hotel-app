@@ -26,11 +26,11 @@ namespace hotel_app.Repositories
         }
         public void Insert(T obj)
         {
-            hotelDbContext.Add(obj);
+            hotelDbContext.Set<T>().Add(obj);
         }
         public void Update(T obj)
         {
-            hotelDbContext.Update(obj);
+            hotelDbContext.Set<T>().Update(obj);
         }
         public int Save()
         {

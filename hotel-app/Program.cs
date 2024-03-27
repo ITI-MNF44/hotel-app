@@ -43,6 +43,7 @@ namespace hotel_app
 			//services 
 			builder.Services.AddScoped<IHotelService, HotelService>();
 			builder.Services.AddScoped<IGuestService, GuestService>();
+			builder.Services.AddScoped<IRoomService, RoomService>();
 
             var app = builder.Build();
 
