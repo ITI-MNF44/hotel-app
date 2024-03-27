@@ -16,8 +16,6 @@ namespace hotel_app.ViewModels
         public int StarRating { get; set; }
         public int Category { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public List<Room>? Rooms { get; set; }
-        public List<Food>? Foods { get; set; }
      
     }
 }

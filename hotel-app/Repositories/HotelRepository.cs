@@ -73,45 +73,10 @@ namespace hotel_app.Repositories
             return Reservations;
         }
 
-        public async Task RegisterInsert(RegisterUserViewModel hotelvm)
+        public async Task RegisterInsert(Hotel hotel)
         {
-            //first add to user table
-            ApplicationUser user = new ApplicationUser()
-            {
-                UserName = hotelvm.UserName,
-                Email = hotelvm.Email
-            };
-            IdentityResult userCreationResult = await usermanager.CreateAsync(user, hotelvm.Password); 
-            if(userCreationResult.Succeeded)
-            {
-                string userId = user.Id;
-                string filename = string.Empty;
-                if (hotelvm.Image != null)
-                {
-                    string Uploader = Path.Combine(myEnvironment.WebRootPath, "images");
-                    filename = Guid.NewGuid().ToString() + "_" + hotelvm.Image.FileName;
-                    string filepath = Path.Combine(Uploader, filename);
-                    // Copy image file
-                    hotelvm.Image.CopyTo(new FileStream(filepath, FileMode.Create));
-
-                }
-                Hotel hotel = new Hotel()
-                {
-                    Name = hotelvm.Name,
-                    Description = hotelvm.Description,
-                    Country = hotelvm.Country,
-                    City = hotelvm.City,
-                    Address = hotelvm.Address,
-                    StarRating = hotelvm.StarRating,
-                    Category = hotelvm.Category,
-                    CreatedDate = DateTime.Now,
-                    UserId = userId,
-                    Image = filename
-                };
-                // Add the hotel entity to the context
                 repository.Insert(hotel);
                 repository.Save();
-            }           
         }
     }
 }

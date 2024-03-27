@@ -33,6 +33,7 @@ namespace hotel_app
 
                 })
                 .AddEntityFrameworkStores<HotelDbContext>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
                     .AddDefaultTokenProviders();
 
 
@@ -51,6 +52,7 @@ namespace hotel_app
             builder.Services.AddScoped<IGeneralRepository<Hotel>, GeneralRepository<Hotel>>();
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddScoped<IHotelCategoryService, HotelCategoryService>();
+
 
             var app = builder.Build();
 

@@ -1,12 +1,10 @@
 ﻿using hotel_app.Models;
-using hotel_app.Repositories;
 using hotel_app.Services;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+
 using System.Security.Claims;
 
 namespace hotel_app.Controllers
@@ -14,22 +12,22 @@ namespace hotel_app.Controllers
     public class HotelController : Controller
     {
         //ask
-        HotelDbContext mycontext;
-        IWebHostEnvironment myEnvironment;
         UserManager<ApplicationUser> usermanager;
         SignInManager<ApplicationUser> signInManager;
         IHotelCategoryService _categoryService;
         IHotelService hotelService;
+        RoleManager<IdentityRole> _roleManager;
+
         //Ctor,inject
-        public HotelController(HotelDbContext context, IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin,IHotelCategoryService hotelCategoryService ,SignInManager<ApplicationUser> _signInManager, IHotelService _HotelService) 
+        public HotelController(UserManager<ApplicationUser> usermanagerlogin,IHotelCategoryService hotelCategoryService,
+            SignInManager<ApplicationUser> _signInManager, IHotelService _HotelService,RoleManager<IdentityRole> roleManager) 
         {
-            mycontext = context;
-            myEnvironment = hostEnvironment;
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
             hotelService = _HotelService;
             _categoryService = hotelCategoryService;
+            _roleManager = roleManager;
+
         }
 
         [Authorize(Roles = "Hotel")]
@@ -51,29 +49,41 @@ namespace hotel_app.Controllers
         }
         //2-save to db
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserHotelRegister(RegisterUserViewModel hoteluservm)
         {
-            // Continue with form submission logic
             if (ModelState.IsValid)
             {
-                await hotelService.RegisterInsert(hoteluservm);
-                return RedirectToAction("Index", "Home");
+                ApplicationUser appUser = hotelService.MapHotelUserVmToAppUser(hoteluservm);
+                string userId = appUser.Id;
+                IdentityResult result = await usermanager.CreateAsync(appUser, hoteluservm.Password);
+
+              
+                if (result.Succeeded)
+                {
+                    IdentityResult roleresult =  await usermanager.AddToRoleAsync(appUser,"Hotel");
+                    if(roleresult.Succeeded)
+                    {
+                        List<Claim> Claims = new List<Claim>();
+                        Claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.Id));
+                        await signInManager.SignInWithClaimsAsync(appUser, true, Claims);
+                        Hotel hotel = await hotelService.MapHotelVmToHotel(hoteluservm, userId);
+                        await hotelService.RegisterInsert(hotel);
+                        return RedirectToAction("Index");
+                    }
+
+                }
             }
-            else
-            {
-                var categories = _categoryService.GetAllCategories();
-                hoteluservm.Categories = categories;
-                return View("UserHotelRegister", hoteluservm);
-            }
+            return View("UserHotelRegister", hoteluservm);
         }
-		public IActionResult Login()
+        public IActionResult Login()
 		{
 			return View("HotelLoginView");
 		}
 
 		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login(UserLoginVIewModel hotelVM)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(UserLoginVIewModel hotelVM)
 		{
             if (ModelState.IsValid)
             {
