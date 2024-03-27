@@ -21,6 +21,15 @@ namespace hotel_app.Repositories
             return DbContext.Guests.FirstOrDefaultAsync(g => g.UserId == userId);
         }
 
+        public List<GuestRoom> getGuestReservations(int id)
+        {
+            return DbContext.GuestsRooms.Where(x=>x.GuestId==id)
+                .Include(x=>x.Room)
+                .ThenInclude(x=>x.RoomCategory)
+                .Include(x=>x.Food)
+                .ThenInclude(x=>x.Category).OrderByDescending(x=>x.BookingDate)
+                .ToList();
+        }
 
     }
 }

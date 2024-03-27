@@ -1,0 +1,86 @@
+﻿@model List<Hotel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<!-- Page Header Start -->
+<div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
+    <div class="container-fluid page-header-inner py-5">
+        <div class="container text-center pb-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Hotels</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center text-uppercase">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">Hotels</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+    <h6 class="section-title text-center text-primary text-uppercase">
+        Our Hotels
+    </h6>
+    <h1 class="mb-5">
+        Explore Our <span class="text-primary text-uppercase">Hotels</span>
+    </h1>
+</div>
+
+<!-- hotels Section Begin -->
+<section class="rooms-section mt-5 spad">
+    <div class="container">
+        <div class="row">
+            @foreach (var hotel in Model)
+            {
+                <div class="col-lg-12 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="hotel-item shadow">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                @if (!string.IsNullOrEmpty(hotel.Image))
+                                {
+                                    <img src="~/img/@hotel.Image" alt="Hotel Image" />
+                                }
+                            </div>
+                            <div class="col-lg-7 my-3">
+                                <h4>
+                                    <a asp-action="Details"
+                                       class="text-primary mb-4"
+                                       asp-controller="Hotel">@hotel.Name</a>
+                                </h4>
+                                <span class="fs-5 ">@hotel.Country | @hotel.City | @hotel.Address</span>
+                                <h5 class="text-black-50 my-3">@hotel.HotelCategory.Name</h5>
+                                <p class="">Description: Experience unparalleled luxury and comfort at the Luxe Grand Hotel. Located in the heart of Cityville, our hotel offers exquisite accommodations, fine dining options, and world-class amenities to make your stay truly memorable.</p>
+                                <ul class="ms-4 mt-3 fs-5 text-black-50">
+                                    @if (hotel.IsAccessible.HasValue && hotel.IsAccessible.Value)
+                                    {
+                                        <li>Wheelchair-accessible and facilities</li>
+                                    }
+                                    <li>High quality food</li>
+                                    <li>High-speed Wi-Fi</li>
+                                    <li>
+                                        <a asp-action="Details"
+                                           class="text-primary fs-6"
+                                           asp-controller="Hotel">Show more...</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-1 overflow-hidden h-25 py-2 text-light">
+                                <span class="fs-6 p-3 rounded-start float-end bg-primary">@hotel.StarRating <i class="fa fa-star p-0"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-lg-12">
+                <div class="room-pagination">
+                    <a href="#">1</a>
+                    <a href="#">2</a>
+                    <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hotel Section End -->

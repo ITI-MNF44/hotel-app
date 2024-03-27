@@ -25,7 +25,8 @@ namespace hotel_app.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var rooms = _roomRepository.AllAvailableRooms();
+            return View(rooms);
         }
 
         public IActionResult Details(int id)

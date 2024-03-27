@@ -8,5 +8,6 @@ namespace hotel_app.Repositories
         public Room GetById(int id, string[] include);
         public List<Room> HotelRooms(int Id);
       
+        public List<Room> AllAvailableRooms();
     }
 }
