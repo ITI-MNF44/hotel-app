@@ -6,5 +6,6 @@ namespace hotel_app.Repositories
     {
         public Task<Guest> GetGuestByUserId(string userId);
 
+        public List<GuestRoom> getGuestReservations(int id);
     }
 }

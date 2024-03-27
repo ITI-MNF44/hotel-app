@@ -1,0 +1,112 @@
+﻿@model List<Room>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<!-- Page Header Start -->
+<div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
+    <div class="container-fluid page-header-inner py-5">
+        <div class="container text-center pb-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Rooms</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center text-uppercase">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">Rooms</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+    <h6 class="section-title text-center text-primary text-uppercase">
+        Our Rooms
+    </h6>
+    <h1 class="mb-5">
+        Explore Our <span class="text-primary text-uppercase">Rooms</span>
+    </h1>
+</div>
+<!-- Rooms Section Begin -->
+<section class="rooms-section mt-5 spad">
+    <div class="container">
+        <div class="row">
+            @foreach (var room in Model)
+            {
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="room-item shadow">
+                        @if (!string.IsNullOrEmpty(room.Image))
+                        {
+                            <img src="~/img/@room.Image" alt="Room Image" />
+                        }
+
+                        <div class="ri-text">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4>@room.Name</h4>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="fs-4 text-muted">@room.PricePerNight $/<span class="fs-5">Night</span></h5>
+                                </div>
+                            </div>
+                            <div class="mt-0 pt-0">
+                                <h5 class="mb-3">
+
+
+                                    <span class="text-primary d-inline">
+                                        <a asp-action="Details"
+                                           class="text-primary fs-5"
+                                           asp-controller="Hotel">@room.Hotel.Name</a>
+                                    </span> | <span class="fs-5 text-muted">@room.RoomCategory.Name</span>
+                                </h5>
+                            </div>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="r-o">Capacity:</td>
+                                        <td>Max persons @room.NumOfBeds</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Bed:</td>
+                                        <td>@room.NumOfBeds <i class="fa fa-bed text-primary ms-2 fs-6"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Services:</td>
+                                        <td>
+                                            <i class="fa fa-tv text-primary me-2 fs-6"></i>TV 
+                                            <i class="fa fa-wifi text-primary me-2 fs-6"></i>Wifi 
+                                            <i class="fa fa-bath text-primary me-2 fs-6"></i>Bath 
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a asp-action="Details"
+                                       class="primary-btn border-primary border-bottom"
+                                       asp-controller="Room">More Details</a>
+                                </div>
+                                <div class="col-6">
+                                    <a asp-action="Index"
+                                       class="primary-btn bg-primary text-white p-2"
+                                       asp-controller="Booking">Booking Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-lg-12">
+                <div class="room-pagination">
+                    <a href="#">1</a>
+                    <a href="#">2</a>
+                    <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Rooms Section End -->
+
+

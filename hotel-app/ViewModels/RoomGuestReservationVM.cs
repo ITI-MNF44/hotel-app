@@ -14,6 +14,8 @@ namespace hotel_app.ViewModels
         public decimal? FoodPrice { get; set; }
         public string? FoodName { get; set; }
         public int? FoodAmount { get; set; }
+        public string? roomCategory { get; set; }
+        public string? roomName { get; set; }
 
     }
 

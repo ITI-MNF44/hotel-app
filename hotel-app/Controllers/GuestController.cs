@@ -98,5 +98,11 @@ namespace hotel_app.Controllers
             return Content("guest SignedOut");
         }
 
+   
+        public IActionResult ReservationsHistory(int guestId)
+        {
+            var model = GuestService.getGuestReservations(guestId);
+            return View("GuestReservationsHistory", model);
+        }
     }
 }
