@@ -54,6 +54,9 @@ namespace hotel_app.Services
             _roomRepository.Delete(id);
         }
 
-      
+        public List<Room> AllAvailableRooms()
+        {
+            return _roomRepository.AllAvailableRooms();
+        }
     }
 }
