@@ -19,6 +19,12 @@ namespace hotel_app.Services
             httpContext = httpContextAccessor.HttpContext;
             hotelRepository = _hotelRepository;
         }
+
+        public List<Hotel> AllHotels()
+        {
+            return hotelRepository.AllHotels();
+        }
+
         public async Task<Hotel> GetCurrentHotel()
         {
             var claimsIdentity = httpContext.User.Identity as ClaimsIdentity;

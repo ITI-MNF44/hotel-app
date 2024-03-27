@@ -22,7 +22,8 @@ namespace hotel_app
             //register DBcontext
             builder.Services.AddDbContext<HotelDbContext>(options => {
 				options.UseSqlServer(builder.Configuration.GetConnectionString("HotelConnection"));
-			});
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
 
 
 			//Register Identity Service (userManager -roleMnager- SigninManager)

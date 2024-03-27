@@ -9,6 +9,7 @@ namespace hotel_app.Services
         public Room GetById(int id, params string[] include);
         public List<RoomCategory> RoomCategories();
         public List<Room> HotelRooms(int id);
+        public List<Room> AllAvailableRooms();
         public void Insert(Room room); 
         public void Update(Room room);
         public void Delete(int id);

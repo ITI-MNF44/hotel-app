@@ -25,7 +25,7 @@ namespace hotel_app.Controllers
         }
         public IActionResult Index()
         {
-            var rooms = _roomRepository.AllAvailableRooms();
+            var rooms = _roomService.AllAvailableRooms();
             return View(rooms);
         }
 
@@ -86,10 +86,24 @@ namespace hotel_app.Controllers
         [HttpPost]
         public IActionResult Update(RoomViewModel room)
         {
-            //Broken
             if (ModelState.IsValid)
             {
-                 _roomService.Update(RoomModelViewMapper.MapToRoom(room));
+                Room oldRoom = _roomService.GetById(room.Id, "Hotel", "RoomCategory");
+                room.HotelId=oldRoom.HotelId;
+                room.CreatedDate = oldRoom.CreatedDate;
+                
+                if ( room.Image == null)
+                {
+                    Room updatedRoom = RoomModelViewMapper.MapToRoom(room);
+                    updatedRoom.Image = oldRoom.Image;
+                    _roomService.Update(updatedRoom);
+                }
+                else
+                {
+                    Room updatedRoom = RoomModelViewMapper.MapToRoom(room, _environment);
+                    _roomService.Update(updatedRoom);
+                }
+
                 _roomService.Save();
                 return RedirectToAction("All");
             }

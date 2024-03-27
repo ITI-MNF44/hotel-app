@@ -19,20 +19,18 @@ namespace hotel_app.Controllers
         UserManager<ApplicationUser> usermanager;
         SignInManager<ApplicationUser> signInManager;
         IHotelService hotelService;
-        IHotelRepository hotelRepository;
-        IHotelCategoryRepository hotelCategoryRepository;
         //Ctor,inject
-        public HotelController(HotelDbContext context, IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin, SignInManager<ApplicationUser> _signInManager, 
-            IHotelService _HotelService, IHotelRepository _hotelRepository, IHotelCategoryRepository _hotelCategoryRepository) 
+        public HotelController(HotelDbContext context, 
+            IWebHostEnvironment hostEnvironment,
+            UserManager<ApplicationUser> usermanagerlogin,
+            SignInManager<ApplicationUser> _signInManager, 
+            IHotelService _HotelService) 
         {
             mycontext = context;
             myEnvironment = hostEnvironment;
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
             hotelService = _HotelService;
-            hotelRepository = _hotelRepository;
-            hotelCategoryRepository = _hotelCategoryRepository;
         }
 
         [Authorize(Roles = "Hotel")]
@@ -44,7 +42,7 @@ namespace hotel_app.Controllers
 
         public IActionResult AllHotels()
         {
-            var hotels = hotelRepository.AllHotels();
+            var hotels = hotelService.AllHotels();
             return View("AllHotels", hotels);
         }
 
