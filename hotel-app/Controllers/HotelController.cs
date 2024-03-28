@@ -20,18 +20,16 @@ namespace hotel_app.Controllers
 
         //Ctor,inject
 
-        public HotelController(HotelDbContext context, 
-        RoleManager<IdentityRole> roleManagerو
-            IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin,
-            SignInManager<ApplicationUser> _signInManager, 
-            IHotelService _HotelService) 
+        public HotelController(
+        UserManager<ApplicationUser> usermanagerlogin,
+        SignInManager<ApplicationUser> _signInManager, 
+        IHotelService _HotelService, IHotelCategoryService hotelCategoryService) 
         {
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
             hotelService = _HotelService;
             _categoryService = hotelCategoryService;
-            _roleManager = roleManager;
+            //_roleManager = roleManager;
 
         }
 
@@ -86,6 +84,7 @@ namespace hotel_app.Controllers
 
                 }
             }
+            hoteluservm.Categories = _categoryService.GetAllCategories();
             return View("UserHotelRegister", hoteluservm);
         }
         public IActionResult Login()
@@ -102,7 +101,7 @@ namespace hotel_app.Controllers
                 ApplicationUser AppUser = await usermanager.FindByNameAsync(hotelVM.Username);
                 if (AppUser != null)
                 {
-                    bool Found = hotelVM.Passwrod.Equals(AppUser.PasswordHash);
+                    bool Found = await usermanager.CheckPasswordAsync(AppUser, hotelVM.Passwrod);
                     if (Found)
                     {
                         await signInManager.SignInAsync(AppUser, hotelVM.RememberMe);
@@ -123,7 +122,7 @@ namespace hotel_app.Controllers
         public async Task<IActionResult> SignOut()
         {
             await signInManager.SignOutAsync();
-            return Content("SignedOut");
+            return Content("Signed Out");
         }
 
         public async Task<IActionResult> ReservationsInfo()
