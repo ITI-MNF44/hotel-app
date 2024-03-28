@@ -7,3 +7,4 @@ namespace hotel_app.Repositories
         // add abstract method
     }
 }
+    

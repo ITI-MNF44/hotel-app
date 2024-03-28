@@ -22,12 +22,19 @@ namespace hotel_app
             //register DBcontext
             builder.Services.AddDbContext<HotelDbContext>(options => {
 				options.UseSqlServer(builder.Configuration.GetConnectionString("HotelConnection"));
-			});
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
 
 
 			//Register Identity Service (userManager -roleMnager- SigninManager)
-			builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-				.AddEntityFrameworkStores<HotelDbContext>()
+			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
+                Options =>
+                {
+                    Options.Password.RequireNonAlphanumeric = false;
+
+                })
+                .AddEntityFrameworkStores<HotelDbContext>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
                     .AddDefaultTokenProviders();
 
 
@@ -43,6 +50,10 @@ namespace hotel_app
 			//services 
 			builder.Services.AddScoped<IHotelService, HotelService>();
 			builder.Services.AddScoped<IGuestService, GuestService>();
+            builder.Services.AddScoped<IGeneralRepository<Hotel>, GeneralRepository<Hotel>>();
+            builder.Services.AddScoped<IHotelService, HotelService>();
+            builder.Services.AddScoped<IHotelCategoryService, HotelCategoryService>();
+
 			builder.Services.AddScoped<IRoomService, RoomService>();
 
             var app = builder.Build();

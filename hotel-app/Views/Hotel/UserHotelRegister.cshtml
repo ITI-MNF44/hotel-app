@@ -1,57 +1,54 @@
-﻿@model RegisterUserViewModel
+﻿@model hotel_app.ViewModels.RegisterUserViewModel
 
 @{
     ViewData["Title"] = "UserHotelRegister";
 }
 
-<div class="container">
-    <h1>User Hotel Registration</h1>
-
-    <div class="row">
-        <div class="col-md-6">
-            <form asp-action="UserHotelRegister" method="post" class="needs-validation" novalidate>
+<div class="hotel-registration-container">
+    <h1 style="text-align:center">Hotel Registration</h1>
+    <div class="hotel-registration-row justify-content-center">
+        <div class="hotel-registration-col-md-8">
+            <form asp-action="UserHotelRegister" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label">Name</label>
+
+                <div class="hotel-registration-form-group">
+                    <label asp-for="Name" class="control-label">Hotel Name</label>
                     <input asp-for="Name" class="form-control" required />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+
+                <div class="hotel-registration-form-group">
                     <label asp-for="Description" class="control-label">Description</label>
-                    <input asp-for="Description" class="form-control" required />
+                    <textarea asp-for="Description" rows="4" class="form-control" required></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Country" class="control-label">Country</label>
-                    <input asp-for="Country" class="form-control" required />
-                    <span asp-validation-for="Country" class="text-danger"></span>
+
+                <div class="hotel-registration-form-row">
+                    <div class="hotel-registration-form-group col-md-6">
+                        <label asp-for="Country" class="control-label">Country</label>
+                        <input asp-for="Country" class="form-control" required />
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                    <div class="hotel-registration-form-group col-md-6">
+                        <label asp-for="City" class="control-label">City</label>
+                        <input asp-for="City" class="form-control" required />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="City" class="control-label">City</label>
-                    <input asp-for="City" class="form-control" required />
-                    <span asp-validation-for="City" class="text-danger"></span>
-                </div>
-                <div class="form-group">
+
+                <div class="hotel-registration-form-group">
                     <label asp-for="Address" class="control-label">Address</label>
                     <input asp-for="Address" class="form-control" required />
                     <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Image" class="control-label">Image URL</label>
-                    <input asp-for="Image" class="form-control" />
+
+                <div class="hotel-registration-form-group">
+                    <label asp-for="Image" class="control-label">Image Upload</label>
+                    <input asp-for="Image" type="file" class="form-control" />
                     <span asp-validation-for="Image" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Latitude" class="control-label">Latitude</label>
-                    <input asp-for="Latitude" class="form-control" />
-                    <span asp-validation-for="Latitude" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Longitude" class="control-label">Longitude</label>
-                    <input asp-for="Longitude" class="form-control" />
-                    <span asp-validation-for="Longitude" class="text-danger"></span>
-                </div>
-                <div class="form-group">
+
+                <div class="hotel-registration-form-group">
                     <label asp-for="StarRating" class="control-label">Star Rating</label>
                     <select asp-for="StarRating" class="form-control">
                         <option value="1">1</option>
@@ -62,75 +59,50 @@
                     </select>
                     <span asp-validation-for="StarRating" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+
+                <div class="hotel-registration-form-group">
                     <label asp-for="Category" class="control-label">Category</label>
-                    <select asp-for="Category" class="form-control" asp-items="Model.Categories ?? new List<SelectListItem>()">
-                        <option value="">Select Category</option>
+                    <select asp-for="Category" class="form-control">
+                        <option value="">Select a category</option>
+                       @*  @if (Model.Categories != null)
+                        { *@
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.Id">@category.Name</option>
+                            }
+                        @* } *@
                     </select>
                     <span asp-validation-for="Category" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+
+                <div class="hotel-registration-form-group">
                     <label asp-for="UserName" class="control-label">Username</label>
                     <input asp-for="UserName" class="form-control" required />
                     <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+
+                <div class="hotel-registration-form-group">
                     <label asp-for="Email" class="control-label">Email</label>
                     <input asp-for="Email" class="form-control" required />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+
+                <div class="hotel-registration-form-group">
                     <label asp-for="Password" class="control-label">Password</label>
                     <input asp-for="Password" type="password" class="form-control" required />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+
+                <div class="hotel-registration-form-group">
                     <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
                     <input asp-for="ConfirmPassword" type="password" class="form-control" required />
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Create</button>
+
+                <div class="hotel-registration-form-group">
+                    <button type="submit" class="btn btn-primary">Register</button>
                 </div>
             </form>
         </div>
     </div>
-
-<!----------------------------------->
-   @*  @section Scripts {
-        <script>
-            (function () {
-                'use strict';
-                window.addEventListener('load', function () {
-                    var forms = document.getElementsByClassName('needs-validation');
-                    var validation = Array.prototype.filter.call(forms, function (form) {
-                        form.addEventListener('submit', function (event) {
-                            if (form.checkValidity() === false) {
-                                event.preventDefault();
-                                event.stopPropagation();
-                            }
-                            form.classList.add('was-validated');
-                        }, false);
-                    });
-                }, false);
-            })();
-        </script>
-    } *@@*  @section Scripts {
-        <script>
-            (function () {
-                'use strict';
-                window.addEventListener('load', function () {
-                    var forms = document.getElementsByClassName('needs-validation');
-                    var validation = Array.prototype.filter.call(forms, function (form) {
-                        form.addEventListener('submit', function (event) {
-                            if (form.checkValidity() === false) {
-                                event.preventDefault();
-                                event.stopPropagation();
-                            }
-                            form.classList.add('was-validated');
-                        }, false);
-                    });
-                }, false);
-            })();
-        </script>
-    } *@
+</div>

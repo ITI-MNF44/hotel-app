@@ -76,8 +76,6 @@ namespace hotel_app.Services
                 NumOfRooms = room.NumOfRooms,
                 PricePerNight = room.PricePerNight,
                 isDeleted = room.IsDeleted,
-                Image = room.Image.ToString()
-
             };
         }
 
