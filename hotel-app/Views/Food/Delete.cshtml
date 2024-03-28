@@ -1,0 +1,83 @@
+﻿@model hotel_app.ViewModels.FoodViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+<style>
+    a:hover {
+        color: #0F172B;
+    }
+
+    * {
+        font-size: 16px;
+    }
+
+    .card {
+        width: 400px;
+        margin: 20px auto; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px; 
+        overflow: hidden; 
+    }
+
+    .card-body {
+        padding: 20px; 
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 10px; 
+    }
+
+    .card-subtitle {
+        font-size: 1rem;
+        margin-bottom: 10px; 
+    }
+
+        .card-subtitle::before {
+            content: "Hotel: ";
+        }
+
+    .row {
+        margin-bottom: 10px; 
+    }
+
+    dt {
+        font-weight: bold;
+    }
+</style>
+
+
+<h1 class="text-center m-3">Delete Food</h1>
+
+<h3 class="text-center m-3">Are you sure you want to delete this?</h3>
+<div class="justify-content-center">
+    <hr />
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Food: <span class="text-primary">@Html.DisplayFor(model => model.Name)</span></h5>
+            <h6 class="card-subtitle mb-2 text-muted"> @Html.DisplayFor(model => model.Hotel)</h6>
+            <hr>
+            <dl class="row">
+                <dt class="col-sm-4">Description:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Description)</dd>
+                <dt class="col-sm-4">Price Per Person:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.PricePerPerson)</dd>
+                <dt class="col-sm-4">Category:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Category)</dd>
+                <dt class="col-sm-4">Created Date:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.CreatedDate)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <form asp-action="DeleteConfirm">
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+
+        <div class="d-flex justify-content-center mb-3">
+            <input type="submit" value="Delete" class="btn btn-danger m-3" />
+            <button asp-action="Index" style="font-size: 15px;" class="d-flex justify-content-center btn btn-primary m-3">Cancel</button>
+        </div>
+    </form>
+</div>
