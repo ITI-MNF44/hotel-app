@@ -12,10 +12,7 @@ namespace hotel_app.Repositories
             _dbContext = DbContext;
         }
         //
-        public List<HotelCategory> GetAllCategories()
-        {
-            return GetAll();
-        }
+     
     }
 
 }
