@@ -4,15 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hotel_app.Services
 {
-    public class RoomService: IRoomService
+    public class RoomService : IRoomService
     {
         readonly IRoomRepository _roomRepository;
         readonly IRoomCategoryRepository _roomCategoryRepository;
+        readonly IGuestRoomRepository _guestRoomRepository;
+
         public RoomService(IRoomRepository roomRepository,
-        IRoomCategoryRepository roomCategoryRepository) 
+        IRoomCategoryRepository roomCategoryRepository,IGuestRoomRepository guestRoomRepository )
         {
             _roomRepository = roomRepository;
             _roomCategoryRepository = roomCategoryRepository;
+            _guestRoomRepository = guestRoomRepository;
         }
 
         public Room GetById(int id)
@@ -42,7 +45,11 @@ namespace hotel_app.Services
 
         public Room GetById(int id, params string[] include)
         {
-           return _roomRepository.GetById(id, include);
+            return _roomRepository.GetById(id, include);
+        }
+        public Task<Room?> GetByIdAsync(int id, params string[] include)
+        {
+            return _roomRepository.GetByIdAsync(id, include);
         }
 
         public void Update(Room room)
@@ -57,6 +64,20 @@ namespace hotel_app.Services
         public List<Room> AllAvailableRooms()
         {
             return _roomRepository.AllAvailableRooms();
+        }
+
+        public async Task<bool> isRoomAvailable(int id , int amount, DateTime startDate, DateTime endDate)
+        {
+            Room room = await _roomRepository.GetByIdAsync(id);
+            if (room != null)
+            {
+                int numOfBooked = _guestRoomRepository.GetBookedRoomsCount(id, startDate, endDate);
+                if (numOfBooked+amount < room.NumOfRooms)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

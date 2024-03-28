@@ -5,6 +5,8 @@ using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace hotel_app.Controllers
 {
@@ -127,6 +129,28 @@ namespace hotel_app.Controllers
             _roomService.Save();
 
             return RedirectToAction("All");
+        }
+
+       public async Task<IActionResult> BookDetails(int id)
+        {
+            //var room = new Room() { Id=2, Image= "629410c0-0f1b-4553-a182-693186d12007_siwa-safari-gardens-hotel.jpg" };
+            var room = await _roomService.GetByIdAsync(id,"RoomCategory","Hotel");
+            return View("Details",room);
+        }
+       
+        public async Task<IActionResult> CheckRoomAvailable(int Id,int amount,DateTime startDate , DateTime endDate)
+        {
+            try
+            {
+               
+               bool result = await _roomService.isRoomAvailable(Id, amount, startDate, endDate);
+               return Json(new { data = result });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or return an appropriate error response.
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
     }
 }

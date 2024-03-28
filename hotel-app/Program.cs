@@ -46,14 +46,14 @@ namespace hotel_app
             builder.Services.AddScoped<IRoomCategoryRepository, RoomCategoryRepository>();
             builder.Services.AddScoped<IHotelCategoryRepository, HotelCategoryRepository>();
             builder.Services.AddScoped<IFoodCategoryRepository, FoodCategoryRepository>();
-
+			builder.Services.AddScoped<IGuestRoomRepository, GuestRoomRepository>();
 			//services 
 			builder.Services.AddScoped<IHotelService, HotelService>();
 			builder.Services.AddScoped<IGuestService, GuestService>();
             builder.Services.AddScoped<IGeneralRepository<Hotel>, GeneralRepository<Hotel>>();
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddScoped<IHotelCategoryService, HotelCategoryService>();
-
+		
 			builder.Services.AddScoped<IRoomService, RoomService>();
 
             var app = builder.Build();
