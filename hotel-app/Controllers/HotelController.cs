@@ -16,23 +16,18 @@ namespace hotel_app.Controllers
         SignInManager<ApplicationUser> signInManager;
         IHotelCategoryService _categoryService;
         IHotelService hotelService;
-        RoleManager<IdentityRole> _roleManager;
-
         //Ctor,inject
 
-        public HotelController(HotelDbContext context, 
-        RoleManager<IdentityRole> roleManagerو
-            IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin,
-            SignInManager<ApplicationUser> _signInManager, 
-            IHotelService _HotelService) 
+        public HotelController(HotelDbContext context,
+                                RoleManager<IdentityRole> roleManager,
+                                UserManager<ApplicationUser> usermanagerlogin,
+                                SignInManager<ApplicationUser> _signInManager, 
+                                 IHotelService _HotelService,IHotelCategoryService hotelCategoryService) 
         {
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
             hotelService = _HotelService;
             _categoryService = hotelCategoryService;
-            _roleManager = roleManager;
-
         }
 
         [Authorize(Roles = "Hotel")]
@@ -149,5 +144,17 @@ namespace hotel_app.Controllers
         }
 
 
+
+        [HttpGet]
+        public IActionResult HotelProfile(int id)
+        {
+            HotelWithRoomsViewModel viewModel = hotelService.GetHotelWithRooms(id);
+            if (viewModel.Hotel == null)
+            {
+                return NotFound();
+            }
+
+            return View("HotelProfile", viewModel);
+        }
     }
 }

@@ -1201,10 +1201,6 @@ ul, ol {
     color: #dc3545;
     margin-left: 10px;
 }
-
-/*---------------------
-next style 
------------------------*/
 /*---------------------
   Hotels Page
 -----------------------*/
@@ -1223,3 +1219,185 @@ next style
     border-bottom:2px solid var(--primary);
     margin-bottom:5px;
 }
+
+/*---------------------
+Hotel Profile
+-----------------------*/
+.sec1 
+{
+    padding-left: 0; 
+    padding-right: 0; 
+}
+.hotel-name-title {
+    text-align: center;
+    font-size: 60px;
+    font-weight: bold;
+    color: #dfa974;
+    font-family: "Lora", serif;
+    text-shadow: #707079;
+    margin-bottom: 7px;
+
+    padding-top: 5px;
+}
+
+.hotel-image-style {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hotel-image-style img {
+        width: 90%;
+        height: 95%;
+        object-fit: cover;
+        margin: 0;
+        padding: 0;
+
+}
+/**************************************/
+.sec2 {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.rating-sec
+{
+    margin-bottom: 10px; 
+}
+.rating-title {
+    font-size: 25px;
+    font-weight: bold;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-family: "Cabin", sans-serif;
+}
+table.rating {
+    border: none;
+    border-collapse: separate;
+}
+
+.rating i {
+    font-size: 20px;
+    color: #ffc107; 
+    margin-right: 5px;
+}
+
+.hoteldesc p {
+    font-size: 16px;
+    font-family: "Cabin", sans-serif;
+    color: #6b6b6b;
+    font-weight: 400;
+    line-height: 26px;
+    text-align:center;
+    margin: 0 0 15px 0;
+    margin-top:10px;
+
+}
+
+.custom-hotel-table {
+    width: 20%;
+    border-collapse: collapse;
+}
+
+    .custom-hotel-table td 
+    {
+        padding: 10px; 
+    }
+
+.h-title {
+    font-size: 20px;
+    font-weight: bold;
+    padding-right: 5px;
+    white-space: nowrap;
+    font-family: "Cabin", sans-serif;
+}
+.h-val
+{
+    font-size:15px;
+    font-family:"Cabin", sans-serif;
+    font-size:15px;
+}
+
+/****************ROOM CARDS**********************/
+.sec3 {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.sec3-title {
+    font-size: 24px;
+    color: #dfa974;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-family: "Cabin", sans-serif;
+}
+
+.sec3 .card
+{
+
+    margin-bottom: 20px; 
+}
+.sec3 .card-title {
+
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "Cabin", sans-serif;
+    color:#dfa974;
+}
+
+.sec3 .card-text.description-center 
+{
+    font-weight:lighter;
+}
+.sec3 .card-text 
+{
+    
+    color: #555; 
+    margin-bottom: 10px; 
+}
+    .sec2 .card-text strong {
+        font-family: "Cabin", sans-serif;
+        font-weight: bold;
+    }
+
+.sec3 .card-img-top {
+    height: 200px; 
+    object-fit: cover; 
+}
+
+.sec3 .btn-primary 
+{
+    background-color: #dfa974; 
+}
+
+    .sec3 .btn-primary:hover 
+    {
+        background-color: #707079;
+    }
+.sec3 .card-body.button-center {
+    text-align: center;
+}
+
+.sec4 {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; 
+    margin-bottom: 20px; 
+}
+.sec4 .btn-primary
+{
+    background-color: #dfa974; 
+    color: #fff;
+    padding: 10px 20px; 
+    font-size: 16px; 
+    border-radius: 5px; 
+    text-decoration: none; 
+}
+
+    .sec4 .btn-primary:hover {
+        background-color: #0056b3; 
+        border-color: #0056b3; 
+    }

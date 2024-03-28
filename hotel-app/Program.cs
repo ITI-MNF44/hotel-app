@@ -54,7 +54,8 @@ namespace hotel_app
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddScoped<IHotelCategoryService, HotelCategoryService>();
 
-			builder.Services.AddScoped<IRoomService, RoomService>();
+
+            builder.Services.AddScoped<IRoomService, RoomService>();
 
             var app = builder.Build();
 

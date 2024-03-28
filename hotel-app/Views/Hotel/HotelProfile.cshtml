@@ -1,0 +1,106 @@
+﻿@model HotelWithRoomsViewModel
+
+@{
+    ViewData["Title"] = "HotelProfile";
+}
+<!-- First Div: Hotel Title and Image -->
+<div class="container-fluid sec1">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <!--<h1 class="m-0 text-primary text-uppercase">@Model.Hotel.Name</h1>-->
+            <h2 class="hotel-name-title">@Model.Hotel.Name</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 hotel-image-style">
+            <img src="~/images/@Model.Hotel.Image" alt="Hotel Image" class="img-fluid">
+        </div>
+    </div>
+</div>
+<!-- end of first div -->
+<!-- Hotel Info -->
+<div class="container-fluid sec2">
+    <div class="row">
+        <div class="col-md-12 rating-sec">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="rating-title">Rating</td>
+                        <td>
+                            <div class="rating">
+                                @for (int i = 0; i < Model.Hotel.StarRating; i++)
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
+                                @for (int i = Model.Hotel.StarRating; i < 5; i++)
+                                {
+                                    <i class="far fa-star"></i>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 hoteldesc">
+            <p>@Model.Hotel.Description</p>
+        </div>
+    </div>
+    <div class="row">
+        <table class="custom-hotel-table">
+            <tbody>
+                <tr>
+                    <td class="h-title">Country:</td>
+                    <td class="h-val">@Model.Hotel.Country</td>
+                </tr>
+                <tr>
+                    <td class="h-title">City:</td>
+                    <td class="h-val">@Model.Hotel.City</td>
+                </tr>
+                <tr>
+                    <td class="h-title">Address:</td>
+                    <td class="h-val">@Model.Hotel.Address</td>
+                </tr>
+                <tr>
+                    <td class="h-title">Category:</td>
+                    <td class="h-val">@Model.HotelCategory.Name</td>
+                </tr>
+               
+            </tbody>
+        </table>
+    </div>   
+</div>
+<!-- end Hotel Info -->
+<!-- Rooms -->
+<div class="container-fluid sec3">
+    <h2 class="sec3-title">Available Rooms</h2>
+    <div class="row">
+        @foreach (var room in Model.Rooms)
+        {
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="~/images/@Model.Hotel.Image" class="card-img-top" alt="@room.Name">
+                    <div class="card-body">
+                        <h5 class="card-title">@room.Name</h5>
+                        <p class="card-text description-center">@room.Description</p>
+                        <p class="card-text"><strong>Category:</strong> @room.RoomCategory.Name</p>
+                        <p class="card-text"><strong>Number of Beds:</strong> @room.NumOfBeds</p>
+                        <p class="card-text"><strong>Price Per Night:</strong> $@room.PricePerNight</p>
+                        <div class="card-body button-center">
+                            <a href="#" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!-- Rooms end -->
+<!--Back button-->
+<div class="container-fluid sec4">
+    <a href="@Url.Action("AllHotels", "Hotel")" class="btn btn-primary">Back</a>
+</div>
+<!--button -->
+

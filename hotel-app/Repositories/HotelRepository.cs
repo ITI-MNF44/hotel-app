@@ -84,5 +84,58 @@ namespace hotel_app.Repositories
                 repository.Insert(hotel);
                 repository.Save();
         }
+
+        //get hotel data with it's rooms
+        //public (Hotel Hotel, List<Room> Rooms,string hotel_category) GetHotelWithRooms(int hotelId)
+        //{
+        //    // Get the hotel details
+        //    Hotel hotel = DbContext.Hotels
+        //                  .Include(h => h.HotelCategory)
+        //                   .FirstOrDefault(h => h.Id == hotelId);
+
+        //    // Get the rooms associated with the hotel
+        //    List<Room> rooms = new List<Room>();
+        //    if (hotel != null)
+        //    {
+        //        rooms = DbContext.Rooms
+        //            .Where(room => room.HotelId == hotelId)
+        //            .Include(room => room.RoomCategory)
+        //            .ToList();
+        //    }
+        //    // Return the hotel along with its rooms
+        //    return (hotel, rooms);
+        //}
+        public (Hotel hotel, HotelCategory hotelCategory, List<(Room room, RoomCategory roomCategory)> roomsWithCategories) GetHotelWithRooms(int hotelId)
+        {
+            // Get the hotel details
+            Hotel hotel = DbContext.Hotels
+                          .Include(h => h.HotelCategory)
+                          .FirstOrDefault(h => h.Id == hotelId);
+
+            // Get the hotel category
+            HotelCategory hotelCategory = null;
+            if (hotel != null)
+            {
+                hotelCategory = hotel.HotelCategory;
+            }
+
+            // Get the rooms associated with the hotel along with their categories
+            var roomsWithCategories = new List<(Room room, RoomCategory roomCategory)>();
+            if (hotel != null)
+            {
+                var rooms = DbContext.Rooms
+                    .Where(room => room.HotelId == hotelId)
+                    .Include(room => room.RoomCategory)
+                    .ToList();
+
+                foreach (var room in rooms)
+                {
+                    var roomCategory = DbContext.RoomsCategories.FirstOrDefault(rc => rc.Id == room.Id);
+                    roomsWithCategories.Add((room, roomCategory));
+                }
+            }
+            return (hotel, hotelCategory, roomsWithCategories);
+        }
+
     }
 }
