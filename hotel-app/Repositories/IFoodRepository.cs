@@ -4,6 +4,7 @@ namespace hotel_app.Repositories
 {
     public interface IFoodRepository: IGeneralRepository<Food>
     {
-        public Food test_function();
+        public Food GetById(int id, params string[] include);
+        public List<Food> GetHotelFoods(int HotelId, params string[] include);
     }
 }

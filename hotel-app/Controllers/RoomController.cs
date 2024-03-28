@@ -2,6 +2,7 @@
 using hotel_app.Repositories;
 using hotel_app.Services;
 using hotel_app.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,7 +35,7 @@ namespace hotel_app.Controllers
             var room = _roomService.GetById(id);
             return View(room);
         }
-
+        
         public async Task<IActionResult> All()
         {
             Hotel hotel = await _hotelService.GetCurrentHotel();
@@ -42,7 +43,7 @@ namespace hotel_app.Controllers
 
             return View("AllRooms", rooms);
         }
-
+        [Authorize]
         public IActionResult Add()
         {
             RoomViewModel room = new RoomViewModel
@@ -74,6 +75,7 @@ namespace hotel_app.Controllers
             return View("AddRoom", room);
         }
 
+        [Authorize]
         public IActionResult Edit(int id)
         {
             Room room = _roomService.GetById(id, "Hotel", "RoomCategory");
@@ -111,6 +113,7 @@ namespace hotel_app.Controllers
             return View("EditRoom", room);
         }
 
+        [Authorize]
         public IActionResult DeleteRoom(int id)
         {
            var room = RoomModelViewMapper.MapToRoomViewModel( _roomService.GetById(id, "Hotel", "RoomCategory"));
