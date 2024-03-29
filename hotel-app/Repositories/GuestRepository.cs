@@ -31,5 +31,22 @@ namespace hotel_app.Repositories
                 .ToList();
         }
 
+        public Guest getGuestDetails(int id)
+        {
+            var res = DbContext.Guests.Where(x => x.Id == id).Include(x=>x.User).FirstOrDefault();
+            return res;
+        }
+
+        public int getGuestByUserNameCount(string guestUserName)
+        {
+            return DbContext.Users.Where(x=>x.UserName == guestUserName).Count();
+        }
+
+
+        public string getGuestNamebyId(string id)
+        {
+            return DbContext.Users.Where(x => x.Id == id).Select(x => x.UserName).FirstOrDefault();
+        }
+
     }
 }

@@ -16,5 +16,9 @@ namespace hotel_app.Services
 
         public List<RoomGuestReservationVM> getGuestReservations(int guest_id);
 
+        public UserProfileViewModel GetUserProfile(int guest_id);
+
+        public int getGuestByUserNameCount(string userName);
+        public string getGuestUserNameById(string id);
     }
 }

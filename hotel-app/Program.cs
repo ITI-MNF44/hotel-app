@@ -46,6 +46,7 @@ namespace hotel_app
             builder.Services.AddScoped<IRoomCategoryRepository, RoomCategoryRepository>();
             builder.Services.AddScoped<IHotelCategoryRepository, HotelCategoryRepository>();
             builder.Services.AddScoped<IFoodCategoryRepository, FoodCategoryRepository>();
+            builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 
 			//services 
 			builder.Services.AddScoped<IHotelService, HotelService>();
@@ -53,8 +54,8 @@ namespace hotel_app
             builder.Services.AddScoped<IGeneralRepository<Hotel>, GeneralRepository<Hotel>>();
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddScoped<IHotelCategoryService, HotelCategoryService>();
-
 			builder.Services.AddScoped<IRoomService, RoomService>();
+            builder.Services.AddScoped<IAppUserService, AppUserService>();
 
             var app = builder.Build();
 

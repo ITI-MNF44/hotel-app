@@ -21,11 +21,11 @@ namespace hotel_app.Controllers
         //Ctor,inject
 
         public HotelController(HotelDbContext context, 
-        RoleManager<IdentityRole> roleManagerو
+        RoleManager<IdentityRole> roleManager,
             IWebHostEnvironment hostEnvironment,
             UserManager<ApplicationUser> usermanagerlogin,
             SignInManager<ApplicationUser> _signInManager, 
-            IHotelService _HotelService) 
+            IHotelService _HotelService, IHotelCategoryService hotelCategoryService) 
         {
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
