@@ -1,0 +1,84 @@
+﻿@model IEnumerable<hotel_app.Models.Food>
+
+@{
+    ViewData["Title"] = "AllFood";
+}
+<style>
+    a:hover {
+        color: #0F172B;
+    }
+    *{
+        font-size: 15px;
+    }
+</style>
+
+<h1 class="text-center m-3">All Food</h1>
+
+<p class="text-center  m-3">
+    <a asp-action="Add">Create New</a>
+</p>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <table class="table table-striped">
+    <thead>
+        <tr>
+            <th class ="text-center">
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th class="text-center">
+                @Html.DisplayName("Price Per Person")
+            </th>
+            <th class="text-center">
+                @Html.DisplayName("Category")
+            </th>
+            <th class="text-center">
+                @Html.DisplayName("Created Date")
+            </th class="text-center">
+
+            <th class="text-center"> @Html.DisplayName("Actions")</th>
+        </tr>
+    </thead>
+    <tbody>
+
+@foreach (var item in Model) {
+        <tr>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.PricePerPerson)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td class="text-center">
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @* @Html.ActionLink("Details", "Details", new { id = item.Id }) | *@
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+        </div>
+    </div>
+</div>
+

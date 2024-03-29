@@ -85,8 +85,6 @@ namespace hotel_app.Services
 
         public async Task<Hotel> MapHotelVmToHotel(RegisterUserViewModel hotelvm,string userId)
         {
-           
-           
                 string filename = string.Empty;
                 if (hotelvm.Image != null)
                 {
@@ -112,6 +110,23 @@ namespace hotel_app.Services
                 return hotel;
         }
 
-       
+        public HotelWithRoomsViewModel GetHotelWithRooms(int hotelId)
+        {
+            (Hotel hotel, HotelCategory hotelCategory, List<(Room room, RoomCategory roomCategory)> roomsWithCategories) = hotelRepository.GetHotelWithRooms(hotelId);
+            return MAPHotelRoomsVM(hotel, roomsWithCategories.Select(x => x.room).ToList(), hotelCategory, roomsWithCategories.Select(x => x.roomCategory).FirstOrDefault());
+        }
+        //
+        public HotelWithRoomsViewModel MAPHotelRoomsVM(Hotel hotel, List<Room> rooms, HotelCategory hotelCategory, RoomCategory roomCategory)
+        {
+            var model = new HotelWithRoomsViewModel
+            {
+                Hotel = hotel,
+                HotelCategory = hotelCategory,
+                Rooms = rooms,
+                RoomCategory = roomCategory
+            };
+
+            return model;
+        }
     }
 }
