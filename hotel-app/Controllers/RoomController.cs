@@ -16,15 +16,18 @@ namespace hotel_app.Controllers
         private readonly IWebHostEnvironment _environment;
         private readonly IRoomService _roomService;
         private readonly IHotelService _hotelService;
+        private readonly IFoodService _foodService;
 
         public RoomController(
             IWebHostEnvironment hostEnvironment,
             IRoomService roomService,
-            IHotelService hotelService)
+            IHotelService hotelService,
+            IFoodService foodService)
         {
             _environment = hostEnvironment;
             _roomService = roomService;
             _hotelService = hotelService;
+            _foodService = foodService;
         }
         public IActionResult Index()
         {
@@ -134,15 +137,23 @@ namespace hotel_app.Controllers
             return RedirectToAction("All");
         }
 
+
+        [HttpGet]
        public async Task<IActionResult> BookDetails(int id)
         {
-            //var room = new Room() { Id=2, Image= "629410c0-0f1b-4553-a182-693186d12007_siwa-safari-gardens-hotel.jpg" };
-            var room = await _roomService.GetByIdAsync(id,"RoomCategory","Hotel");
-            return View("Details",room);
+            BookingDetailsViewModel bookingVm = await _roomService.GetBookingRoomVM(id);
+            //ViewBag.foods = _foodService.GetHotelFoods(room.HotelId).ToList();
+            return View("Details", bookingVm);
+        }
+
+        [HttpPost]
+        public IActionResult ConfirmBook(BookingDetailsViewModel bookingVM)
+        {
+            return View("bookingSummary");
         }
        
         public async Task<IActionResult> CheckRoomAvailable(int Id,int amount,DateTime startDate , DateTime endDate)
-        {
+       {
             try
             {
                

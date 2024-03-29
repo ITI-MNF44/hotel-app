@@ -1,5 +1,23 @@
 ﻿<!-- Page Header Start -->
-@model Room
+@model BookingDetailsViewModel
+
+
+<style>
+    input[type="submit"]{
+        display: block;
+        font-size: 14px;
+        text-transform: uppercase;
+        border-radius: 2px;
+        color: white;
+        background-color:black;
+        font-weight: 500;
+        background: transparent;
+        width: 100%;
+        height: 46px;
+        margin-top: 30px;
+        transition:0s all;
+    }
+</style>
 
 <div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
     <div class="container-fluid page-header-inner py-5">
@@ -17,17 +35,7 @@
     </div>
 </div>
 <!-- Page Header End -->
-<style>
-    .card {
-        border: 2px solid transparent; /* Default border */
-        cursor: pointer;
-        width:150px;
-    }
 
-        .card.selected {
-            border: 2px solid #dfa974;
-        }
-</style>
 <!-- Room Details Section Begin -->
 <section class="room-details-section spad">
     <div class="container">
@@ -39,15 +47,15 @@
                     </div>
                     <div class="rd-text">
                         <div class="rd-title">
-                            <h3>@Model.Name</h3>
+                            <h3>@Model.RoomName</h3>
                             <div class="rdt-right">
         
-                                <h2>@(Model.PricePerNight)$<span>/Night</span></h2>
+                                <h2>@(Model.price)$<span> / Night</span></h2>
                             </div>
                         </div>
                         <div class="hotel-data">
-                            <h4>@Model.Hotel.Name  |  </h4>
-                            <p> @(Model.Hotel.Country), @(Model.Hotel.City) </p>
+                            <h4>@Model.HotelName  |  </h4>
+                            <p> @(Model.Country), @(Model.City) </p>
                         </div>
                         <hr />
 
@@ -55,16 +63,16 @@
                             <tbody>
                                 <tr>
                                     <td class="r-o">Category:</td>
-                                    <td>@Model.RoomCategory.Name</td>
+                                    <td>@Model.RoomCategory</td>
                                 </tr>
                                 <tr>
                                     <td class="r-o">Bed:</td>
-                                    <td>@Model.NumOfBeds Beds</td>
+                                    <td>@Model.BedsNum Beds</td>
                                 </tr>
                             </tbody>
                         </table>
                         <p class="f-para">
-                             @Model.Description
+                             @Model.RoomDescription
                         </p>
                     </div>
                 </div>
@@ -72,18 +80,18 @@
             <div class="col-lg-4">
                 <div class="room-booking">
                     <h3>Your Reservation</h3>
-                    <form action="#">
+                    <form asp-action="ConfirmBook" asp-controller="Room" method="post">
                         <div class="check-date">
                             <label for="date-in">Check In:</label>
-                            <input type="date" class="date-input text-muted" id="date-in">
+                            <input asp-for="StartDate" type="date" class="date-input text-muted" id="date-in" asp-format="{0:yyyy-MM-dd}">
                         </div>
                         <div class="check-date">
                             <label for="date-out">Check Out:</label>
-                            <input type="date" class="date-input text-muted" id="date-out">
+                            <input asp-for="EndDate" type="date" class="date-input text-muted" id="date-out" asp-format="{0:yyyy-MM-dd}">
                         </div>
                         <div class="select-option">
                             <label for="room">Rooms Amount:</label>
-                            <select class="form-select text-muted" id="room">
+                            <select asp-for="Amount" class="form-select text-muted" id="room">
                                 <option value="1">1 Room</option>
                                 <option value="2">2 Rooms</option>
                                 <option value="3">3 Rooms</option>
@@ -91,28 +99,37 @@
                                 <option value="5">5 Rooms</option>
                             </select>
                         </div>
-                        <div>
-                            <input type="checkbox" class="form-check-input" />
-                            <label>include food</label>
-                        </div>
-                        <div class="food-details">
-
-                            <div class="card mb-3" onclick="toggleSelection(this)">
-                                <div style="height:120px">
-                                    <img style="max-height:100%;max-width:100%;object-fit:cover;object-position:center center" src="~/img/team-1.jpg" />
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Oceanfront Bistro</h6>
-                                    <p class="card-text">15$/person</p>
-                                </div>
-                                <!-- Hidden checkbox -->
-                                <input type="checkbox" class="form-check-input" style="display: none;">
+                        
+                        <div >
+                            <div>
+                                <input id="check-food" type="checkbox" class="form-check-input" />
+                                <label style="font-size:14px;margin-bottom:10px" >Include Food</label>
                             </div>
+                            <div id="food-details" class="select-option">
+                                <select asp-for="FoodId" class="form-select text-muted" id="room">
+                                    @if (Model.FoodList != null && Model.FoodList.Count > 0)
+                                    {
+                                        <option >-- Select Food --</option>
+
+                                        @foreach (var food in Model.FoodList)
+                                        {
+                                            <option value="@food.Id">@food.Name (@(food.PricePerPerson)$/Person)</option>
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="">-- sorry no available food --</option>
+                                    }
+                                </select>
+                            </div>
+
                         </div>
                      
-                        <span>error</span>
+                        <div id="available-state" style="color:red"> please select start date</div>
 
                         <button id="check-availablility-btn" >Check Availability</button>
+                        <input id="submit-btn" type="submit" class="btn bg-dark" value="Book Now" />
                     </form>
                     
                 </div>
@@ -126,13 +143,22 @@
     let startdate = document.getElementById("date-in");
     let enddate = document.getElementById("date-out");
     let amount = document.getElementById("room");
+    let availstate = document.getElementById("available-state");
+    let submitBtn = document.getElementById("submit-btn")
+    let checkFood = document.getElementById("check-food")
+    let foodDetails = document.getElementById("food-details")
+
+    submitBtn.style.visibility = "hidden";
+    foodDetails.style.display = "none";
+
+
     availBtn.addEventListener("click", (e) => {
         e.preventDefault();
 
         // Construct the URL with query parameters
-        const url = `/room/checkRoomAvailable/${@Model.Id}?amount=${amount.value}&startDate=${startdate.value}&endDate=${enddate.value}`;
-        console.log(url);
-        // Make the fetch request
+        const url = `/room/checkRoomAvailable/${@Model.RoomId}?amount=${amount.value}&startDate=${startdate.value}&endDate=${enddate.value}`;
+
+
         fetch(url)
             .then(response => {
                 // Check if the response is successful (status code 200)
@@ -150,9 +176,13 @@
                     if (data.data) {
                         console.log("Room is available");
                         availBtn.innerHTML="room is available !"
-                        availBtn.style = "background-color:Green;color:white";
+                        availBtn.style = "border-color:Green;color:green";
+                        submitBtn.style.visibility = "visible"
+
                     } else {
-                        console.log("Room is not available");
+                        availBtn.innerHTML = "Sorry, not available !"
+                        availBtn.style = "border-color:red;color:red";
+                        submitBtn.style.visibility = "hidden"
                     }
                 } else {
                     console.log("Invalid response from server");
@@ -162,21 +192,27 @@
                 // Handle any errors
                 console.error('Error:', error);
             });
-    });
-    function toggleSelection(card) {
-        // Toggle 'selected' class on card
-        $(card).toggleClass('selected');
 
-        // Toggle checkbox state
-        var checkbox = $(card).find('.form-check-input');
-        checkbox.prop('checked', !checkbox.prop('checked'));
-    }
-    $(document).ready(function () {
-        $('.card').click(function () {
-            $(this).toggleClass('selected'); // Toggle 'selected' class on click
-            console.log("selected");
-        });
+      
     });
+    function resetAvalBtn() {
+        availBtn.style = "border-color:#dfa974;color:#dfa974";
+        availBtn.innerHTML = "Check Availability"
+        submitBtn.style.visibility = "hidden"
+    }
+
+    startdate.addEventListener("change", resetAvalBtn);
+    enddate.addEventListener("change", resetAvalBtn);
+    amount.addEventListener("change", resetAvalBtn);
+
+    checkFood.addEventListener("change", () => {
+        if (checkFood.checked) {
+            foodDetails.style.display = "block";
+        }else{
+            foodDetails.style.display = "none";
+        }
+    })
+
 </script>
 
 

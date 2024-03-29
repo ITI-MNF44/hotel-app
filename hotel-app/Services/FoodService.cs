@@ -32,7 +32,10 @@ namespace hotel_app.Services
         {
             return _foodRepository.GetHotelFoods(HotelId, include);
         }
-
+        public async Task<List<Food>> GetHotelFoodsAsync(int HotelId)
+        {
+            return await _foodRepository.GetHotelFoodsAsync(HotelId);
+        }
         public void Insert(Food food)
         {
             _foodRepository.Insert(food);

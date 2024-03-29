@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Booked Successfully</title>
+    <!-- Include your CSS stylesheets here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .confirmation {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 40px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .checkmark-circle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 5px solid #dfa974;
+            margin: 0 auto;
+            margin-bottom: 30px;
+        }
+
+        .checkmark {
+            font-size: 140px;
+            color: #dfa974;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 8px;
+            background-color: #dfa974;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+            .btn:hover {
+                background-color: black;
+                color: #dfa974;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="confirmation">
+            <div class="checkmark-circle">
+                <div class="checkmark">&#10004;</div>
+            </div>
+            <h1>Room Booked Successfully!</h1>
+            <p>Your booking has been confirmed. We look forward to welcoming you.</p>
+            <a href="index" class="btn">Return to Home</a>
+        </div>
+    </div>
+</body>
+</html>

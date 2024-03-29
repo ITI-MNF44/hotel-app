@@ -1,5 +1,6 @@
 ﻿using hotel_app.Models;
 using hotel_app.Repositories;
+using hotel_app.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace hotel_app.Services
@@ -9,13 +10,15 @@ namespace hotel_app.Services
         readonly IRoomRepository _roomRepository;
         readonly IRoomCategoryRepository _roomCategoryRepository;
         readonly IGuestRoomRepository _guestRoomRepository;
+        private readonly IFoodService _foodService;
 
         public RoomService(IRoomRepository roomRepository,
-        IRoomCategoryRepository roomCategoryRepository,IGuestRoomRepository guestRoomRepository )
+        IRoomCategoryRepository roomCategoryRepository, IGuestRoomRepository guestRoomRepository, IFoodService foodService )
         {
             _roomRepository = roomRepository;
             _roomCategoryRepository = roomCategoryRepository;
             _guestRoomRepository = guestRoomRepository;
+            _foodService = foodService;
         }
 
         public Room GetById(int id)
@@ -66,18 +69,43 @@ namespace hotel_app.Services
             return _roomRepository.AllAvailableRooms();
         }
 
-        public async Task<bool> isRoomAvailable(int id , int amount, DateTime startDate, DateTime endDate)
+        public async Task<bool> isRoomAvailable(int id, int amount, DateTime startDate, DateTime endDate)
         {
             Room room = await _roomRepository.GetByIdAsync(id);
             if (room != null)
             {
                 int numOfBooked = _guestRoomRepository.GetBookedRoomsCount(id, startDate, endDate);
-                if (numOfBooked+amount < room.NumOfRooms)
+                if (numOfBooked + amount < room.NumOfRooms)
                 {
                     return true;
                 }
             }
             return false;
+        }
+        public async Task<BookingDetailsViewModel> GetBookingRoomVM(int id)
+        {
+            Room room = await GetByIdAsync(id, "RoomCategory", "Hotel");
+            var foods = await _foodService.GetHotelFoodsAsync(room.Hotel.Id);
+            return new BookingDetailsViewModel()
+            {
+                RoomId = room.Id,
+                RoomName = room.Name,
+                Image = room.Image,
+                HotelName = room.Hotel.Name,
+                Country = room.Hotel.Country,
+                City = room.Hotel.City,
+                RoomCategory = room.RoomCategory.Name,
+                BedsNum = room.NumOfBeds,
+                FoodList = foods,
+                RoomDescription = room.Description,
+                price = room.PricePerNight,
+                //StartDate = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
+                //EndDate = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 3),
+                StartDate =DateTime.Today,
+                EndDate = DateTime.Today.AddDays(3),
+
+
+            };
         }
     }
 }
