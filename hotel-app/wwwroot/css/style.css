@@ -1326,10 +1326,12 @@ table.rating {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.sec3-title {
+.sec3-title 
+{
     font-size: 24px;
     color: #dfa974;
-    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom:5px;
     text-align: center;
     font-weight: bold;
     font-family: "Cabin", sans-serif;
@@ -1337,10 +1339,10 @@ table.rating {
 
 .sec3 .card
 {
-
-    margin-bottom: 20px; 
+    margin-bottom: 10px; 
 }
-.sec3 .card-title {
+.sec3 .card-title
+{
 
     font-size: 20px;
     font-weight: bold;
@@ -1358,17 +1360,25 @@ table.rating {
     color: #555; 
     margin-bottom: 10px; 
 }
-    .sec2 .card-text strong {
+    .sec2 .card-text strong
+    { 
         font-family: "Cabin", sans-serif;
         font-weight: bold;
     }
-
-.sec3 .card-img-top {
-    height: 200px; 
-    object-fit: cover; 
+.card-text .value
+{
+    margin-left: 10px;
 }
 
-.sec3 .btn-primary 
+.sec3 .card-img-top 
+{
+    height: auto;
+    display:block;
+    margin:20px auto 0;
+    width:90%;
+}
+
+.sec3 .btn-primary  
 {
     background-color: #dfa974; 
 }

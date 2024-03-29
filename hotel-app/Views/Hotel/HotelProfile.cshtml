@@ -81,13 +81,13 @@
         {
             <div class="col-md-4">
                 <div class="card">
-                    <img src="~/images/@Model.Hotel.Image" class="card-img-top" alt="@room.Name">
+                    <img src="~/img/@room.Image" class="card-img-top" alt="@room.Name">
                     <div class="card-body">
                         <h5 class="card-title">@room.Name</h5>
                         <p class="card-text description-center">@room.Description</p>
-                        <p class="card-text"><strong>Category:</strong> @room.RoomCategory.Name</p>
-                        <p class="card-text"><strong>Number of Beds:</strong> @room.NumOfBeds</p>
-                        <p class="card-text"><strong>Price Per Night:</strong> $@room.PricePerNight</p>
+                        <p class="card-text"><strong>Category</strong> <span class="value">@room.RoomCategory.Name</span></p>
+                        <p class="card-text"><strong>Number of Beds</strong> <span class="value">@room.NumOfBeds</span></p>
+                        <p class="card-text"><strong>Price Per Night</strong> <span class="value">$@room.PricePerNight</span></p>
                         <div class="card-body button-center">
                             <a href="#" class="btn btn-primary">Book Now</a>
                         </div>
