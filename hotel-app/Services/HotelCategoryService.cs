@@ -13,7 +13,7 @@ namespace hotel_app.Services
         //get all
         public List<HotelCategory> GetAllCategories()
         {
-            return _categoryRepository.GetAllCategories();
+            return _categoryRepository.GetAll(); //you can call getAll directly as you inherited it
         }
     }
 }

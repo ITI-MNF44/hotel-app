@@ -12,16 +12,12 @@ namespace hotel_app.Repositories
     {
         HotelDbContext DbContext;
         IRoomRepository roomRepository;
-        UserManager<ApplicationUser> usermanager;
-        IWebHostEnvironment myEnvironment;
         IGeneralRepository<Hotel> repository;
         public HotelRepository(HotelDbContext _DbContext, IRoomRepository _roomRepository,
-            UserManager<ApplicationUser> _usermanager, IWebHostEnvironment _myEnvironment, IGeneralRepository<Hotel> _repository) : base(_DbContext)
+             IGeneralRepository<Hotel> _repository) : base(_DbContext)
         {   
             DbContext = _DbContext;
             roomRepository = _roomRepository;
-            usermanager = _usermanager;
-            myEnvironment = _myEnvironment;
             repository = _repository;
         }
         //Hotel register
