@@ -92,20 +92,39 @@ namespace hotel_app.Services
                 RoomName = room.Name,
                 Image = room.Image,
                 HotelName = room.Hotel.Name,
+                HotelId = room.Hotel.Id,
                 Country = room.Hotel.Country,
                 City = room.Hotel.City,
+                Address = room.Hotel.Address,
                 RoomCategory = room.RoomCategory.Name,
                 BedsNum = room.NumOfBeds,
                 FoodList = foods,
                 RoomDescription = room.Description,
                 price = room.PricePerNight,
-                //StartDate = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
-                //EndDate = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 3),
                 StartDate =DateTime.Today,
                 EndDate = DateTime.Today.AddDays(3),
 
 
             };
         }
+
+        public async Task<bool> SaveBooking(int guestId, BookingDetailsViewModel viewModel)
+        {
+            GuestRoom booking = new GuestRoom() { 
+            GuestId = guestId,
+            RoomId = viewModel.RoomId,
+            FoodId = viewModel.FoodId==null?null: viewModel.FoodId,
+            StartDate = viewModel.StartDate,
+            EndDate = viewModel.EndDate,
+            BookingDate = DateTime.Now,
+            RoomsAmount = viewModel.RoomsAmount,
+            FoodAmount = viewModel.BedsNum
+            };
+            _guestRoomRepository.Insert(booking);
+            _guestRoomRepository.Save();
+            return true;
+        }
+
+
     }
 }

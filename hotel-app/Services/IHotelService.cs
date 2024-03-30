@@ -16,6 +16,9 @@ namespace hotel_app.Services
         public ApplicationUser MapHotelUserVmToAppUser(RegisterUserViewModel hotelvm);
         public  Task<Hotel> MapHotelVmToHotel(RegisterUserViewModel hotelvm, string userId);
         public Task RegisterInsert(Hotel hotel);
-       
+
+
+        public HotelWithRoomsViewModel GetHotelWithRooms(int hotelId);
+        public HotelWithRoomsViewModel MAPHotelRoomsVM(Hotel hotel, List<Room> rooms, HotelCategory hotelCategory, RoomCategory roomCategory);
     }
 }

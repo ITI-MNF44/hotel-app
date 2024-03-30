@@ -9,8 +9,11 @@ namespace hotel_app.ViewModels
         public string Image { get; set; }
         public string RoomName{ get; set; }
         public string HotelName{ get; set; }
+        public int HotelId { get; set; }
         public string Country{ get; set; }
         public string City{ get; set; }
+
+        public string Address { get; set; }
         public string RoomCategory{ get; set; }
         public int BedsNum{ get; set; }
         public string RoomDescription{ get; set; }

@@ -17,6 +17,10 @@
         margin-top: 30px;
         transition:0s all;
     }
+
+    #hotel-link:hover{
+        color:black !important;
+    }
 </style>
 
 <div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
@@ -46,7 +50,7 @@
                         <img style="max-height:100%;object-fit:cover; object-position:center center" src="~/img/@Model.Image" alt=""  /> 
                     </div>
                     <div class="rd-text">
-                        <div class="rd-title">
+                        <div style="margin-top:10px" class="rd-title">
                             <h3>@Model.RoomName</h3>
                             <div class="rdt-right">
         
@@ -54,8 +58,8 @@
                             </div>
                         </div>
                         <div class="hotel-data">
-                            <h4>@Model.HotelName  |  </h4>
-                            <p> @(Model.Country), @(Model.City) </p>
+                            <h4 ><a id="hotel-link" style="text-decoration:underline" target="_blank" href="http://localhost:53770/Hotel/hotelprofile/@(Model.HotelId)">@Model.HotelName</a>  |  </h4>
+                            <p style="font-size:14px"> @(Model.Country), @(Model.City), @(Model.Address) </p>
                         </div>
                         <hr />
 
@@ -80,7 +84,8 @@
             <div class="col-lg-4">
                 <div class="room-booking">
                     <h3>Your Reservation</h3>
-                    <form asp-action="ConfirmBook" asp-controller="Room" method="post">
+                    <form asp-action="bookingSummary" asp-controller="Room" method="post">
+                        <input type="hidden" asp-for="RoomId" value="@Model.RoomId" />
                         <div class="check-date">
                             <label for="date-in">Check In:</label>
                             <input asp-for="StartDate" type="date" class="date-input text-muted" id="date-in" asp-format="{0:yyyy-MM-dd}">
@@ -91,7 +96,7 @@
                         </div>
                         <div class="select-option">
                             <label for="room">Rooms Amount:</label>
-                            <select asp-for="Amount" class="form-select text-muted" id="room">
+                            <select asp-for="RoomsAmount" class="form-select text-muted" id="room">
                                 <option value="1">1 Room</option>
                                 <option value="2">2 Rooms</option>
                                 <option value="3">3 Rooms</option>
@@ -101,9 +106,9 @@
                         </div>
                         
                         <div >
-                            <div>
-                                <input id="check-food" type="checkbox" class="form-check-input" />
-                                <label style="font-size:14px;margin-bottom:10px" >Include Food</label>
+                            <div style="display:flex;align-items:center;margin-bottom:10px">
+                                <input style="width:16px;height:16px;cursor:pointer;margin:0 5px 0 0 " id="check-food" type="checkbox" class="form-check-input" />
+                                <label style="font-size:14px;" >Include Food</label>
                             </div>
                             <div id="food-details" class="select-option">
                                 <select asp-for="FoodId" class="form-select text-muted" id="room">
@@ -126,7 +131,7 @@
 
                         </div>
                      
-                        <div id="available-state" style="color:red"> please select start date</div>
+                        @* <div id="available-state" style="color:red"> please select start date</div> *@
 
                         <button id="check-availablility-btn" >Check Availability</button>
                         <input id="submit-btn" type="submit" class="btn bg-dark" value="Book Now" />
@@ -147,14 +152,16 @@
     let submitBtn = document.getElementById("submit-btn")
     let checkFood = document.getElementById("check-food")
     let foodDetails = document.getElementById("food-details")
-
+    let spinner = document.createElement("div");
+    spinner.classList.add("spinner-border")
     submitBtn.style.visibility = "hidden";
     foodDetails.style.display = "none";
 
 
     availBtn.addEventListener("click", (e) => {
         e.preventDefault();
-
+        availBtn.innerHTML = "";
+        availBtn.append(spinner);
         // Construct the URL with query parameters
         const url = `/room/checkRoomAvailable/${@Model.RoomId}?amount=${amount.value}&startDate=${startdate.value}&endDate=${enddate.value}`;
 

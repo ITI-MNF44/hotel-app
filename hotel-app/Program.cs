@@ -53,12 +53,12 @@ namespace hotel_app
             builder.Services.AddScoped<IGeneralRepository<Hotel>, GeneralRepository<Hotel>>();
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddScoped<IHotelCategoryService, HotelCategoryService>();
-		
+
+
 			builder.Services.AddScoped<IRoomService, RoomService>();
             builder.Services.AddScoped<IFoodService, FoodService>();
 
-
-            var app = builder.Build();
+      var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())

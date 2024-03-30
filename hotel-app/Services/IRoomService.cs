@@ -20,6 +20,7 @@ namespace hotel_app.Services
 
         public Task<bool> isRoomAvailable(int id, int amount, DateTime startDate, DateTime endDate);
         public Task<BookingDetailsViewModel> GetBookingRoomVM(int id);
+        public Task<bool> SaveBooking(int guestId, BookingDetailsViewModel viewModel);
 
 
     }

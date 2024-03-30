@@ -17,17 +17,20 @@ namespace hotel_app.Controllers
         private readonly IRoomService _roomService;
         private readonly IHotelService _hotelService;
         private readonly IFoodService _foodService;
+        private readonly IGuestService _guestService;
 
         public RoomController(
             IWebHostEnvironment hostEnvironment,
             IRoomService roomService,
             IHotelService hotelService,
-            IFoodService foodService)
+            IFoodService foodService,
+            IGuestService guestService)
         {
             _environment = hostEnvironment;
             _roomService = roomService;
             _hotelService = hotelService;
             _foodService = foodService;
+            _guestService = guestService;
         }
         public IActionResult Index()
         {
@@ -147,9 +150,16 @@ namespace hotel_app.Controllers
         }
 
         [HttpPost]
-        public IActionResult ConfirmBook(BookingDetailsViewModel bookingVM)
+        public async  Task<IActionResult> bookingSummaryAsync(BookingDetailsViewModel bookingVM)
         {
-            return View("bookingSummary");
+            Guest guest = await _guestService.GetCurrentGuest();
+            bool result = await _roomService.SaveBooking(guest.Id,bookingVM);
+            if (result)
+            {
+                return View("bookingConfirmed");
+
+            }
+            return Content("error");
         }
        
         public async Task<IActionResult> CheckRoomAvailable(int Id,int amount,DateTime startDate , DateTime endDate)
