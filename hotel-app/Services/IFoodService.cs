@@ -11,6 +11,8 @@ namespace hotel_app.Services
         public void Update(Food food);
         public void Delete(int id);
         public void Save();
+        public Task<List<Food>> GetHotelFoodsAsync(int HotelId);
+
 
     }
 }

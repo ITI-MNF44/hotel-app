@@ -6,5 +6,7 @@ namespace hotel_app.Repositories
     {
         public Food GetById(int id, params string[] include);
         public List<Food> GetHotelFoods(int HotelId, params string[] include);
+        public Task<List<Food>> GetHotelFoodsAsync(int HotelId);
+
     }
 }

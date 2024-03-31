@@ -34,5 +34,11 @@ namespace hotel_app.Repositories
 
             return foods.ToList();
         }
+        
+        public async Task<List<Food>> GetHotelFoodsAsync(int HotelId)
+        {
+            return await hotelDbContext.Foods.Where(food => food.HotelID == HotelId && food.isDeleted == false).ToListAsync();
+        }
+
     }
 }

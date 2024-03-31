@@ -1,7 +1,7 @@
 ﻿@model List<Hotel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "AllHotels";
 }
 <!-- Page Header Start -->
 <div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
@@ -19,7 +19,7 @@
 </div>
 <!-- Page Header End -->
 
-<div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+<div class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
     <h6 class="section-title text-center text-primary text-uppercase">
         Our Hotels
     </h6>
@@ -27,60 +27,44 @@
         Explore Our <span class="text-primary text-uppercase">Hotels</span>
     </h1>
 </div>
-
 <!-- hotels Section Begin -->
 <section class="rooms-section mt-5 spad">
     <div class="container">
-        <div class="row">
-            @foreach (var hotel in Model)
-            {
-                <div class="col-lg-12 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="hotel-item shadow">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                @if (!string.IsNullOrEmpty(hotel.Image))
+        @foreach (var hotel in Model) 
+        {
+            <div class="card rounded border-0 m-4 shadow mb-3 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="position-relative row g-0">
+                    <div class="fs-5 position-absolute p-2 rounded-1 bg-primary text-white top-0 text-end end-0" style="max-width: fit-content;">@hotel.StarRating <samall class="fa fa-star fs-6"></samall></div>
+                    <div class="col-md-4">
+
+                        @if (!string.IsNullOrEmpty(hotel.Image))
+                        {
+                            <img src="~/img/@hotel.Image" class="img-fluid rounded-start w-100 h-100" alt="Hotel Image" />
+                        }
+                    </div>
+                    <div class="col-md-8 pe-lg-5">
+                        <div class="card-body">
+                            <h4 class="card-title text-primary mb-3"><a href="" class="text-primary">@hotel.Name</a><span class="text-muted fs-5"> | @hotel.HotelCategory.Name</span></h4>
+                            <p>@hotel.Country | @hotel.City | @hotel.Address</p>
+                            <p class="card-text p-0 m-0"></p>
+                            <p class="card-text">@(hotel.Description.Length > 140 ? hotel.Description.Substring(0, 140) + "..." : hotel.Description)</p>
+                            <ul class="ms-4 my-2 fs-5 text-black-50">
+                                @if (hotel.IsAccessible.HasValue && hotel.IsAccessible.Value)
                                 {
-                                    <img src="~/img/@hotel.Image" alt="Hotel Image" />
+                                    <li>Wheelchair-accessible and facilities</li>
                                 }
-                            </div>
-                            <div class="col-lg-7 my-3">
-                                <h4>
+                                <li>High quality food</li>
+                                <li>
                                     <a asp-action="Details"
-                                       class="text-primary mb-4"
-                                       asp-controller="Hotel">@hotel.Name</a>
-                                </h4>
-                                <span class="fs-5 ">@hotel.Country | @hotel.City | @hotel.Address</span>
-                                <h5 class="text-black-50 my-3">@hotel.HotelCategory.Name</h5>
-                                <p class="">Description: Experience unparalleled luxury and comfort at the Luxe Grand Hotel. Located in the heart of Cityville, our hotel offers exquisite accommodations, fine dining options, and world-class amenities to make your stay truly memorable.</p>
-                                <ul class="ms-4 mt-3 fs-5 text-black-50">
-                                    @if (hotel.IsAccessible.HasValue && hotel.IsAccessible.Value)
-                                    {
-                                        <li>Wheelchair-accessible and facilities</li>
-                                    }
-                                    <li>High quality food</li>
-                                    <li>High-speed Wi-Fi</li>
-                                    <li>
-                                        <a asp-action="Details"
-                                           class="text-primary fs-6"
-                                           asp-controller="Hotel">Show more...</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-1 overflow-hidden h-25 py-2 text-light">
-                                <span class="fs-6 p-3 rounded-start float-end bg-primary">@hotel.StarRating <i class="fa fa-star p-0"></i></span>
-                            </div>
+                                       class="text-primary fs-6"
+                                       asp-controller="Hotel">Show more...</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            }
-            <div class="col-lg-12">
-                <div class="room-pagination">
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
-                </div>
             </div>
-        </div>
+        }
     </div>
 </section>
 <!-- Hotel Section End -->

@@ -30,7 +30,7 @@ namespace hotel_app.Controllers
             _categoryService = hotelCategoryService;
         }
 
-        [Authorize(Roles = "Hotel")]
+        //[Authorize(Roles = "Hotel")]
         public async Task<IActionResult> Index()
         {
             Hotel h = await hotelService.GetCurrentHotel();
