@@ -21,8 +21,8 @@ namespace hotel_app.Controllers
 
         public HotelController(
         UserManager<ApplicationUser> usermanagerlogin,
-        SignInManager<ApplicationUser> _signInManager, 
-        IHotelService _HotelService, IHotelCategoryService hotelCategoryService) 
+        SignInManager<ApplicationUser> _signInManager,
+        IHotelService _HotelService, IHotelCategoryService hotelCategoryService)
         {
             usermanager = usermanagerlogin;
             signInManager = _signInManager;
@@ -33,8 +33,8 @@ namespace hotel_app.Controllers
         //[Authorize(Roles = "Hotel")]
         public async Task<IActionResult> Index()
         {
-            Hotel h = await hotelService.GetCurrentHotel(); 
-            return Content("current hotel : "+h.Name);
+            Hotel h = await hotelService.GetCurrentHotel();
+            return Content("current hotel : " + h.Name);
         }
 
         public IActionResult AllHotels()
@@ -65,11 +65,11 @@ namespace hotel_app.Controllers
                 string userId = appUser.Id;
                 IdentityResult result = await usermanager.CreateAsync(appUser, hoteluservm.Password);
 
-              
+
                 if (result.Succeeded)
                 {
-                    IdentityResult roleresult =  await usermanager.AddToRoleAsync(appUser,"Hotel");
-                    if(roleresult.Succeeded)
+                    IdentityResult roleresult = await usermanager.AddToRoleAsync(appUser, "Hotel");
+                    if (roleresult.Succeeded)
                     {
                         List<Claim> Claims = new List<Claim>();
                         Claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.Id));
@@ -85,14 +85,14 @@ namespace hotel_app.Controllers
             return View("UserHotelRegister", hoteluservm);
         }
         public IActionResult Login()
-		{
-			return View("HotelLoginView");
-		}
+        {
+            return View("HotelLoginView");
+        }
 
-		[HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(UserLoginVIewModel hotelVM)
-		{
+        {
             if (ModelState.IsValid)
             {
                 ApplicationUser AppUser = await usermanager.FindByNameAsync(hotelVM.Username);
@@ -114,7 +114,7 @@ namespace hotel_app.Controllers
 
             }
             return View("HotelLoginView", hotelVM);
-		}
+        }
 
         public async Task<IActionResult> SignOut()
         {
@@ -134,7 +134,7 @@ namespace hotel_app.Controllers
             {
                 return Content("Error getting reservations data");
             }
-           
+
         }
 
         public IActionResult getRoomReservationsDetails(int id, string roomName)

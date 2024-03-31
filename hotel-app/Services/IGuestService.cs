@@ -1,5 +1,6 @@
 ﻿using hotel_app.Models;
 using hotel_app.ViewModels;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace hotel_app.Services
 {
@@ -16,5 +17,11 @@ namespace hotel_app.Services
 
         public List<RoomGuestReservationVM> getGuestReservations(int guest_id);
 
+        public UserProfileViewModel GetUserProfile(int guest_id);
+
+        public int getGuestByUserNameCount(string userName);
+        public string getGuestUserNameById(string id);
+
+        public void EditGuestProfile(UserProfileViewModel userProfileViewModel);
     }
 }

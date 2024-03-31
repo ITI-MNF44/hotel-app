@@ -1,0 +1,181 @@
+﻿@using hotel_app.ViewModels;
+@model UserProfileViewModel;
+<div class="row">
+
+
+
+    <div class="col-xl-12">
+        <div class="card mb-4">
+            <h2 class="card-header">Account Details</h2>
+
+            @if (ViewData["msg"] == "data updated")
+            {
+                <div class="alert alert-dismissible alert-primary">
+                    <button type="button" class="close" data-bs-dismiss="alert">&times;</button>
+                    data updated successfully
+                </div>
+            }
+
+            <div class="card-body">
+
+                <form method="post" id="edit-guest">
+
+                    <div class="mb-3">
+                        <label class="small mb-1" asp-for="UserName">Username</label>
+                        <input class="form-control" asp-for="UserName" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="row gx-3 mb-3">
+
+                        <div class="col-md-6">
+                            <label class="small mb-1" asp-for="FirstName">First name</label>
+                            <input class="form-control" asp-for="FirstName" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="small mb-1" asp-for="LastName">Last name</label>
+                            <input class="form-control" asp-for="LastName" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small mb-1" asp-for="UserEmail">User Email</label>
+                        <input class="form-control" asp-for="UserEmail" type="email"/>
+                        <span asp-validation-for="UserEmail" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="row gx-3 mb-3">
+
+                        <div class="col-md-6">
+                            <label class="small mb-1" asp-for="UserPhone">Phone number</label>
+                            <input class="form-control" asp-for="UserPhone" type="number" placeholder="Enter phone number"/>
+                            <span asp-validation-for="UserPhone" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="small mb-1" asp-for="BirthDate">Birth date</label>
+                            <input class="form-control" asp-for="BirthDate" type="date" placeholder="Enter your birthday" />
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
+                        </div>
+                     </div>
+
+                    <div class="mb-3">
+
+                        <label class="small mb-1" asp-for="Password">Current password</label>
+                        <input class="form-control" asp-for="Password" type="password" placeholder="******" value="" oninput="tryToDisplayNewPass()" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="row gx-3 mb-3 pass-fields hide-fields">
+                        <div class="col-md-6">
+
+                            <label class="small mb-1" asp-for="NewPassword">New Password</label>
+                            <input class="form-control" asp-for="NewPassword" type="password" placeholder="Enter new password" />
+                            <span asp-validation-for="NewPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="small mb-1" asp-for="ConfirmPassword">confirm password</label>
+                            <input class="form-control" asp-for="ConfirmPassword" type="password" placeholder="Enter new password" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                        <input hidden class="form form-control" asp-for="UserId" />
+                        <input hidden class="form form-control" asp-for="guestId" />
+                    
+                    <button class="btn btn-primary" type="submit">Save changes</button>
+                    <button class="btn btn-primary" type="button" onclick="reload()">discard changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    @* ----------------- *@
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    
+
+
+    <style>
+
+        .img-account-profile {
+            height: 10rem;
+        }
+
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+
+    .card {
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+    }
+
+        .card .card-header {
+            font-weight: 500;
+        }
+
+    .card-header:first-child {
+        border-radius: 0.35rem 0.35rem 0 0;
+    }
+
+    .card-header {
+        padding: 1rem 1.35rem;
+        margin-bottom: 0;
+        background-color: rgba(33, 40, 50, 0.03);
+        border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+    }
+
+    .hide-fields {
+        display:none;
+    }
+
+
+    .close-icon {
+        font-size: 1.5rem;
+        color: red;
+        cursor: pointer;
+    }
+
+        .close-icon:hover {
+            color: darkred;
+        }
+
+</style>
+
+  <script>
+
+      function tryToDisplayNewPass() {
+
+          console.log("key pressed");
+            var passFields = document.querySelector(".pass-fields");
+           let inputElement = event.target;
+          if (inputElement.value.length >= 1) {
+            passFields.classList.remove("hide-fields");
+        } else if (inputElement.value.length ==0)
+
+            passFields.classList.add("hide-fields");
+
+        document.querySelector('.pass-fields input:first-of-type').value = '';
+        document.getElementById('ConfirmPassword').value = '';
+
+      }
+
+      function reload() {
+        location.reload();
+      }
+  </script>

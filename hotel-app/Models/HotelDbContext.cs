@@ -27,13 +27,26 @@ namespace hotel_app.Models
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomCategory> RoomsCategories { get; set; }
 
-		//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		//{
-		//	optionsBuilder.
-		//		UseSqlServer("Data Source=.;Initial Catalog=HotelDB;Integrated Security=True;Encrypt=False");
-		//	base.OnConfiguring(optionsBuilder);
-		//}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Guest>()
+                .HasIndex(e => e.UserId)
+                .IsUnique();
+
+            modelBuilder.Entity<Hotel>()
+               .HasIndex(e => e.UserId)
+               .IsUnique();
+        }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //	optionsBuilder.
+        //		UseSqlServer("Data Source=.;Initial Catalog=HotelDB;Integrated Security=True;Encrypt=False");
+        //	base.OnConfiguring(optionsBuilder);
+        //}
 
 
-	}
+    }
 }
