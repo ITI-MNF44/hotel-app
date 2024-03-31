@@ -93,7 +93,9 @@
                         <div class="check-date">
                             <label for="date-out">Check Out:</label>
                             <input asp-for="EndDate" type="date" class="date-input text-muted" id="date-out" asp-format="{0:yyyy-MM-dd}">
+
                         </div>
+
                         <div class="select-option">
                             <label for="room">Rooms Amount:</label>
                             <select asp-for="RoomsAmount" class="form-select text-muted" id="room">
@@ -132,6 +134,7 @@
                         </div>
                      
                         @* <div id="available-state" style="color:red"> please select start date</div> *@
+                        <div id="date-error" style="color:red;margin-top:10px"> </div>
 
                         <button id="check-availablility-btn" >Check Availability</button>
                         <input id="submit-btn" type="submit" class="btn bg-dark" value="Book Now" />
@@ -149,9 +152,10 @@
     let enddate = document.getElementById("date-out");
     let amount = document.getElementById("room");
     let availstate = document.getElementById("available-state");
-    let submitBtn = document.getElementById("submit-btn")
-    let checkFood = document.getElementById("check-food")
-    let foodDetails = document.getElementById("food-details")
+    let submitBtn = document.getElementById("submit-btn");
+    let checkFood = document.getElementById("check-food");
+    let foodDetails = document.getElementById("food-details");
+    let dateError = document.getElementById("date-error");
     let spinner = document.createElement("div");
     spinner.classList.add("spinner-border")
     submitBtn.style.visibility = "hidden";
@@ -219,6 +223,30 @@
             foodDetails.style.display = "none";
         }
     })
+
+
+    // Add event listener to detect changes in start date and end date
+    startdate.addEventListener("change", validateDateRange);
+    enddate.addEventListener("change", validateDateRange);
+
+    function validateDateRange(e) {
+        // Get the values of start date and end date
+        let startDateValue = new Date(startdate.value);
+        let endDateValue = new Date(enddate.value);
+
+        if (startDateValue >= endDateValue) {
+            e.target.style.border = "1px solid red";
+            dateError.innerHTML = "End date must be greate than start date"
+            availBtn.disabled = true;
+        } else {
+            // If valid, remove any existing error styles
+            startdate.style.border = "";
+            enddate.style.border = "";
+            dateError.innerHTML=""
+            availBtn.disabled = false;
+        }
+    }
+
 
 </script>
 

@@ -150,14 +150,17 @@ namespace hotel_app.Controllers
         }
 
         [HttpPost]
-        public async  Task<IActionResult> bookingSummaryAsync(BookingDetailsViewModel bookingVM)
+        public async  Task<IActionResult> bookingSummary(BookingDetailsViewModel bookingVM)
         {
-            Guest guest = await _guestService.GetCurrentGuest();
-            bool result = await _roomService.SaveBooking(guest.Id,bookingVM);
-            if (result)
+            if (ModelState.ContainsKey("EndDate") && ModelState["EndDate"].Errors.Count == 0)
             {
-                return View("bookingConfirmed");
+                Guest guest = await _guestService.GetCurrentGuest();
+                bool result = await _roomService.SaveBooking(guest.Id, bookingVM);
+                if (result)
+                {
+                    return View("bookingConfirmed");
 
+                }
             }
             return Content("error");
         }
