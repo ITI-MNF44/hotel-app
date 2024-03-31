@@ -1,5 +1,8 @@
 ﻿using hotel_app.Models;
+using hotel_app.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace hotel_app.Repositories
 {
@@ -48,5 +51,35 @@ namespace hotel_app.Repositories
             return DbContext.Users.Where(x => x.Id == id).Select(x => x.UserName).FirstOrDefault();
         }
 
+        public void editGuestProfile(UserProfileViewModel user)
+        {
+            Guest guestuser = DbContext.Guests.Where(x => x.Id == user.guestId).Include(x => x.User).FirstOrDefault();
+
+            guestuser.User.UserName = user.UserName;
+            guestuser.FirstName = user.FirstName;
+            guestuser.LastName = user.LastName;
+            guestuser.User.Email = user.UserEmail ?? guestuser.User.Email;
+            guestuser.User.PhoneNumber = user.UserPhone ?? guestuser.User.PhoneNumber;
+            guestuser.BirthDate = (DateTime)user.BirthDate;
+
+            if(user.NewPassword!= null)
+            {
+                var passwordHasher = new PasswordHasher<ApplicationUser>();
+                var newPasswordHash = passwordHasher.HashPassword(guestuser.User, user.NewPassword);
+                guestuser.User.PasswordHash = newPasswordHash;
+            }
+
+            try
+            {
+                DbContext.Entry(guestuser).State = EntityState.Modified;
+                DbContext.Entry(guestuser.User).State = EntityState.Modified;
+                 DbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                int x = 10;
+            }
+
+        }
     }
 }

@@ -5,9 +5,12 @@ using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace hotel_app.Controllers
 {
@@ -104,7 +107,6 @@ namespace hotel_app.Controllers
             return Content("guest SignedOut");
         }
 
-   
         public IActionResult ReservationsHistory(int guestId)
         {
             var model = GuestService.getGuestReservations(guestId);
@@ -118,19 +120,17 @@ namespace hotel_app.Controllers
            var model =  GuestService.GetUserProfile(id);
             applicationUser = AppUserService.GetUserById(model.UserId);
 
+
             return View("EditProfile", model);
         }
 
         [HttpPost]
         public IActionResult EditProfile(UserProfileViewModel userProfileViewModel)
         {
-            //if (ModelState.IsValid == false)
-            //{
-            //    return View("EditCourse", userProfileViewModel);
-            //}
-
-            return Content(userProfileViewModel.ToString());
-           
+        
+           GuestService.EditGuestProfile(userProfileViewModel);
+            ViewData["msg"] = "data updated";
+            return  View("EditProfile", userProfileViewModel);
         }
 
         public IActionResult validateUserName(string UserName, string UserId)
@@ -148,7 +148,6 @@ namespace hotel_app.Controllers
             }
             return Json(false);
         }
-
 
         public IActionResult validateEmail(string UserEmail, string UserId)
         {
@@ -176,6 +175,11 @@ namespace hotel_app.Controllers
 
         public async Task<IActionResult> ValidateCurrentPassword(string password, string userId)
         {
+
+            if(password=="")
+                return Json(true);
+
+
             var user = await usermanager.FindByIdAsync(userId);
 
             if (user == null)
@@ -185,13 +189,9 @@ namespace hotel_app.Controllers
             }
 
             var hashedPassword = user.PasswordHash;
-
-            // Use PasswordHasher to hash the input password
             var passwordHasher = new PasswordHasher<ApplicationUser>();
-            var inputPasswordHash = passwordHasher.HashPassword(user, password);
+            var result = passwordHasher.VerifyHashedPassword(user, hashedPassword, password);
 
-            // Verify the hashed input password with the hashed password stored in the database
-            var result = passwordHasher.VerifyHashedPassword(user, hashedPassword, inputPasswordHash);
 
             // Check the result
             if (result == PasswordVerificationResult.Success)

@@ -74,6 +74,8 @@ namespace hotel_app.Services
             return new UserProfileViewModel()
             {
                 UserId = guest.User.Id,
+                guestId = guest.Id,
+
                 FirstName = guest.FirstName,
                 LastName = guest.LastName,
                 BirthDate = guest.BirthDate,
@@ -93,6 +95,11 @@ namespace hotel_app.Services
         public string getGuestUserNameById(string id)
         {
             return GuestRepository.getGuestNamebyId(id);
+        }
+
+        public void EditGuestProfile(UserProfileViewModel userProfileViewModel)
+        {
+            GuestRepository.editGuestProfile(userProfileViewModel);
         }
     }
 }
