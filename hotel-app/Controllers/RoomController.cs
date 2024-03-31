@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace hotel_app.Controllers
 {
@@ -14,15 +16,21 @@ namespace hotel_app.Controllers
         private readonly IWebHostEnvironment _environment;
         private readonly IRoomService _roomService;
         private readonly IHotelService _hotelService;
+        private readonly IFoodService _foodService;
+        private readonly IGuestService _guestService;
 
         public RoomController(
             IWebHostEnvironment hostEnvironment,
             IRoomService roomService,
-            IHotelService hotelService)
+            IHotelService hotelService,
+            IFoodService foodService,
+            IGuestService guestService)
         {
             _environment = hostEnvironment;
             _roomService = roomService;
             _hotelService = hotelService;
+            _foodService = foodService;
+            _guestService = guestService;
         }
         public IActionResult Index()
         {
@@ -130,6 +138,46 @@ namespace hotel_app.Controllers
             _roomService.Save();
 
             return RedirectToAction("All");
+        }
+
+
+        [HttpGet]
+       public async Task<IActionResult> BookDetails(int id)
+        {
+            BookingDetailsViewModel bookingVm = await _roomService.GetBookingRoomVM(id);
+            //ViewBag.foods = _foodService.GetHotelFoods(room.HotelId).ToList();
+            return View("Details", bookingVm);
+        }
+
+        [HttpPost]
+        public async  Task<IActionResult> bookingSummary(BookingDetailsViewModel bookingVM)
+        {
+            if (ModelState.ContainsKey("EndDate") && ModelState["EndDate"].Errors.Count == 0)
+            {
+                Guest guest = await _guestService.GetCurrentGuest();
+                bool result = await _roomService.SaveBooking(guest.Id, bookingVM);
+                if (result)
+                {
+                    return View("bookingConfirmed");
+
+                }
+            }
+            return Content("error");
+        }
+       
+        public async Task<IActionResult> CheckRoomAvailable(int Id,int amount,DateTime startDate , DateTime endDate)
+       {
+            try
+            {
+               
+               bool result = await _roomService.isRoomAvailable(Id, amount, startDate, endDate);
+               return Json(new { data = result });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or return an appropriate error response.
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
     }
 }

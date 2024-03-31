@@ -9,5 +9,7 @@ namespace hotel_app.Repositories
         public List<Room> HotelRooms(int Id);
       
         public List<Room> AllAvailableRooms();
+        public Task<Room?> GetByIdAsync(int id, params string[] include);
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using hotel_app.Models;
 using hotel_app.Repositories;
+using hotel_app.ViewModels;
 
 namespace hotel_app.Services
 {
@@ -14,5 +15,13 @@ namespace hotel_app.Services
         public void Update(Room room);
         public void Delete(int id);
         public void Save();
+
+        public Task<Room?> GetByIdAsync(int id, params string[] include);
+
+        public Task<bool> isRoomAvailable(int id, int amount, DateTime startDate, DateTime endDate);
+        public Task<BookingDetailsViewModel> GetBookingRoomVM(int id);
+        public Task<bool> SaveBooking(int guestId, BookingDetailsViewModel viewModel);
+
+
     }
 }

@@ -22,7 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
           rel="stylesheet"
           asp-append-version="true" />
-    <title>Login</title>
+    <title>Guest Register</title>
     <style>
         :root {
             --primary-color: #dfa974;
@@ -145,6 +145,11 @@
             padding-left: 4px;
             font: 18px;
         }
+
+        select option {
+            font-size: 14px;
+            padding: 8px;
+        }
     </style>
 </head>
 <body>
@@ -163,7 +168,12 @@
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
             </div>
-          
+
+            <div class="form-group input-box">
+                <input asp-for="Email" class="form-control" placeholder="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
             <div class="form-group input-box">
                 <input asp-for="UserName" class="form-control" placeholder="userame" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
@@ -178,8 +188,7 @@
             </div>
             <div class="form-group input-box">
                 <select asp-for="Gender" class="form-select">
-                    @* <option class="select-option" value="non">-- Select Gender --</option> *@
-                    <option class="select-option" value="male">Male</option>
+                    <option class="select-option" selected value="male">Male</option>
                     <option class="select-option" value="female">Female</option>
                 </select>
                 <span asp-validation-for="Gender" class="text-danger"></span>
@@ -188,10 +197,24 @@
                 <input type="date" asp-for="BirthDate" class="form-control" placeholder="Birthdate" />
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
-            <div class="form-group input-box">
+       @*      <div class="form-group input-box">
                 <input asp-for="Country" class="form-control" placeholder="Country" />
                 <span asp-validation-for="Country" class="text-danger"></span>
+            </div> *@
+            <div class="form-group input-box">
+                <select style="margin-bottom" asp-for="Country" class="form-control form-select " id="country-select">
+                    <option selected value=""> -- Select a country --</option>
+                    @foreach (var item in Model.Countries)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+                <span asp-validation-for="Country" class="text-danger"></span>
+
             </div>
+
+           
+
             <div class="form-group input-box">
                 <input type="submit" value="Create Account" class="btn login-btn" />
             </div>

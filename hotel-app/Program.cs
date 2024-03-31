@@ -31,6 +31,8 @@ namespace hotel_app
                 Options =>
                 {
                     Options.Password.RequireNonAlphanumeric = false;
+                    Options.Password.RequiredLength = 8;
+
 
                 })
                 .AddEntityFrameworkStores<HotelDbContext>()
@@ -46,7 +48,7 @@ namespace hotel_app
             builder.Services.AddScoped<IRoomCategoryRepository, RoomCategoryRepository>();
             builder.Services.AddScoped<IHotelCategoryRepository, HotelCategoryRepository>();
             builder.Services.AddScoped<IFoodCategoryRepository, FoodCategoryRepository>();
-
+			builder.Services.AddScoped<IGuestRoomRepository, GuestRoomRepository>();
 			//services 
 			builder.Services.AddScoped<IHotelService, HotelService>();
 			builder.Services.AddScoped<IGuestService, GuestService>();
@@ -58,7 +60,10 @@ namespace hotel_app
 			builder.Services.AddScoped<IRoomService, RoomService>();
             builder.Services.AddScoped<IFoodService, FoodService>();
 
-      var app = builder.Build();
+            builder.Services.AddHttpClient();
+
+
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
