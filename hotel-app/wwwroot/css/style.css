@@ -733,6 +733,39 @@ ul, ol {
 /*-----------------------
   Room Details Section
 -------------------------*/
+.spinner-border {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border-width: 0.25em;
+    border-color: white;
+    border-top-color: #dfa974;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.hotel-data {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 6px;
+}
+.hotel-data h4 {
+    color: #dfa974;
+    font-size:20px;
+}
+.hotel-data p{
+    margin:0;
+}
 .room-details-section {
     padding-top: 0;
     padding-bottom: 80px;
@@ -757,18 +790,20 @@ ul, ol {
 
 .room-details-item .rd-text .rd-title {
     overflow: hidden;
-    margin-bottom: 8px;
+    max-height: 50px
 }
 
     .room-details-item .rd-text .rd-title h3 {
         color: #19191a;
         float: left;
+        font-size:40px;
     }
 
     .room-details-item .rd-text .rd-title .rdt-right {
         float: right;
         text-align: right;
     }
+    
 
         .room-details-item .rd-text .rd-title .rdt-right .rating {
             display: inline-block;
