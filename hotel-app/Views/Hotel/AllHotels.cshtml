@@ -44,7 +44,10 @@
                     </div>
                     <div class="col-md-8 pe-lg-5">
                         <div class="card-body">
-                            <h4 class="card-title text-primary mb-3"><a href="" class="text-primary">@hotel.Name</a><span class="text-muted fs-5"> | @hotel.HotelCategory.Name</span></h4>
+                            <h4 class="card-title text-primary mb-3">
+                                <a href="@Url.Action("HotelProfile", "Hotel", new { id = hotel.Id })" class="text-primary">@hotel.Name</a>
+                                <span class="text-muted fs-5"> | @hotel.HotelCategory.Name</span>
+                            </h4>
                             <p>@hotel.Country | @hotel.City | @hotel.Address</p>
                             <p class="card-text p-0 m-0"></p>
                             <p class="card-text">@(hotel.Description.Length > 140 ? hotel.Description.Substring(0, 140) + "..." : hotel.Description)</p>
