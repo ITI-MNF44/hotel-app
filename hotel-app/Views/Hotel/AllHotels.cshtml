@@ -39,7 +39,7 @@
 
                         @if (!string.IsNullOrEmpty(hotel.Image))
                         {
-                            <img src="~/img/@hotel.Image" class="img-fluid rounded-start w-100 h-100" alt="Hotel Image" />
+                            <img src="~/images/@hotel.Image" class="img-fluid rounded-start w-100 h-100" alt="Hotel Image" />
                         }
                     </div>
                     <div class="col-md-8 pe-lg-5">
@@ -58,8 +58,9 @@
                                 }
                                 <li>High quality food</li>
                                 <li>
-                                    <a asp-action="Details"
+                                    <a asp-action="HotelProfile"
                                        class="text-primary fs-6"
+                                       asp-route-id="@hotel.Id"
                                        asp-controller="Hotel">Show more...</a>
                                 </li>
                             </ul>

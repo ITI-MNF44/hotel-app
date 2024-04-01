@@ -1488,11 +1488,6 @@ table.rating {
         }
 
 
-To add advanced styling to the embedded Google Maps iframe, you can use CSS to customize its appearance. Here's an example of how you can add some styling to the map:
-
-html
-Copy code
-<style >
 .map-container {
     position: relative;
     width: 100%;
