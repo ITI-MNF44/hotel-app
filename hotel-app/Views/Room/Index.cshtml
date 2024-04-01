@@ -40,7 +40,7 @@
                     <div class="position-relative">
                             @if (!string.IsNullOrEmpty(room.Image))
                             {
-                                <img class="img-fluid" src="~/img/@room.Image" alt="Room Image" />
+                                <img class="img-fluid" src="~/images/@room.Image" alt="Room Image" />
                             }
                                                 </div>
                     <div class="p-4 mt-2">
@@ -67,9 +67,11 @@
                             <di class="fs-6">@(room.Description.Length > 90 ? room.Description.Substring(0, 90) + "..." : room.Description)</di>
 
                             <div class="bg-primary text-center w-100 rounded py-2 mb-4 mt-4 mx-auto">
-                            <a asp-action="Details"
+                            @* <a asp-action="Details"
                             class="px-4 text-white"
-                            asp-controller="Room">More Details</a>
+                             asp-route-id="@room.Id"
+                            asp-controller="Room">More Details</a> *@
+                                <a href="http://localhost:53770/room/bookdetails/@room.Id" class="px-4 text-white">More Details</a>
                         </div>
                     </div>
                 </div>
