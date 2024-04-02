@@ -6,7 +6,12 @@
 
     <div class="col-xl-12">
         <div class="card mb-4">
-            <h2 class="card-header">Account Details</h2>
+            <div class="card-header d-flex align-items-center">
+                <h2 class="">Account Details</h2>
+                <i class=" fa-solid fa-right-from-bracket"></i>
+                <a class="me-4 ms-auto btn btn-outline-danger" asp-controller="Guest" asp-action="SignOut">Log Out</a>
+
+            </div>
 
             @if (ViewData["msg"] == "data updated")
             {

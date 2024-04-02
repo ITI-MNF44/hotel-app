@@ -106,7 +106,7 @@ namespace hotel_app.Controllers
                         Claims.Add(new Claim(ClaimTypes.NameIdentifier, AppUser.Id));
                         await usermanager.AddToRoleAsync(AppUser, "Hotel");
                         await signInManager.SignInWithClaimsAsync(AppUser, hotelVM.RememberMe, Claims);
-                        return RedirectToAction("index", "home");
+                        return RedirectToAction("Home","Hotel");
                     }
 
                 }
@@ -119,7 +119,7 @@ namespace hotel_app.Controllers
         public async Task<IActionResult> SignOut()
         {
             await signInManager.SignOutAsync();
-            return Content("Signed Out");
+            return RedirectToAction("Login");
         }
 
         public async Task<IActionResult> ReservationsInfo()
@@ -149,6 +149,19 @@ namespace hotel_app.Controllers
         [HttpGet]
         public IActionResult HotelProfile(int id)
         {
+            HotelWithRoomsViewModel viewModel = hotelService.GetHotelWithRooms(id);
+            if (viewModel.Hotel == null)
+            {
+                return NotFound();
+            }
+
+            return View("HotelProfile", viewModel);
+        }
+
+        public async Task<IActionResult> HomeAsync()
+        {
+            var hotel = await hotelService.GetCurrentHotel();
+            int id = hotel.Id;
             HotelWithRoomsViewModel viewModel = hotelService.GetHotelWithRooms(id);
             if (viewModel.Hotel == null)
             {

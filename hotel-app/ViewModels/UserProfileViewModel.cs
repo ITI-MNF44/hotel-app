@@ -1,5 +1,4 @@
-﻿using hotel_app.ValidationModels;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace hotel_app.ViewModels
@@ -39,7 +38,7 @@ namespace hotel_app.ViewModels
 
 
         [Required(ErrorMessage ="this field is reauired")]
-        [RegularExpression("^([a-zA-Z0-9]{5,}.*)?$", ErrorMessage = "Password should start with at least 5 alphanumeric characters.")]
+        [RegularExpression(@"^(?=.*[A-Z]).{8,}$", ErrorMessage = "Password must be at least 8 characters long and contain at least one uppercase letter.")]
         public string? NewPassword { get; set; }
 
 

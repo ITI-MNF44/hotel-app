@@ -179,5 +179,14 @@ namespace hotel_app.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+        [HttpGet]
+
+        public async Task<IActionResult> test()
+        {
+            BookingDetailsViewModel bookingVm = await _roomService.GetBookingRoomVM(1010);
+            //ViewBag.foods = _foodService.GetHotelFoods(room.HotelId).ToList();
+            return View("Details", bookingVm);
+        }
+
     }
 }

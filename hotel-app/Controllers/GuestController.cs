@@ -68,7 +68,7 @@ namespace hotel_app.Controllers
                         Claims.Add(new Claim(ClaimTypes.NameIdentifier, AppUser.Id));
                         await usermanager.AddToRoleAsync(AppUser, "Guest");
                         await signInManager.SignInWithClaimsAsync(AppUser, guestVM.RememberMe, Claims);
-                        return RedirectToAction("index", "home");
+                        return RedirectToAction("AllHotels", "Hotel");
                     }
 
                 }
@@ -139,7 +139,7 @@ namespace hotel_app.Controllers
                     guest.UserId = AppUser.Id;
                     GuestService.InsertGuest(guest);
                     GuestService.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("AllHotels", "Hotel");
                 }
 
                 return View("GuestRegisterView", guestVM);
@@ -152,23 +152,24 @@ namespace hotel_app.Controllers
         public async Task<IActionResult> SignOut()
         {
             await signInManager.SignOutAsync();
-            return Content("guest SignedOut");
+            return RedirectToAction("Login");
         }
 
-        public IActionResult ReservationsHistory(int guestId)
+        public async Task< IActionResult> ReservationsHistory()
         {
-            var model = GuestService.getGuestReservations(guestId);
+            var guest = await GuestService.GetCurrentGuest();
+            var id = guest.Id;
+            var model = GuestService.getGuestReservations(id);
             return View("GuestReservationsHistory", model);
         }
 
         [HttpGet]
-        public IActionResult EditProfile(int id)
+        public async Task<IActionResult> EditProfile()
         {
-
+           var guest = await GuestService.GetCurrentGuest();
+           var id = guest.Id;
            var model =  GuestService.GetUserProfile(id);
             applicationUser = AppUserService.GetUserById(model.UserId);
-
-
             return View("EditProfile", model);
         }
 

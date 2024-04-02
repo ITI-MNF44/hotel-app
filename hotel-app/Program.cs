@@ -80,7 +80,7 @@ namespace hotel_app
 
 			app.MapControllerRoute(
 				name: "default",
-				pattern: "{controller=Home}/{action=Index}/{id?}");
+				pattern: "{controller=Hotel}/{action=AllHotels}");
 
 			app.Run();
 		}

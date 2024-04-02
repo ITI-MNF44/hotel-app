@@ -36,7 +36,7 @@ namespace hotel_app.Services
 
             // Mapping for Image
             string fileName = "";
-            string uploadFile = Path.Combine(_hostEnvironment.WebRootPath, "img");
+            string uploadFile = Path.Combine(_hostEnvironment.WebRootPath, "images");
             fileName = Guid.NewGuid().ToString() + "_" + room.Image.FileName;
             string filePath = Path.Combine(uploadFile, fileName);
             room.Image.CopyTo(new FileStream(filePath, FileMode.Create));
