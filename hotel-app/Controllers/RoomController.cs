@@ -145,7 +145,6 @@ namespace hotel_app.Controllers
        public async Task<IActionResult> BookDetails(int id)
         {
             BookingDetailsViewModel bookingVm = await _roomService.GetBookingRoomVM(id);
-            //ViewBag.foods = _foodService.GetHotelFoods(room.HotelId).ToList();
             return View("Details", bookingVm);
         }
 

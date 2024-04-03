@@ -70,11 +70,14 @@
                             <div class="fs-6">@(room.Description.Length > 90 ? room.Description.Substring(0, 90) + "..." : room.Description)</div>
 
                             <div class="bg-primary text-center w-100 rounded py-2 mb-4 mt-4 mx-auto">
-@*                             <a asp-action="Details"
+                                <a style="width:100%" asp-action="BookDetails"
                             class="px-4 text-white"
                              asp-route-id="@room.Id"
-                            asp-controller="Room">More Details</a> *@
-                                <a href="http://localhost:53770/room/bookdetails/@room.Id" class="px-4 text-white">More Details</a>
+                            asp-controller="Room">More Details</a>
+
+
+
+                                @* <a href="http://localhost:53770/room/bookdetails/@room.Id" class="px-4 text-white">More Details</a> *@
                         </div>
                     </div>
                 </div>

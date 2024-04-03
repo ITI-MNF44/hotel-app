@@ -164,6 +164,7 @@ namespace hotel_app.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Guest")]
         public async Task<IActionResult> EditProfile()
         {
            var guest = await GuestService.GetCurrentGuest();
