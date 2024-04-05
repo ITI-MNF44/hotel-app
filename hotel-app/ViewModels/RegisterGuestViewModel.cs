@@ -1,4 +1,5 @@
 ﻿using hotel_app.Models;
+using hotel_app.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,6 +9,7 @@ namespace hotel_app.ViewModels
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        [ValidUserName(ErrorMessage ="Username is used, Try another one")]
         public string UserName { get; set; }
 
         [EmailAddress(ErrorMessage = "Invalid email address")]

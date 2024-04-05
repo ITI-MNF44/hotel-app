@@ -60,15 +60,15 @@ namespace hotel_app.Controllers
                 ApplicationUser AppUser = await usermanager.FindByNameAsync(guestVM.Username);
                 if (AppUser != null)
                 {
-                    bool found = await usermanager.CheckPasswordAsync(AppUser, guestVM.Passwrod);
-                    if (found)
+                    bool Found = await usermanager.CheckPasswordAsync(AppUser, guestVM.Passwrod);
+                    if (Found)
                     {
-                        await signInManager.SignInAsync(AppUser, guestVM.RememberMe);
-                        List<Claim> Claims = new List<Claim>();
-                        Claims.Add(new Claim(ClaimTypes.NameIdentifier, AppUser.Id));
-                        await usermanager.AddToRoleAsync(AppUser, "Guest");
-                        await signInManager.SignInWithClaimsAsync(AppUser, guestVM.RememberMe, Claims);
-                        return RedirectToAction("AllHotels", "Hotel");
+                        var userRoles = await usermanager.GetRolesAsync(AppUser);
+                        if (userRoles.Contains("Guest"))
+                        {
+                            await signInManager.SignInAsync(AppUser, guestVM.RememberMe);
+                            return RedirectToAction("AllHotels", "Hotel");
+                        }
                     }
 
                 }
@@ -77,13 +77,8 @@ namespace hotel_app.Controllers
             }
             return View("GuestLoginView", guestVM);
         }
-
-        public async Task<IActionResult> Register()
+        public async Task<List<string>> getAllCountries()
         {
-            var guestVM = new RegisterGuestViewModel();
-
-            try
-            {
                 // Call the REST countries API to get the list of countries
                 var client = _clientFactory.CreateClient();
                 HttpResponseMessage response = await client.GetAsync("https://restcountries.com/v3.1/all");
@@ -107,18 +102,17 @@ namespace hotel_app.Controllers
                     countryNames.Sort();
 
                     // Set the SelectList to the view model
-                    guestVM.Countries = countryNames;
+                   return countryNames;
                 }
-            }
-            catch (Exception ex)
-            {
-                // Handle the exception (e.g., log the error)
-                // You can set a default SelectList or handle it as per your requirement
-                Console.WriteLine($"Error fetching countries: {ex.Message}");
-                guestVM.Countries = new List<string>();
-            }
+     
 
             // Pass the view model to the view
+        }
+        public async Task<IActionResult> Register()
+        {
+            var guestVM = new RegisterGuestViewModel();
+            guestVM.Countries = await getAllCountries();
+            
             return View("GuestRegisterView", guestVM);
         }
         [HttpPost]
@@ -141,11 +135,12 @@ namespace hotel_app.Controllers
                     GuestService.SaveChanges();
                     return RedirectToAction("AllHotels", "Hotel");
                 }
-
+                guestVM.Countries = await getAllCountries();
                 return View("GuestRegisterView", guestVM);
 
 
             }
+            guestVM.Countries = await getAllCountries();
             return View("GuestRegisterView", guestVM);
         }
 
