@@ -1,4 +1,5 @@
-﻿using hotel_app.Models;
+﻿
+using hotel_app.Models;
 using hotel_app.Services;
 using hotel_app.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -30,7 +31,7 @@ namespace hotel_app.Controllers
             _categoryService = hotelCategoryService;
         }
 
-        //[Authorize(Roles = "Hotel")]
+        [Authorize(Roles = "Hotel")]
         public async Task<IActionResult> Index()
         {
             Hotel h = await hotelService.GetCurrentHotel();
@@ -76,7 +77,7 @@ namespace hotel_app.Controllers
                         await signInManager.SignInWithClaimsAsync(appUser, true, Claims);
                         Hotel hotel = await hotelService.MapHotelVmToHotel(hoteluservm, userId);
                         await hotelService.RegisterInsert(hotel);
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Home", "Hotel");
                     }
 
                 }
@@ -101,14 +102,13 @@ namespace hotel_app.Controllers
                     bool Found = await usermanager.CheckPasswordAsync(AppUser, hotelVM.Passwrod);
                     if (Found)
                     {
-                        await signInManager.SignInAsync(AppUser, hotelVM.RememberMe);
-                        List<Claim> Claims = new List<Claim>();
-                        Claims.Add(new Claim(ClaimTypes.NameIdentifier, AppUser.Id));
-                        await usermanager.AddToRoleAsync(AppUser, "Hotel");
-                        await signInManager.SignInWithClaimsAsync(AppUser, hotelVM.RememberMe, Claims);
-                        return RedirectToAction("index", "home");
+                        var userRoles = await usermanager.GetRolesAsync(AppUser);
+                        if (userRoles.Contains("Hotel"))
+                        {
+                            await signInManager.SignInAsync(AppUser, hotelVM.RememberMe);
+                            return RedirectToAction("Home", "Hotel");
+                        }
                     }
-
                 }
                 ModelState.AddModelError(string.Empty, "Username or password is incorrect");
 
@@ -119,7 +119,7 @@ namespace hotel_app.Controllers
         public async Task<IActionResult> SignOut()
         {
             await signInManager.SignOutAsync();
-            return Content("Signed Out");
+            return RedirectToAction("Login");
         }
 
         public async Task<IActionResult> ReservationsInfo()
@@ -149,6 +149,19 @@ namespace hotel_app.Controllers
         [HttpGet]
         public IActionResult HotelProfile(int id)
         {
+            HotelWithRoomsViewModel viewModel = hotelService.GetHotelWithRooms(id);
+            if (viewModel.Hotel == null)
+            {
+                return NotFound();
+            }
+
+            return View("HotelProfile", viewModel);
+        }
+
+        public async Task<IActionResult> HomeAsync()
+        {
+            var hotel = await hotelService.GetCurrentHotel();
+            int id = hotel.Id;
             HotelWithRoomsViewModel viewModel = hotelService.GetHotelWithRooms(id);
             if (viewModel.Hotel == null)
             {

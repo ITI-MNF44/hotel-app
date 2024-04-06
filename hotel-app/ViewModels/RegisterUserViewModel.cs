@@ -1,4 +1,5 @@
 ﻿using hotel_app.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
@@ -37,10 +38,13 @@ namespace hotel_app.ViewModels
 
         [Required(ErrorMessage = "Please enter a user name.")]
         [Display(Name = "User Name")]
+        [Remote("CheckNameAvailability", "Guest", ErrorMessage = "username is not available")]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Please enter an email address.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
+        [Remote("CheckEmailAvailability", "Guest", ErrorMessage = "Email already in use")]
+
         public string Email { get; set; }
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$", ErrorMessage = "Password must have at least one uppercase ('A'-'Z'), one lowercase ('a'-'z'), and one digit (0-9).")]
         [Required(ErrorMessage = "Password is required.")]

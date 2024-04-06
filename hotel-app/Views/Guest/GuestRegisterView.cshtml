@@ -41,7 +41,7 @@
         }
             /* Add the overlay */
             body::before {
-                position:fixed;
+                position: fixed;
                 content: "";
                 position: absolute;
                 top: 0;
@@ -60,9 +60,7 @@
             max-width: 650px;
             text-align: center;
             position: relative; /* Adjust this line */
-            top:120px
-
-            z-index: 1; /* Add this line */
+            top: 120px z-index: 1; /* Add this line */
         }
 
             .login-card h1 {
@@ -82,12 +80,12 @@
             }
 
         .input-box {
-           /*  padding: 6px 0;
-            margin-bottom: 4px; */
+            /*  padding: 6px 0;
+                    margin-bottom: 4px; */
         }
 
-        .input-box-name{
-        flex-basis:50%
+        .input-box-name {
+            flex-basis: 50%
         }
 
         .login-card input:focus {
@@ -197,9 +195,9 @@
                 <input type="date" asp-for="BirthDate" class="form-control" placeholder="Birthdate" />
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
-       @*      <div class="form-group input-box">
-                <input asp-for="Country" class="form-control" placeholder="Country" />
-                <span asp-validation-for="Country" class="text-danger"></span>
+            @*      <div class="form-group input-box">
+            <input asp-for="Country" class="form-control" placeholder="Country" />
+            <span asp-validation-for="Country" class="text-danger"></span>
             </div> *@
             <div class="form-group input-box">
                 <select style="margin-bottom" asp-for="Country" class="form-control form-select " id="country-select">
@@ -213,7 +211,7 @@
 
             </div>
 
-           
+
 
             <div class="form-group input-box">
                 <input type="submit" value="Create Account" class="btn login-btn" />

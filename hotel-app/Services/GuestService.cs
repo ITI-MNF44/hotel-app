@@ -26,7 +26,7 @@ namespace hotel_app.Services
         }
         public ApplicationUser MapGuestVmToAppUser(RegisterGuestViewModel guestVM)
         {
-            return new ApplicationUser() { UserName = guestVM.UserName, PasswordHash = guestVM.Password };
+            return new ApplicationUser() { UserName = guestVM.UserName, PasswordHash = guestVM.Password ,Email=guestVM.Email};
         }
         public Guest MapGuestVmToGuest(RegisterGuestViewModel guestVM)
         {

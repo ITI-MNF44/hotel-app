@@ -4,7 +4,7 @@
     ViewData["Title"] = "AllHotels";
 }
 <!-- Page Header Start -->
-<div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
+@* <div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
     <div class="container-fluid page-header-inner py-5">
         <div class="container text-center pb-5">
             <h1 class="display-3 text-white mb-3 animated slideInDown">Hotels</h1>
@@ -16,59 +16,124 @@
             </nav>
         </div>
     </div>
-</div>
+</div> *@
 <!-- Page Header End -->
+<!--slider-->
+<partial name="_HeaderSliderPartial" />
+<!--end slider-->
 
 <div class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
     <h6 class="section-title text-center text-primary text-uppercase">
         Our Hotels
     </h6>
-    <h1 class="mb-5">
+    <h1 class="mb-5 pb-5">
         Explore Our <span class="text-primary text-uppercase">Hotels</span>
     </h1>
 </div>
 <!-- hotels Section Begin -->
-<section class="rooms-section mt-5 spad">
+<section class="">
     <div class="container">
-        @foreach (var hotel in Model) 
-        {
-            <div class="card rounded border-0 m-4 shadow mb-3 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="position-relative row g-0">
-                    <div class="fs-5 position-absolute p-2 rounded-1 bg-primary text-white top-0 text-end end-0" style="max-width: fit-content;">@hotel.StarRating <samall class="fa fa-star fs-6"></samall></div>
-                    <div class="col-md-4">
+        <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(600px, 1fr)); padding:40px 0 ">
+            @foreach (var hotel in Model)
+            {
+                <div class="card p-0 rounded border-0 shadow wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="position-relative row g-0">
+                        <div class="fs-5 position-absolute p-2 rounded-1 bg-primary text-white top-0 text-end float-end end-0" style="max-width: fit-content;">@hotel.StarRating <samall class="fa fa-star fs-6"></samall></div>
+                        <div class="col-md-4">
 
-                        @if (!string.IsNullOrEmpty(hotel.Image))
-                        {
-                            <img src="~/images/@hotel.Image" class="img-fluid rounded-start w-100 h-100" alt="Hotel Image" />
-                        }
-                    </div>
-                    <div class="col-md-8 pe-lg-5">
-                        <div class="card-body">
-                            <h4 class="card-title text-primary mb-3">
-                                <a href="@Url.Action("HotelProfile", "Hotel", new { id = hotel.Id })" class="text-primary">@hotel.Name</a>
-                                <span class="text-muted fs-5"> | @hotel.HotelCategory.Name</span>
-                            </h4>
-                            <p>@hotel.Country | @hotel.City | @hotel.Address</p>
-                            <p class="card-text p-0 m-0"></p>
-                            <p class="card-text">@(hotel.Description.Length > 140 ? hotel.Description.Substring(0, 140) + "..." : hotel.Description)</p>
-                            <ul class="ms-4 my-2 fs-5 text-black-50">
-                                @if (hotel.IsAccessible.HasValue && hotel.IsAccessible.Value)
-                                {
-                                    <li>Wheelchair-accessible and facilities</li>
-                                }
-                                <li>High quality food</li>
-                                <li>
-                                    <a asp-action="HotelProfile"
-                                       class="text-primary fs-6"
-                                       asp-route-id="@hotel.Id"
-                                       asp-controller="Hotel">Show more...</a>
-                                </li>
-                            </ul>
+                            @if (!string.IsNullOrEmpty(hotel.Image))
+                            {
+                                <div style="height:100%">
+                                    <img src="~/images/@hotel.Image" class="img-fluid rounded-start" alt="Room Image" style="height:100%;width:100%;object-fit:cover;object-position:center" />
+                                </div>
+                                @* <img src="~/images/@hotel.Image" class="img-fluid w-100 h-100" alt="@hotel.Name" /> *@
+                            }
+                        </div>
+                        <div class="col-md-8 pe-lg-5">
+                            <div class="card-body">
+                                <h4 class="card-title text-primary mb-3">
+                                    <a href="@Url.Action("HotelProfile", "Hotel", new { id = hotel.Id })" class="text-primary" style="font-size: 18px;">@hotel.Name</a>
+                                    <span class="text-muted fs-5"> | @hotel.HotelCategory.Name</span>
+                                </h4>
+                                <p>@hotel.Country | @hotel.City | @hotel.Address</p>
+                                <p class="card-text p-0 m-0"></p>
+                                <p class="card-text text-muted" style="height:55px;">@(hotel.Description.Length > 80 ? hotel.Description.Substring(0, 80) + "..." : hotel.Description)</p>
+                                <a href="@Url.Action("HotelProfile", "Hotel", new { id = hotel.Id })" class="text-primary text-decoration-underline btn-hover ">MORE DETAILS</a>
+
+                                @*   <ul class="ms-4 my-2 fs-5 text-black-50">
+                            @if (hotel.IsAccessible.HasValue && hotel.IsAccessible.Value)
+                            {
+                            <li>Wheelchair-accessible and facilities</li>
+                            }
+                            <li>High quality food</li>
+                            <li>
+                            <a asp-action="HotelProfile"
+                            class="text-primary fs-6"
+                            asp-route-id="@hotel.Id"
+                            asp-controller="Hotel">Show more...</a>
+                            </li>
+                            </ul> *@
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 </section>
 <!-- Hotel Section End -->
+@* <partial name="_ServicesPartial" />
+<partial name="_AboutSectionPartial" /> *@
+<!-- Contact Section Begin -->
+@* <section class="contact-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="contact-text">
+                    <h2>Contact Info</h2>
+                    <p class="mb-5">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua.
+                    </p>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td class="c-o">Address:</td>
+                                <td>856 Cordia Extension. 356, Lake, US</td>
+                            </tr>
+                            <tr>
+                                <td class="c-o">Phone:</td>
+                                <td>(12) 345 67890</td>
+                            </tr>
+                            <tr>
+                                <td class="c-o">Email:</td>
+                                <td>info.hotilier@gmail.com</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-7 offset-lg-1">
+                <form action="#" class="contact-form">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <input type="text" placeholder="Your Name">
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" placeholder="Your Email">
+                        </div>
+                        <div class="col-lg-12">
+                            <textarea placeholder="Your Message"></textarea>
+                            <button type="submit">Submit Now</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.0606825994123!2d-72.8735845851828!3d40.760690042573295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e85b24c9274c91%3A0xf310d41b791bcb71!2sWilliam%20Floyd%20Pkwy%2C%20Mastic%20Beach%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1578582744646!5m2!1sen!2sbd"
+                    height="470" style="border:0;" allowfullscreen=""></iframe>
+        </div>
+    </div>
+</section> *@
+<!-- Contact Section End -->
