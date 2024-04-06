@@ -1,5 +1,7 @@
 ﻿
 using hotel_app.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace hotel_app.Repositories
 {
@@ -26,15 +28,22 @@ namespace hotel_app.Repositories
         }
         public void Insert(T obj)
         {
-            hotelDbContext.Add(obj);
+            hotelDbContext.Set<T>().Add(obj);
         }
         public void Update(T obj)
         {
-            hotelDbContext.Update(obj);
+            hotelDbContext.Set<T>().Update(obj);
         }
         public int Save()
         {
              return hotelDbContext.SaveChanges();
+        }
+
+
+        // get count of any entity based on any property
+        public int GetEntityCount<TEntity>(Expression<Func<TEntity, bool>> condition) where TEntity : class
+        {
+            return hotelDbContext.Set<TEntity>().Count(condition);
         }
     }
 }

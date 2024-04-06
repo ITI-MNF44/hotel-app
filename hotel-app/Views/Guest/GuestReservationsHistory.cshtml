@@ -1,0 +1,101 @@
+﻿@using hotel_app.Models;
+@using HelperClass;
+@model List<RoomGuestReservationVM>
+
+    <div class="container" style="padding: 40px 0">
+
+
+    @if (Model.Count() > 0)
+    {
+        <div style="width:100%">
+            <h1 class="reservation-header">Reservation History</h1>
+            <table class="table reservation-table">
+                <thead class="bg-success">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Room Name</th>
+                        <th scope="col">Room Category</th>
+                        <th scope="col">Room Price</th>
+                        <th scope="col">Num Of Rooms</th>
+                        <th scope="col">Booking Date</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Food Name</th>
+                        <th scope="col">Food Category</th>
+                        <th scope="col">Food price</th>
+                        <th scope="col">Food Amount</th>
+                        <th scope="col">Total Price</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <th scope="row">@(i + 1)</th>
+                            <td>@Model[i].roomName</td>
+                            <td>@Model[i].roomCategory</td>
+                            <td>@Model[i].RoomPrice</td>
+                            <td>@Model[i].Rooms_amount</td>
+                            <td>@Model[i].BookingDate.getCustomTime()</td>
+                            <td>@Model[i].StartDate.getCustomTime()</td>
+                            <td>@Model[i].EndDate.getCustomTime()</td>
+                            <td>@(Model[i].FoodName != null ? Model[i].FoodName : "--")</td>
+                            <td>@(Model[i].FoodCategory != null ? Model[i].FoodCategory : "--")</td>
+                            <td>@(Model[i].FoodPrice != null ? Model[i].FoodPrice : "--")</td>
+                            <td>@(Model[i].FoodAmount != null ? Model[i].FoodAmount : "--")</td>
+                            <td>@((Model[i].RoomPrice * Model[i].Rooms_amount) + ((Model[i].FoodAmount ?? 0) * (Model[i].FoodPrice ?? 0)))</td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-success role="alert">
+            <h3 class="alert-heading">Reservation History</h3>
+            <p style="color:black">
+                you do not have any reservations yet, you can browse our website to find the suitable hotel for your vacation
+            </p>
+            <hr>
+            <p>Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+        </div>
+
+    }
+    </div>
+
+
+
+
+<style>
+
+    h1.reservation-header {
+        text-align: center;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        box-shadow: 5px 5px 10px #546, -5px -5px 10px #546;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    table.reservation-table {
+        box-shadow: 5px 5px 10px #546;
+        border-radius: 10px;
+    }
+
+        table.reservation-table thead tr {
+            font-size: 12px;
+            color: white;
+        }
+
+    table.reservation-table tr {
+        text-align: center;
+        font-size: 12px;
+        color: black;
+        font-weight:bold;
+    }
+</style>

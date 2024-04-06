@@ -1,0 +1,42 @@
+﻿@model hotel_app.ViewModels.UserLoginVIewModel
+
+@{
+    Layout = "_ViewLogin";
+    ViewData["Title"] = "HotelLogin";
+}
+<div class="row" style="background-image: url('img\room-2.jpg');">
+        <div class="px-5 py-4">
+
+        <form asp-action="login" class="w-100">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Username" class="control-label form-label"></label>
+                <input asp-for="Username" class="form-control form" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Passwrod" class="control-label"></label>
+                <input asp-for="Passwrod" class="form-control" />
+                <span asp-validation-for="Passwrod" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+                </label>
+            </div>
+            <div class="mb-1 text-center">
+                <input type="submit" value="Log In" class="btn btn-primary w-100" />
+
+            </div>
+        </form>
+        </div>
+    </div>
+
+
+<div class="text-center pb-3">
+    <a class="w-100  text-decoration-underline" asp-action="UserHotelRegister">Don't have an acount? Register'</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

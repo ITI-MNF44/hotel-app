@@ -1,0 +1,105 @@
+﻿@model hotel_app.ViewModels.RoomViewModel
+
+@{
+    ViewData["Title"] = "DeleteRoom";
+}
+<style>
+    a:hover {
+        color: #0F172B;
+    }
+   *{
+        font-size: 16px;
+   }
+
+    .card {
+        width: 500px;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+    }
+
+    .card-subtitle {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+        .card-subtitle::before {
+            content: "Hotel: ";
+        }
+
+    .row {
+        margin-bottom: 10px;
+    }
+
+    dt {
+        font-weight: bold;
+    }
+
+    /* Additional styling for the description list */
+    dl.row {
+        margin-top: 20px; /* Add space above the description list */
+    }
+
+    dt {
+        margin-top: 10px; /* Add space between definition terms */
+    }
+
+    dd {
+        margin-bottom: 10px; /* Add space between definition descriptions */
+    }
+
+</style>
+<h1 class="text-center m-3">Delete Room</h1>
+
+<h3 class="text-center m-3">Are you sure you want to delete this room?</h3>
+
+<div class="justify-content-center">
+  
+    <hr />
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Room: <span class="text-primary">@Html.DisplayFor(model => model.Name)</span></h5>
+            <h6 class="card-subtitle mb-2 text-muted">@Html.DisplayFor(model => model.HotelName)</h6>
+            <hr>
+            <dl class="row">
+                <dt class="col-sm-4">ID:</dt>
+                <dd class="col-sm-8 mb-3">@Html.DisplayFor(model => model.Id)</dd>
+                <dt class="col-sm-4">Name:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Name)</dd>
+                <dt class="col-sm-4">Description:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Description)</dd>
+                <dt class="col-sm-4">Category Name:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.CategoryName)</dd>
+                <dt class="col-sm-4">Number of Beds:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.NumOfBeds)</dd>
+                <dt class="col-sm-4">Price Per Night:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.PricePerNight)</dd>
+                <dt class="col-sm-4">Number of Rooms:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.NumOfRooms)</dd>
+                <dt class="col-sm-4">Created Date:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.CreatedDate)</dd>
+            </dl>
+        </div>
+    </div>
+
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+
+        <div class="d-flex justify-content-center mb-3">
+
+            <input type="submit" value="Delete" class="btn btn-danger m-3" />
+            <button asp-action="All" style="font-size: 15px;" class="d-flex justify-content-center btn btn-primary m-3">Cancel</button>
+        </div>
+    </form>
+</div>

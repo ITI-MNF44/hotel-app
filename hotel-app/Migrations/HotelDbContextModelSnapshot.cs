@@ -314,7 +314,8 @@ namespace hotel_app.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Guests");
                 });
@@ -391,7 +392,6 @@ namespace hotel_app.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsAccessible")
@@ -424,7 +424,8 @@ namespace hotel_app.Migrations
 
                     b.HasIndex("Category");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Hotels");
                 });

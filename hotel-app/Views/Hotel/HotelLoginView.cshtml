@@ -1,0 +1,179 @@
+﻿@model hotel_app.ViewModels.UserLoginVIewModel
+
+@{
+    Layout = "";
+    ViewData["Title"] = "HotelLogin";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css"
+    <!-- Google Web Fonts -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com"
+          asp-append-version="true" />
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin
+          asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+          asp-append-version="true" />
+    <title>Login</title>
+    <style>
+        :root {
+            --primary-color: #dfa974;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('/img/hero-3.jpg');
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative; /* Add this line */
+        }
+            /* Add the overlay */
+            body::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient( to top, rgba(0, 0, 0, 0.8), transparent ); /* Adjust the opacity (0.8) as needed */
+            }
+
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            width:400px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            text-align: center;
+            position: relative; /* Adjust this line */
+            z-index: 1; /* Add this line */
+        }
+
+            .login-card h1 {
+                margin-bottom: 30px;
+                /* font-family: "heboo"; */
+                color: var(--primary-color);
+                font-weight: bold;
+            }
+
+            .login-card input[type="text"],
+            .login-card input[type="password"] {
+                width: 100%;
+               
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+                font-size: 16px;
+            }
+
+        .input-box {
+            padding: 6px 0;
+            margin-bottom: 4px;
+            }
+
+            .login-card input:focus {
+                outline: 1px solid var(--primary-color);
+                box-shadow: 0px 0px 1px 1px var(--primary-color);
+            }
+
+            .login-card .login-btn {
+                width: 100%;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                background-color: var(--primary-color);
+                color: #fff;
+                font-size: 16px;
+                cursor: pointer;
+            }
+
+            .login-card .login-btn:hover {
+                    background-color: black;
+            }
+
+
+            .register-link{
+                width: 100%;
+                padding: 10px 0 0 ;
+                margin-bottom: 6px;
+            }
+
+        .register-link a{
+                color: black ;
+            }
+
+        .rememberme{
+            width: 100%;
+            padding: 0 6px;
+            margin-bottom: 10px;
+            color: black;
+        }
+
+        .login-card input[type="Checkbox"]:checked {
+            background-color:black;
+        }
+
+        ul {
+            list-style-type: none;
+            padding :  0 6px;
+        }
+
+        span{
+            text-align:start;
+            width:100%;
+            display:block;
+            min-height:24px;
+            padding-left:4px;
+            font:18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1 class="py-4 text-uppercase text-center">Hotelier</h1>
+        <form asp-action="Login" >
+            <div  asp-validation-summary="ModelOnly" class="text-danger text-start"></div>
+            <div class="input-box">
+                <input asp-for="Username" placeholder="Username" class="form-control form" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="input-box">
+                <input asp-for="Passwrod" placeholder="Password" class="form-control" />
+                <span asp-validation-for="Passwrod" class="text-danger"></span>
+            </div>
+            <div class="text-start rememberme">
+                <label  >
+                    <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+                </label>
+            </div>
+            <div >
+                <input type="submit" value="Log In" class="login-btn" />
+            </div>
+        </form>
+        <div class="register-link text-center">
+            <a class="w-100  text-decoration-underline" asp-action="UserHotelRegister">Don't have an acount? Register</a>
+        </div>
+
+    </div>
+    
+    <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+   
+</body>
+</html>

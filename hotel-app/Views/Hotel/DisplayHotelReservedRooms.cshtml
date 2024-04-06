@@ -1,0 +1,92 @@
+﻿@using hotel_app.Models;
+
+@model List<Room>
+
+<div class="container"><div style="min-height:600px; padding:20px">
+
+    <h1 id="main-title">Rooms Information</h1>
+
+    <table class="table" >
+        <thead class="bg-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Room Name</th>
+                <th scope="col">Room Category</th>
+                <th scope="col">Num Of Bed</th>
+                <th scope="col">Price Per Night</th>
+                <th scope="col">Num Of Rooms</th>
+@*                 <th scope="col">Reserved Rooms</th>
+                <th scope="col">Available Rooms</th> *@
+                <th scope="col">Extra Info</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <th scope="row">@(i + 1)</th>
+                    <td>@Model[i].Name</td>
+                    <td>@Model[i].RoomCategory!.Name</td>
+                    <td>@Model[i].NumOfBeds</td>
+                    <td>@Model[i].PricePerNight</td>
+                    <td>@Model[i].NumOfRooms </td>
+@*                     <td>@Model[i].GuestRooms.Sum(x => x.RoomsAmount)</td>
+                    <td>@(Model[i].NumOfRooms - Model[i].GuestRooms.Sum(x => x.RoomsAmount))</td> *@
+                    <td><a href="/hotel/getRoomReservationsDetails/@Model[i].Id?roomName=@Model[i].Name">More Details</a></td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+
+</div>
+
+</div>
+
+
+<style>
+    :root {
+        --primary-color: #dfa974;
+    }
+
+    #main-title {
+       text-align:center;
+       margin-bottom:20px;
+       margin-top:20px;
+        box-shadow:  2px 2px 2px 2px #3333;
+        border-radius:8px;
+        padding:10px;
+        
+    }
+    
+    table{
+        box-shadow: 2px 2px 2px 2px #3333;
+        border-radius: 8px;
+    }
+    table thead tr{
+        font-size: 18px;
+        color:white;
+            
+    }
+    tr{
+        text-align: center;
+        font-size:18px;
+        color:black;
+    }
+
+    td a {
+        background-color: var(--primary-color) ;
+        color:white;
+        padding: 4px 8px;
+        border-radius:8px;
+        transition: all 0.3s ease-out;
+        font-size:16px;
+    }
+
+    td a:hover {
+        background-color:black;
+            color: white;
+    }
+</style>

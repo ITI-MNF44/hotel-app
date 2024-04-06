@@ -1,69 +1,194 @@
-﻿using hotel_app.Models;
+﻿
+
+
+using hotel_app.Models;
 using hotel_app.Repositories;
+using hotel_app.Services;
 using hotel_app.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace hotel_app.Controllers
 {
     public class RoomController : Controller
     {
-        private HotelDbContext _context;
-        private IWebHostEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
+        private readonly IRoomService _roomService;
+        private readonly IHotelService _hotelService;
+        private readonly IFoodService _foodService;
+        private readonly IGuestService _guestService;
 
-        private IRoomRepository _roomRepository;
-
-        public RoomController(HotelDbContext context, IWebHostEnvironment hostEnvironment, IRoomRepository roomRepository)
+        public RoomController(
+            IWebHostEnvironment hostEnvironment,
+            IRoomService roomService,
+            IHotelService hotelService,
+            IFoodService foodService,
+            IGuestService guestService)
         {
-            _context = context;
             _environment = hostEnvironment;
-            _roomRepository=roomRepository;
+            _roomService = roomService;
+            _hotelService = hotelService;
+            _foodService = foodService;
+            _guestService = guestService;
         }
         public IActionResult Index()
         {
-            return View();
+            var rooms = _roomService.AllAvailableRooms();
+            return View(rooms);
         }
 
         public IActionResult Details(int id)
         {
-            var room = _roomRepository.GetById(id);
+            var room = _roomService.GetById(id);
             return View(room);
         }
-        //endpoint for add room
-        public IActionResult AddRoom()
+
+        public async Task<IActionResult> All()
         {
-            //not implemented yet
-            return View();
+            Hotel hotel = await _hotelService.GetCurrentHotel();
+            List<Room> rooms = _roomService.HotelRooms(hotel.Id);
+
+            return View("AllRooms", rooms);
+        }
+        [Authorize]
+        public IActionResult Add()
+        {
+            RoomViewModel room = new RoomViewModel
+            {
+                Categories = _roomService.RoomCategories(),
+            };
+
+            return View("AddRoom", room);
         }
 
-        //add to DB
         [HttpPost]
-        public IActionResult AddRoom(HotelViewModel hotel)
+        public async Task<IActionResult> Save(RoomViewModel room)
         {
-            //image code
-            //string filename = "";
-            //if (product1.photo != null)
-            //{
-            //    string Uploader = Path.Combine(env.WebRootPath, "images");
-            //    filename = Guid.NewGuid().ToString() + "_" + product1.photo.FileName;
-            //    string filepath = Path.Combine(Uploader, filename);
-            //    product1.photo.CopyTo(new FileStream(filepath, FileMode.Create));
-            //}
-            ////
-            //product p = new product()
-            //{
-            //    Name = product1.Name,
-            //    price = product1.price,
-            //    Image = filename
-            //};
-            ////
-            //context.Products.Add(p);
-            //context.SaveChanges();
-            ////
-            //ViewBag.success = "record added successfully";
-            //not implemented yet
-            return View();
+            if (ModelState.IsValid)
+            {
+                Hotel hotel = await _hotelService.GetCurrentHotel();
+                room.HotelId = hotel.Id;
+                room.IsDeleted = false;
+                room.CreatedDate = DateTime.Now.Date;
+
+                _roomService.Insert(RoomModelViewMapper.MapToRoom(room, _environment));
+                _roomService.Save();
+
+                return RedirectToAction("All");
+            }
+
+            room.Categories = _roomService.RoomCategories();
+
+            return View("AddRoom", room);
         }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            Room room = _roomService.GetById(id, "Hotel", "RoomCategory");
+            RoomViewModel? roomViewModle = RoomModelViewMapper.MapToRoomViewModel(room);
+            roomViewModle.Categories = _roomService.RoomCategories();
+
+            return View("EditRoom", roomViewModle);
+        }
+
+        [HttpPost]
+        public IActionResult Update(RoomViewModel room)
+        {
+            if (ModelState.IsValid)
+            {
+                Room oldRoom = _roomService.GetById(room.Id, "Hotel", "RoomCategory");
+                room.HotelId = oldRoom.HotelId;
+                room.CreatedDate = oldRoom.CreatedDate;
+
+                if (room.Image == null)
+                {
+                    Room updatedRoom = RoomModelViewMapper.MapToRoom(room);
+                    updatedRoom.Image = oldRoom.Image;
+                    _roomService.Update(updatedRoom);
+                }
+                else
+                {
+                    Room updatedRoom = RoomModelViewMapper.MapToRoom(room, _environment);
+                    _roomService.Update(updatedRoom);
+                }
+
+                _roomService.Save();
+                return RedirectToAction("All");
+            }
+
+            return View("EditRoom", room);
+        }
+
+        [Authorize]
+        public IActionResult DeleteRoom(int id)
+        {
+            var room = RoomModelViewMapper.MapToRoomViewModel(_roomService.GetById(id, "Hotel", "RoomCategory"));
+            return View("DeleteRoom", room);
+
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var room = _roomService.GetById(id);
+            room.isDeleted = true;
+            _roomService.Update(room);
+            _roomService.Save();
+
+            return RedirectToAction("All");
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> BookDetails(int id)
+        {
+            BookingDetailsViewModel bookingVm = await _roomService.GetBookingRoomVM(id);
+            return View("Details", bookingVm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> bookingSummary(BookingDetailsViewModel bookingVM)
+        {
+            if (ModelState.ContainsKey("EndDate") && ModelState["EndDate"].Errors.Count == 0)
+            {
+                Guest guest = await _guestService.GetCurrentGuest();
+                bool result = await _roomService.SaveBooking(guest.Id, bookingVM);
+                if (result)
+                {
+                    return View("bookingConfirmed");
+
+                }
+            }
+            return Content("error");
+        }
+
+        public async Task<IActionResult> CheckRoomAvailable(int Id, int amount, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+
+                bool result = await _roomService.isRoomAvailable(Id, amount, startDate, endDate);
+                return Json(new { data = result });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or return an appropriate error response.
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+        [HttpGet]
+
+        public async Task<IActionResult> test()
+        {
+            BookingDetailsViewModel bookingVm = await _roomService.GetBookingRoomVM(1);
+            //ViewBag.foods = _foodService.GetHotelFoods(room.HotelId).ToList();
+            return View("Details", bookingVm);
+        }
+
     }
 }

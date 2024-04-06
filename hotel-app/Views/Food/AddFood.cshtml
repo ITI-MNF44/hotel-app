@@ -1,0 +1,64 @@
+﻿@model hotel_app.ViewModels.FoodViewModel
+
+@{
+    ViewData["Title"] = "AddFood";
+    SelectList CategoriesList = new SelectList(Model.Categories, "Id", "Name");
+}
+
+<style>
+    a:hover {
+        color: #0F172B;
+    }
+    *{
+        font-size:15px;
+    }
+</style>
+
+<h1 class="text-center m-3">Add New Food</h1>
+
+
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form asp-action="Save" asp-controller="Food" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="PricePerPerson" class="control-label"></label>
+                <input asp-for="PricePerPerson" class="form-control" />
+                <span asp-validation-for="PricePerPerson" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select class="form form-control" asp-for="CategoryId" asp-items="CategoriesList">
+                </select> 
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3 d-flex justify-content-center">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <a asp-action="Index" style="font-size: 15px;">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

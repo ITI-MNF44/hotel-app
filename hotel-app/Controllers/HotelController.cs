@@ -1,143 +1,174 @@
-﻿using hotel_app.Models;
+﻿
+using hotel_app.Models;
+using hotel_app.Services;
 using hotel_app.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+
+using System.Security.Claims;
 
 namespace hotel_app.Controllers
 {
     public class HotelController : Controller
     {
         //ask
-        HotelDbContext mycontext;
-        IWebHostEnvironment myEnvironment;
         UserManager<ApplicationUser> usermanager;
+        SignInManager<ApplicationUser> signInManager;
+        IHotelCategoryService _categoryService;
+        IHotelService hotelService;
         //Ctor,inject
-        public HotelController(HotelDbContext context, IWebHostEnvironment hostEnvironment,
-            UserManager<ApplicationUser> usermanagerlogin) 
+
+
+        public HotelController(
+        UserManager<ApplicationUser> usermanagerlogin,
+        SignInManager<ApplicationUser> _signInManager,
+        IHotelService _HotelService, IHotelCategoryService hotelCategoryService)
         {
-            mycontext = context;
-            myEnvironment = hostEnvironment;
-            this.usermanager = usermanagerlogin;
+            usermanager = usermanagerlogin;
+            signInManager = _signInManager;
+            hotelService = _HotelService;
+            _categoryService = hotelCategoryService;
         }
 
-        public IActionResult Index()
+        [Authorize(Roles = "Hotel")]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            Hotel h = await hotelService.GetCurrentHotel();
+            return Content("current hotel : " + h.Name);
         }
+
+        public IActionResult AllHotels()
+        {
+            var hotels = hotelService.AllHotels();
+            return View("AllHotels", hotels);
+        }
+
         //1-open registeration form 
         [HttpGet]
         public IActionResult UserHotelRegister()
         {
-            var categories = mycontext.HotelsCategories
-                                      .Select(c => new SelectListItem
-                                      {
-                                          Text = c.Name,
-                                          Value = c.Id.ToString()
-                                      })
-                                      .ToList();
-
-            if (categories == null)
-            {
-                categories = new List<SelectListItem>(); 
-            }
-
-            var hoteluservm = new RegisterUserViewModel
+            var categories = _categoryService.GetAllCategories();
+            var vm = new RegisterUserViewModel
             {
                 Categories = categories
             };
-
-            return View(hoteluservm);
+            return View(vm);
         }
         //2-save to db
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserHotelRegister(RegisterUserViewModel hoteluservm)
         {
-            //first insert to user table
-            if(ModelState.IsValid == true)
+            if (ModelState.IsValid)
             {
-                //user first
-                ApplicationUser user = new ApplicationUser()
+                ApplicationUser appUser = hotelService.MapHotelUserVmToAppUser(hoteluservm);
+                string userId = appUser.Id;
+                IdentityResult result = await usermanager.CreateAsync(appUser, hoteluservm.Password);
+
+
+                if (result.Succeeded)
                 {
-                    UserName = hoteluservm.UserName,
-                    Email = hoteluservm.Email,
-                    PasswordHash=hoteluservm.Password
-                };
-                IdentityResult userCreationResult = await usermanager.CreateAsync(user); //hashed
-                if(userCreationResult.Succeeded)
-                {
-                    //get userid
-                    string userId = user.Id;
-                    //save the rest of other data 
-                    Hotel hotel = new Hotel()
+                    IdentityResult roleresult = await usermanager.AddToRoleAsync(appUser, "Hotel");
+                    if (roleresult.Succeeded)
                     {
-                        Name = hoteluservm.Name,
-                        Description=hoteluservm.Description,
-                        Country=hoteluservm.Country,
-                        City=hoteluservm.City,
-                        Address=hoteluservm.Address,
-                        StarRating=hoteluservm.StarRating,
-                        Category=hoteluservm.Category,
-                        CreatedDate=DateTime.Now,
-                        Latitude=hoteluservm.Latitude,
-                        Longitude=hoteluservm.Longitude,
-                        Image=hoteluservm.Image,
-                        UserId = userId,
-                    };
-                    //save
-                    mycontext.Hotels.Add(hotel);
-                    await mycontext.SaveChangesAsync();
-                    return RedirectToAction("");
+                        List<Claim> Claims = new List<Claim>();
+                        Claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.Id));
+                        await signInManager.SignInWithClaimsAsync(appUser, true, Claims);
+                        Hotel hotel = await hotelService.MapHotelVmToHotel(hoteluservm, userId);
+                        await hotelService.RegisterInsert(hotel);
+                        return RedirectToAction("Home", "Hotel");
+                    }
 
                 }
-                else
+            }
+            hoteluservm.Categories = _categoryService.GetAllCategories();
+            return View("UserHotelRegister", hoteluservm);
+        }
+        public IActionResult Login()
+        {
+            return View("HotelLoginView");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(UserLoginVIewModel hotelVM)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser AppUser = await usermanager.FindByNameAsync(hotelVM.Username);
+                if (AppUser != null)
                 {
-                    foreach(var item in userCreationResult.Errors)
+                    bool Found = await usermanager.CheckPasswordAsync(AppUser, hotelVM.Passwrod);
+                    if (Found)
                     {
-                        ModelState.AddModelError("", item.Description);
+                        var userRoles = await usermanager.GetRolesAsync(AppUser);
+                        if (userRoles.Contains("Hotel"))
+                        {
+                            await signInManager.SignInAsync(AppUser, hotelVM.RememberMe);
+                            return RedirectToAction("Home", "Hotel");
+                        }
                     }
                 }
+                ModelState.AddModelError(string.Empty, "Username or password is incorrect");
 
+            }
+            return View("HotelLoginView", hotelVM);
+        }
+
+        public async Task<IActionResult> SignOut()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Login");
+        }
+
+        public async Task<IActionResult> ReservationsInfo()
+        {
+            Hotel currHotel = await hotelService.GetCurrentHotel();
+            if (currHotel != null)
+            {
+                var res = hotelService.ReservationsInfo(currHotel.Id);
+                return View("DisplayHotelReservedRooms", res);
             }
             else
             {
-                return View("UserHotelRegister",hoteluservm);
+                return Content("Error getting reservations data");
             }
-            return View();
+
+        }
+
+        public IActionResult getRoomReservationsDetails(int id, string roomName)
+        {
+            var model = hotelService.RoomReservationsDetails(id);
+            ViewData["roomName"] = roomName;
+            return View("RoomReservationsDetails", model);
         }
 
 
 
-        //2- save to db
+        [HttpGet]
+        public IActionResult HotelProfile(int id)
+        {
+            HotelWithRoomsViewModel viewModel = hotelService.GetHotelWithRooms(id);
+            if (viewModel.Hotel == null)
+            {
+                return NotFound();
+            }
 
-        ////add to DB
-        //[HttpPost]
-        //public IActionResult AddHotel(HotelViewModel hotel)
-        //{
-        //    //image code
-        //    //string filename = "";
-        //    //if (product1.photo != null)
-        //    //{
-        //    //    string Uploader = Path.Combine(env.WebRootPath, "images");
-        //    //    filename = Guid.NewGuid().ToString() + "_" + product1.photo.FileName;
-        //    //    string filepath = Path.Combine(Uploader, filename);
-        //    //    product1.photo.CopyTo(new FileStream(filepath, FileMode.Create));
-        //    //}
-        //    ////
-        //    //product p = new product()
-        //    //{
-        //    //    Name = product1.Name,
-        //    //    price = product1.price,
-        //    //    Image = filename
-        //    //};
-        //    ////
-        //    //context.Products.Add(p);
-        //    //context.SaveChanges();
-        //    ////
-        //    //ViewBag.success = "record added successfully";
-        //    //not implemented yet
-        //    return View();
-        //}
+            return View("HotelProfile", viewModel);
+        }
 
+        public async Task<IActionResult> HomeAsync()
+        {
+            var hotel = await hotelService.GetCurrentHotel();
+            int id = hotel.Id;
+            HotelWithRoomsViewModel viewModel = hotelService.GetHotelWithRooms(id);
+            if (viewModel.Hotel == null)
+            {
+                return NotFound();
+            }
+
+            return View("HotelProfile", viewModel);
+        }
     }
 }
