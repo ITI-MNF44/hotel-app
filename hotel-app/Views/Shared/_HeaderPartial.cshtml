@@ -15,13 +15,13 @@
 <div class="container-fluid bg-dark px-0">
     <div class="row gx-0 d-flex align-items-center justify-content-between">
         <div class="col-lg-3 bg-dark d-none d-lg-block">
-            <a class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center" asp-area="" asp-controller="Home" asp-action="Index">
+            <a class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center" asp-area="" asp-controller="Hotel" asp-action="AllHotels">
                 <h1 class="m-0 text-primary text-uppercase">Hotelier</h1>
             </a>
         </div>
         <div class="col-lg-9  align-items-end">
             <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
-                <a class=" navbar-brand d-block d-lg-none" text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                <a class=" navbar-brand d-block d-lg-none" text-dark" asp-area="" asp-controller="Hotel" asp-action="AllHotels">
                     <h1 class="m-0 text-primary text-uppercase">Hotelier</h1>
                 </a>
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -48,8 +48,8 @@
                         {
                             <a class="nav-item nav-link" asp-area="" asp-controller="Hotel" asp-action="AllHotels">Home</a>
                             <a class="nav-item nav-link" asp-area="" asp-controller="Room" asp-action="Index">Rooms</a>
-                            <a href="about.html" class="nav-item nav-link">About</a>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a href="/hotailer/about" class="nav-item nav-link">About</a>
+                            <a href="/hotailer/contact" class="nav-item nav-link">Contact</a>
                         }
 
 

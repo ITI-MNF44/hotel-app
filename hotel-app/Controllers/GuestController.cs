@@ -250,6 +250,27 @@ namespace hotel_app.Controllers
                 return Json(false);
             }
         }
+
+        public async Task <IActionResult> CheckNameAvailability(string username)
+        {
+            ApplicationUser AppUser = await usermanager.FindByNameAsync(username);
+            if (AppUser == null)
+            {
+                return Json(true);
+            }
+            return Json(false);
+        }
+        public async Task<IActionResult> CheckEmailAvailability(string email)
+        {
+            ApplicationUser AppUser = await usermanager.FindByEmailAsync(email);
+            if (AppUser == null)
+            {
+                return Json(true);
+            }
+            return Json(false);
+        }
+
+
     }
 
 }

@@ -8,104 +8,116 @@
     ViewData["Title"] = "HotelProfile";
 }
 <!-- First Div: Hotel Title and Image -->
-<div class=" sec1">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <!--<h1 class="m-0 text-primary text-uppercase">@Model.Hotel.Name</h1>-->
-            <h2 class="hotel-name-title">@Model.Hotel.Name</h2>
+
+<div class="container">
+    <div class=" sec1">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <!--<h1 class="m-0 text-primary text-uppercase">@Model.Hotel.Name</h1>-->
+                <h2 class="hotel-name-title">@Model.Hotel.Name</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div style="height:600px" class="col-md-12 hotel-image-style">
+                <img src="~/images/@Model.Hotel.Image" alt="Hotel Image" class="img-fluid">
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div style="height:600px" class="col-md-12 hotel-image-style">            
-            <img src="~/images/@Model.Hotel.Image" alt="Hotel Image" class="img-fluid">
+    <!-- end of first div -->
+    <!-- Hotel Info -->
+    <div class=" sec2">
+        <div class="row">
+            <div class="col-md-12 rating-sec">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="rating-title">Rating</td>
+                            <td>
+                                <div class="rating">
+                                    @for (int i = 0; i < Model.Hotel.StarRating; i++)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+                                    @for (int i = Model.Hotel.StarRating; i < 5; i++)
+                                    {
+                                        <i class="far fa-star"></i>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-</div>
-<!-- end of first div -->
-<!-- Hotel Info -->
-<div class=" sec2">
-    <div class="row">
-        <div class="col-md-12 rating-sec">
-            <table>
+        <div class="row">
+            <div class="col-md-12 hoteldesc">
+                <p>@Model.Hotel.Description</p>
+            </div>
+        </div>
+        <div class="row">
+            <table class="custom-hotel-table">
                 <tbody>
                     <tr>
-                        <td class="rating-title">Rating</td>
-                        <td>
-                            <div class="rating">
-                                @for (int i = 0; i < Model.Hotel.StarRating; i++)
-                                {
-                                    <i class="fas fa-star"></i>
-                                }
-                                @for (int i = Model.Hotel.StarRating; i < 5; i++)
-                                {
-                                    <i class="far fa-star"></i>
-                                }
-                            </div>
-                        </td>
+                        <td class="h-title">Country:</td>
+                        <td class="h-val">@Model.Hotel.Country</td>
                     </tr>
+                    <tr>
+                        <td class="h-title">City:</td>
+                        <td class="h-val">@Model.Hotel.City</td>
+                    </tr>
+                    <tr>
+                        <td class="h-title">Address:</td>
+                        <td class="h-val">@Model.Hotel.Address</td>
+                    </tr>
+                    <tr>
+                        <td class="h-title">Category:</td>
+                        <td class="h-val">@Model.HotelCategory.Name</td>
+                    </tr>
+
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12 hoteldesc">
-            <p>@Model.Hotel.Description</p>
-        </div>
-    </div>
-    <div class="row">
-        <table class="custom-hotel-table">
-            <tbody>
-                <tr>
-                    <td class="h-title">Country:</td>
-                    <td class="h-val">@Model.Hotel.Country</td>
-                </tr>
-                <tr>
-                    <td class="h-title">City:</td>
-                    <td class="h-val">@Model.Hotel.City</td>
-                </tr>
-                <tr>
-                    <td class="h-title">Address:</td>
-                    <td class="h-val">@Model.Hotel.Address</td>
-                </tr>
-                <tr>
-                    <td class="h-title">Category:</td>
-                    <td class="h-val">@Model.HotelCategory.Name</td>
-                </tr>
-               
-            </tbody>
-        </table>
-    </div>   
-</div>
-<!-- end Hotel Info -->
-<!-- Rooms -->
-<div class=" sec3">
-    <h2 class="sec3-title">Available Rooms</h2>
-    <div class="row">
-        @foreach (var room in Model.Rooms)
-        {
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div style="height:250px">
-                            <img style="height:100%;width:100%;object-fit:cover;object-position:center" src="~/images/@room.Image" class="card-img-top" alt="@room.Name">
-                        </div>
-                        <h5 class="card-title mt-2">@room.Name</h5>
-                        <p style="height:100px; overflow:hidden" class="card-text description-center">@room.Description</p>
-                        <p class="card-text"><strong>Category</strong> <span class="value">@room.RoomCategory.Name</span></p>
-                        <p class="card-text"><strong>Number of Beds</strong> <span class="value">@room.NumOfBeds</span></p>
-                        <p class="card-text"><strong>Price Per Night</strong> <span class="value">$@room.PricePerNight</span></p>
-                        @if (SignInManager.Context.User.IsInRole("Guest"))
-                        {
-                            <div class="card-body button-center">
-                                <a href="http://localhost:53770/room/bookdetails/@room.Id" class="btn btn-primary">Book Now</a>
+    <!-- end Hotel Info -->
+    <!-- Rooms -->
+    <div class=" sec3">
+        <h2 class="sec3-title">Available Rooms</h2>
+        <div class="row">
+            @foreach (var room in Model.Rooms)
+            {
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="height:250px">
+                                <img style="height:100%;width:100%;object-fit:cover;object-position:center" src="~/images/@room.Image" class="card-img-top" alt="@room.Name">
                             </div>
-                        }
+                            <h5 class="card-title mt-2">@room.Name</h5>
+                            <p style="height:100px; overflow:hidden" class="card-text description-center">@room.Description</p>
+                            <p class="card-text"><strong>Category</strong> <span class="value">@room.RoomCategory.Name</span></p>
+                            <p class="card-text"><strong>Number of Beds</strong> <span class="value">@room.NumOfBeds</span></p>
+                            <p class="card-text"><strong>Price Per Night</strong> <span class="value">$@room.PricePerNight</span></p>
+                            @if (!SignInManager.Context.User.IsInRole("Hotel"))
+                            {
+                                <div class="card-body button-center">
+                                    <a href="http://localhost:53770/room/bookdetails/@room.Id" class="btn btn-primary">Book Now</a>
+                                </div>
+                            }
+             
+                            @*            @if (SignInManager.Context.User.IsInRole("Guest"))
+                        {
+                        <div class="card-body button-center">
+                        <a href="http://localhost:53770/room/bookdetails/@room.Id" class="btn btn-primary">Book Now</a>
+                        </div>
+                        } *@
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
+
 </div>
+
 <!-- Rooms end -->
 <!--Back button-->
 @* <div class="container-fluid sec4">

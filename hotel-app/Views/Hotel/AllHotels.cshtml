@@ -33,7 +33,7 @@
 <!-- hotels Section Begin -->
 <section class="">
     <div class="container">
-        <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(600px, 1fr))">
+        <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(600px, 1fr)); padding:40px 0 ">
             @foreach (var hotel in Model)
             {
                 <div class="card p-0 rounded border-0 shadow wow fadeInUp" data-wow-delay="0.1s">
@@ -82,10 +82,10 @@
     </div>
 </section>
 <!-- Hotel Section End -->
-<partial name="_ServicesPartial" />
-<partial name="_AboutSectionPartial" />
+@* <partial name="_ServicesPartial" />
+<partial name="_AboutSectionPartial" /> *@
 <!-- Contact Section Begin -->
-<section class="contact-section spad">
+@* <section class="contact-section spad">
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
@@ -135,5 +135,5 @@
                     height="470" style="border:0;" allowfullscreen=""></iframe>
         </div>
     </div>
-</section>
+</section> *@
 <!-- Contact Section End -->

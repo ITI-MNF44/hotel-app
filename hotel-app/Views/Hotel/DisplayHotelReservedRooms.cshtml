@@ -2,8 +2,7 @@
 
 @model List<Room>
 
-
-<div style="min-height:600px; padding:20px">
+<div class="container"><div style="min-height:600px; padding:20px">
 
     <h1 id="main-title">Rooms Information</h1>
 
@@ -16,8 +15,8 @@
                 <th scope="col">Num Of Bed</th>
                 <th scope="col">Price Per Night</th>
                 <th scope="col">Num Of Rooms</th>
-                <th scope="col">Reserved Rooms</th>
-                <th scope="col">Available Rooms</th>
+@*                 <th scope="col">Reserved Rooms</th>
+                <th scope="col">Available Rooms</th> *@
                 <th scope="col">Extra Info</th>
             </tr>
         </thead>
@@ -31,8 +30,8 @@
                     <td>@Model[i].NumOfBeds</td>
                     <td>@Model[i].PricePerNight</td>
                     <td>@Model[i].NumOfRooms </td>
-                    <td>@Model[i].GuestRooms.Sum(x => x.RoomsAmount)</td>
-                    <td>@(Model[i].NumOfRooms - Model[i].GuestRooms.Sum(x => x.RoomsAmount))</td>
+@*                     <td>@Model[i].GuestRooms.Sum(x => x.RoomsAmount)</td>
+                    <td>@(Model[i].NumOfRooms - Model[i].GuestRooms.Sum(x => x.RoomsAmount))</td> *@
                     <td><a href="/hotel/getRoomReservationsDetails/@Model[i].Id?roomName=@Model[i].Name">More Details</a></td>
                 </tr>
             }
@@ -41,6 +40,8 @@
 
     </table>
 
+
+</div>
 
 </div>
 
