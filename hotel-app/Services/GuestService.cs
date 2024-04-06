@@ -26,7 +26,7 @@ namespace hotel_app.Services
         }
         public ApplicationUser MapGuestVmToAppUser(RegisterGuestViewModel guestVM)
         {
-            return new ApplicationUser() { UserName = guestVM.UserName, PasswordHash = guestVM.Password };
+            return new ApplicationUser() { UserName = guestVM.UserName, PasswordHash = guestVM.Password ,Email=guestVM.Email};
         }
         public Guest MapGuestVmToGuest(RegisterGuestViewModel guestVM)
         {
@@ -68,5 +68,38 @@ namespace hotel_app.Services
             }).ToList();
         }
 
+        public UserProfileViewModel GetUserProfile(int guest_id)
+        {
+           var guest = GuestRepository.getGuestDetails(guest_id);
+            return new UserProfileViewModel()
+            {
+                UserId = guest.User.Id,
+                guestId = guest.Id,
+
+                FirstName = guest.FirstName,
+                LastName = guest.LastName,
+                BirthDate = guest.BirthDate,
+                UserName = guest.User.UserName,
+                UserPhone = guest.User.PhoneNumber,
+                UserEmail = guest.User.Email,
+                Password = guest.User.PasswordHash,
+
+            };
+        }
+
+        public int getGuestByUserNameCount(string userName)
+        {
+            return GuestRepository.getGuestByUserNameCount(userName);
+        }
+
+        public string getGuestUserNameById(string id)
+        {
+            return GuestRepository.getGuestNamebyId(id);
+        }
+
+        public void EditGuestProfile(UserProfileViewModel userProfileViewModel)
+        {
+            GuestRepository.editGuestProfile(userProfileViewModel);
+        }
     }
 }

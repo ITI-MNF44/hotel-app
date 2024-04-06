@@ -1,4 +1,9 @@
-﻿<!-- Spinner Start -->
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!-- Spinner Start -->
 <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
         <span class="sr-only">Loading...</span>
@@ -8,51 +13,69 @@
 
 <!-- Header Start -->
 <div class="container-fluid bg-dark px-0">
-    <div class="row gx-0">
-        <div class="row gx-0 bg-light d-none d-lg-flex ">
-            <div class="col-lg-7 px-5 text-start">
-                <div class="h-100 d-inline-flex align-items-center py-2 me-4">
-                    <i class="fa fa-envelope text-primary me-2"></i>
-                    <p class="mb-0">info@example.com</p>
-                </div>
-                <div class="h-100 d-inline-flex align-items-center py-2">
-                    <i class="fa fa-phone-alt text-primary me-2"></i>
-                    <p class="mb-0">+012 345 6789</p>
-                </div>
-            </div>
-            <div class="col-lg-5 px-5 text-end ">
-                <div class="d-inline-flex align-items-center py-2">
-                    <a class="me-3" href=""><i class="fab fa-facebook-f"></i></a>
-                    <a class="me-3" href=""><i class="fab fa-twitter"></i></a>
-                    <a class="me-3" href=""><i class="fab fa-linkedin-in"></i></a>
-                    <a class="me-3" href=""><i class="fab fa-instagram"></i></a>
-                    <a class="" href=""><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-        </div>
+    <div class="row gx-0 d-flex align-items-center justify-content-between">
         <div class="col-lg-3 bg-dark d-none d-lg-block">
-            <a class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center" asp-area="" asp-controller="Home" asp-action="Index">
+            <a class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center" asp-area="" asp-controller="Hotel" asp-action="AllHotels">
                 <h1 class="m-0 text-primary text-uppercase">Hotelier</h1>
             </a>
         </div>
-        <div class="col-lg-9">
+        <div class="col-lg-9  align-items-end">
             <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
-                <a class=" navbar-brand d-block d-lg-none" text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                <a class=" navbar-brand d-block d-lg-none" text-dark" asp-area="" asp-controller="Hotel" asp-action="AllHotels">
                     <h1 class="m-0 text-primary text-uppercase">Hotelier</h1>
                 </a>
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                    <div class="navbar-nav mr-auto py-0 d-flex justify-content-end">
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Hotel" asp-action="AllHotels">Hotels</a>
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Room" asp-action="Index">Rooms</a>
-                        <a href="service.html" class="nav-item nav-link">Services</a>
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Booking" asp-action="Index">Booking</a>
+                <div class="collapse navbar-collapse justify-content-between " id="navbarCollapse">
+                    <div class="navbar-nav me-5 py-0 d-flex align-self-end ms-auto ">
+                        @if (SignInManager.Context.User.IsInRole("Hotel"))
+                        {
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Hotel" asp-action="Home">Profile</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Hotel" asp-action="ReservationsInfo">Bookings</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Room" asp-action="All">Rooms</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Food" asp-action="Index">Services</a>
+                            @if (SignInManager.Context.User.Identity.IsAuthenticated)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <a class=" btn btn-outline-primary" asp-controller="Hotel" asp-action="SignOut">Log Out</a>
+                                </div>
+                            }
+                    
+                        }
 
-                        <a href="about.html" class="nav-item nav-link">About</a>
-                        <a href="contact.html" class="nav-item nav-link">Contact</a>
+                        @if (SignInManager.Context.User.IsInRole("Guest") || !SignInManager.Context.User.Identity.IsAuthenticated)
+                        {
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Hotel" asp-action="AllHotels">Home</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Room" asp-action="Index">Rooms</a>
+                            <a href="/hotailer/about" class="nav-item nav-link">About</a>
+                            <a href="/hotailer/contact" class="nav-item nav-link">Contact</a>
+                        }
+
+
+                        @if (SignInManager.Context.User.IsInRole("Guest"))
+                        {
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Guest" asp-action="ReservationsHistory">Booking</a>
+                           
+
+                            @if (SignInManager.Context.User.Identity.IsAuthenticated)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <a style="border:2px solid var(--primary);border-radius:50%;padding:2px; font-size:18px" asp-controller="Guest" asp-action="EditProfile"><i  class=" border-2 border-primary rounded-circle p-2 fa fa-user"></i></a>
+                                </div>
+                            }
+
+                         
+                        }
+
+                        @if (!SignInManager.Context.User.Identity.IsAuthenticated)
+                        {
+                            <div class="d-flex align-items-center">
+                                <a class=" btn btn-outline-primary" asp-controller="Guest" asp-action="Login">Login</a>
+                            </div>
+                        }
+                   
+                        
                     </div>
                 </div>
             </nav>

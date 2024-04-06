@@ -38,5 +38,17 @@ namespace hotel_app.Repositories
                 .Include(room=>room.RoomCategory).ToList();
         }
 
+        public async Task<Room?> GetByIdAsync(int id, params string[] include)
+        {
+            IQueryable<Room> roomQuery = hotelDbContext.Rooms.Where(room => room.Id == id);
+
+            foreach (var includeProperty in include)
+            {
+                roomQuery = roomQuery.Include(includeProperty);
+            }
+
+            return await roomQuery.AsNoTracking().FirstOrDefaultAsync();
+        }
+
     }
 }

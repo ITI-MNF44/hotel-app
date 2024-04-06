@@ -30,10 +30,10 @@ namespace hotel_app.Controllers
         public async Task<IActionResult> AddHotelRole()
         {
             // Check if the "Hotel" role exists
-            if (!await _roleManager.RoleExistsAsync("Guest"))
+            if (!await _roleManager.RoleExistsAsync("Gest"))
             {
                 // If the role doesn't exist, create it
-                var role = new IdentityRole("Guest");
+                var role = new IdentityRole("Gest");
                 var result = await _roleManager.CreateAsync(role);
 
                 // Check if the role creation was successful
